@@ -1,0 +1,239 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, width=device-width">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>提问</title>
+    <meta http-equiv="Cache-Control" content="must-revalidate,no-cache">
+    <link rel="stylesheet" href="css/style.css">
+    <script type="text/javascript" src="js/jquery-1.12.3.min.js"></script>
+    <script src="script/layer_mobile/layer.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+    <script src="script/core.js"></script>
+    <script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script src="script/wechat_config.js"></script>
+</head>
+<body>
+    <section class="question_content">
+        <h1>标题</h1>
+        <div class="inputs">
+            <input type="text" id="q_title" placeholder="输入标题" value="">
+        </div>
+        <h1>内容</h1>
+        <div class="textarea">
+            <textarea id="b" placeholder="输入内容..."></textarea>
+            <span id="a">0/200</span>
+        </div>
+        <div class="add_img">
+            <input type="button" onmousemove="f.style.pixelLeft=event.x-60;f.style.pixelTop=this.offsetTop;" value="可添加3张照片或一段10秒视频" size="30" onclick="upd()" class="liulan">
+            <input type="file" id="f" name="f" style="height: 26px;" class="files" size="1" hidefocus>
+            <div class="uploadimg">
+            </div>
+            <div class="upload_video">
+            </div>
+        </div>
+        <div class="questions">
+            <input type="button" id="" value="提交" onclick="AddArticle()">
+        </div>
+    </section>
+    <script language="javascript">
+
+        var ppl = 70;//每条长
+        var maxl = 200;//总长
+        document.onkeyup = function () {
+            var s = document.getElementById("b").value.length;
+            if (s > maxl)
+                document.getElementById("b").value = document.getElementById("b").value.substr(0, maxl - 1);
+            else
+                document.getElementById("a").innerHTML = "" + s + "/" + maxl + "";
+            if (document.getElementById("b").value.length == 0)
+                document.getElementById("a").innerHTML = "" + 0 + "/" + maxl + "";
+        }
+
+        //选择文件回调事件
+        function upd() {
+            var file_input = $(f);
+            var imglen = file_input.parent().children('.uploadimg').children().length;
+            var videolen = file_input.parent().children('.upload_video').children().length;
+
+            if (imglen < 3 && videolen < 1) {
+                file_input.unbind();
+                file_input.click();
+                file_input.change(function () {
+                    var file = this.files[0];
+                    if (file) {
+                        var size = file.size;
+                        if ((size / 1024 / 1024) > 10) {//超过10M
+                            dialogTips('文件大小不能超出10M');
+                            return false;
+                        }
+
+                        var type = file.type;
+                        type = type.split('/')[0];
+
+                        if (type == 'image') {
+                            if (videolen > 0) {
+                                dialogTips('您已经上传过视频，不能再上传图片');
+                                return false;
+                            }
+
+                            var reader = new FileReader();
+                            reader.readAsDataURL(file);
+                            reader.onload = function (e) {
+                                dialogLoadingText('加载中');
+                                var src = e.target.result;
+
+                                var htmls = '<img src="' + src + '" width="33%" height="128">';
+                                file_input.parent().children('.uploadimg').append(htmls); //设置预览图片
+
+                                layer.closeAll();
+                            }
+                        }
+                        else if (type == 'video') {
+                            if (imglen > 0) {
+                                dialogTips('您已经上传过图片，不能再上传视频');
+                                return false;
+                            }
+                            var windowURL = window.URL || window.webkitURL;
+                            var url = windowURL.createObjectURL(file);
+
+                            var htmls = '<video id="videoview_hide" src="' + url + '" width="100%" hidden>您的浏览器不支持 video 标签。</video>';
+                            file_input.parent().children('.upload_video').append(htmls); //设置预览图片
+
+                            setTimeout(function () {
+
+                                //获取视频缩略图
+                                var scale = 0.2,
+                                video = document.getElementById('videoview_hide'),
+                                canvas = document.createElement("canvas"),
+                                canvasFill = canvas.getContext('2d');
+                                if (video) {
+                                    var duration = video.duration;
+                                    if (duration > 10) {
+                                        layer.closeAll();
+                                        $('#videoview_hide,#videoview').remove();
+                                        dialogTips('视频时长不可超过10s');
+                                        return false;
+                                    }
+
+                                    canvas.width = video.videoWidth * scale;
+                                    canvas.height = video.videoHeight * scale;
+                                    canvasFill.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+                                    var src = canvas.toDataURL("image/jpeg");
+                                    $('.upload_video').append('<img id="imgSmallView" src="' + src + '" alt="预览图" hidden />');
+
+                                    //把视频文件转成base64字符串
+                                    var reader = new FileReader();
+                                    reader.readAsDataURL(file);
+                                    reader.onload = function (e) {
+                                        dialogLoadingText('加载中');
+                                        var src = e.target.result;
+
+                                        var htmls = '<video id="videoview" src="' + src + '" width="100%">您的浏览器不支持 video 标签。</video>';
+                                        file_input.parent().children('.upload_video').append(htmls); //设置预览图片
+
+                                        layer.closeAll();
+                                    }
+                                }
+                            }, 500);
+                        } else {
+                            dialogTips('文件类型不正确');
+                            return false;
+                        }
+                    }
+                });
+            }
+        }
+
+        function AddArticle() {
+            if (islogin()) {
+                var cid = getUrlParam('cid');
+                var title = $.trim($('#q_title').val());
+                var contents = $.trim($('#b').val());
+                var type = '';
+                var src = '';
+
+                if (!title) {
+                    dialogTips('请输入标题');
+                    return;
+                }
+                if (!contents) {
+                    dialogTips('请输入内容');
+                    return;
+                }
+                if (contents.length > 200) {
+                    dialogTips('内容字数太多');
+                    return;
+                }
+
+                var videosrc = $('#videoview').attr('src');
+                var videoimg = $('#imgSmallView').attr('src');
+                if (videosrc && videoimg) {
+                    if ($('.uploadimg img').length > 0) {
+                        dialogTips('图片和视频只能上传一种');
+                        return false;
+                    }
+                    if (videosrc.split(',').length != 2) {
+                        dialogTips('视频格式不正确');
+                        return false;
+                    }
+                    if (videoimg.split(',').length != 2) {
+                        dialogTips('视频缩略图格式不正确');
+                        return false;
+                    }
+
+                    type = 'video';
+                    src = videosrc + '|' + videoimg;//前者是视频后者是缩略图
+                }
+
+                var imgsrc = '';
+                var imgarr = $('.uploadimg img');
+                if (imgarr.length > 0) {
+                    if (videosrc) {
+                        dialogTips('图片和视频只能上传一种');
+                        return false;
+                    }
+
+                    imgarr.each(function (k, v) {
+                        var imgbase64 = $(v).attr('src');
+                        if (imgbase64.split(',').length != 2) {
+                            dialogTips('图片格式不正确');
+                            return false;
+                        }
+
+                        imgsrc += imgbase64 + '|';
+                    })
+
+                    type = 'image';
+                    src = imgsrc.substr(0, imgsrc.length - 1);
+                }
+
+                var data = {
+                    user_id: islogin().id,
+                    course_id: cid,
+                    title: title,
+                    contents: contents,
+                    type: type,
+                    src: src
+                };
+
+                dialogLoadingText('提交中');
+                sendAjaxSetFunc(data, '/tools/business_handler.ashx?action=AddArticle', function (result) {
+                    layer.closeAll();
+                    if (parseInt(result.code) == 200) {
+                        dialogMsgFun('提问成功', function () {
+                            history.back(-1);
+                        });
+                    } else {
+                        dialogMsg(result.message);
+                    }
+                })
+            } else {
+                dialogMsgFun('您还没有登录，请先去登录', gotologin);
+            }
+        }
+    </script>
+</body>
+</html>

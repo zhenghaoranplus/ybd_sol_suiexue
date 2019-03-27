@@ -1,0 +1,108 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, width=device-width">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>登录</title>
+    <meta http-equiv="Cache-Control" content="must-revalidate,no-cache">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/jquery-1.12.3.min.js"></script>
+    <script src="script/layer_mobile/layer.js"></script>
+    <script src="script/core.js"></script>
+    <script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script src="script/wechat_config.js"></script>
+    <script>
+        $(function () {
+            var recommend = sessionStorage.getItem('recommend') || '0';
+
+            $('#userlogin').click(function () {
+                var mobile = $.trim($('#mobile').val());
+                var pwd = $.trim($('#pwd').val());
+
+                if (!mobile) {
+                    dialogTips('请输入手机号');
+                    return;
+                }
+                if (!pwd) {
+                    dialogTips('请输入密码');
+                    return;
+                }
+
+                var data = {
+                    phone: mobile,
+                    pwd: pwd
+                };
+
+                sendAjaxSetFunc(data, '/tools/business_handler.ashx?action=UserLogin', function (result) {
+                    if (parseInt(result.code, 10) == 200) {
+                        var user = result.data[0];
+                        var userInfo = JSON.stringify(result.data.UserInfo);
+                        var userTree = JSON.stringify(result.data.UserTree);
+                        var userOAuths = JSON.stringify(result.data.UserOAuths);
+                        setStorage('userInfo', encodeURIComponent(userInfo));
+                        setStorage('userTree', encodeURIComponent(userTree));
+                        setStorage('userOAuths', encodeURIComponent(userOAuths));
+
+                        dialogMsgFun('登录成功', gotoback);
+                    } else {
+                        dialogMsg(result.message);
+                    }
+                })
+            })
+
+            $('.loginway a').click(function () {
+                var backurl = getStorage('backurl');
+                if (!backurl) {
+                    backurl = window.location.protocol + '//' + window.location.host + "/html/index.html";
+                }
+
+                recommend = sessionStorage.getItem('recommend') || '0';
+
+                var href = 'wxlogin.html?source_url=' + backurl;
+                if (backurl.toString().lastIndexOf('?') >= 0) {
+                    href += '&recommend=' + recommend;
+                } else {
+                    href += '?recommend=' + recommend;
+                }
+                window.location.href = href;
+            })
+        })
+    </script>
+</head>
+<body class="whitebg">
+    <section class="loginform">
+        <div class="login_logo">
+            <img src="images/login_logo.png">
+        </div>
+        <ul>
+            <li class="li1">
+                <div class="inputdiv">
+                    <input type="text" id="mobile" name="mobile" class="input" placeholder="请输入您的手机号" value="">
+                </div>
+            </li>
+            <li class="li2">
+                <div class="inputdiv">
+                    <input type="password" id="pwd" name="pwd" class="input" placeholder="请输入您的密码" value="">
+                </div>
+            </li>
+        </ul>
+        <p class="userbtn">
+            <input type="button" id="userlogin" name="" value="登录">
+        </p>
+        <p class="fogotpwd">
+            <a href="register.html" class="toregister" title="立即注册">立即注册</a>
+            <a href="getpwd.html" title="忘记密码">忘记密码?</a>
+        </p>
+        <section class="otherlogin">
+            <h1><span>第三方登录</span></h1>
+            <div class="loginway">
+                <a href="javascript:;" title="微信登录">
+                    <img src="images/login_icon.png">
+                </a>
+            </div>
+        </section>
+    </section>
+
+</body>
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, width=device-width">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>个人资料</title>
+    <meta http-equiv="Cache-Control" content="must-revalidate,no-cache">
+    <link rel="stylesheet" href="css/style.css">
+    <script type="text/javascript" src="js/jquery-1.12.3.min.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+    <script src="script/layer_mobile/layer.js"></script>
+    <script src="script/core.js"></script>
+    <script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script src="script/wechat_config.js"></script>
+</head>
+<body>
+    <section class="member_data">
+        <div class="pic">
+            <img src="images/head_img5.jpg">
+        </div>
+        <h2></h2>
+        <div class="school"></div>
+    </section>
+    <section class="classroom">
+        <p class="title">他的课堂</p>
+        <section id="classlist">
+            <div class="list">
+                <a href="join_class.html">
+                    <div class="pic">
+                        <img src="images/classroom_img.jpg">
+                    </div>
+                    <h1>网络营销1班</h1>
+                    <p>创建人：<span>张老师</span></p>
+                    <p>创建时间：2017-05-10</p>
+                </a>
+            </div>
+        </section>
+    </section>
+    <script>
+        var pageIndex = 1;
+        var pageSize = 10;
+        getData();
+        scrollLoad();
+
+        function getData() {
+            var uid = getUrlParam('uid');
+            var data = {
+                user_id: uid,
+                page_index: pageIndex,
+                page_size: pageSize
+            };
+
+            sendAjaxSetFunc(data, '/tools/business_handler.ashx?action=GetMemberClassroom', function (result) {
+                if (parseInt(result.code, 10) == 200) {
+                    var obj = result.data[0];
+                    $('.member_data img').attr('src', obj.avatar);
+                    $('.member_data h2').html(obj.nick_name);
+                    $('.member_data .school').html(obj.school_name);
+
+                    var list = obj.classroomList;
+                    var htmls = '';
+
+                    $.each(list, function (k, v) {
+                        htmls += [
+                            '<div class="list">',
+                            '<a href="join_class.html?id=' + v['id'] + '">',
+                            '<div class="pic">',
+                            '<img src="' + v['avatar'] + '">',
+                            '</div>',
+                            '<h1>' + v['name'] + '</h1>',
+                            '<p>创建人：<span>' + v['user_name'] + '</span></p>',
+                            '<p>创建时间：' + v['add_time'] + '</p>'
+                        ].join('');
+                    })
+
+                    if (pageIndex == 1) {
+                        $("#classlist").html(htmls);
+                    } else if (pageIndex > 1) {
+                        $("#classlist").append(htmls);
+                    }
+                } else {
+                    dialogMsg(result.message);
+                }
+            })
+        }
+    </script>
+</body>
+</html>

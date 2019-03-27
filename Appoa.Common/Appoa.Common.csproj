@@ -1,0 +1,165 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{800EA747-E444-4F57-8495-7E4090E08B25}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Appoa.Common</RootNamespace>
+    <AssemblyName>Appoa.Common</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Appoa.Web.SUIEXUE\files\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="ThoughtWorks.QRCode">
+      <HintPath>..\Appoa.Web.SUIEXUE\files\ThoughtWorks.QRCode.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AES.cs" />
+    <Compile Include="AESEncrypt.cs" />
+    <Compile Include="AppoaKeys.cs" />
+    <Compile Include="BarCodeToHTML.cs" />
+    <Compile Include="CacheHelper.cs" />
+    <Compile Include="CombinImage.cs" />
+    <Compile Include="ConfigHelper.cs" />
+    <Compile Include="ConvertJson.cs" />
+    <Compile Include="CoordinatesHelper.cs" />
+    <Compile Include="DataCache.cs" />
+    <Compile Include="Degree.cs" />
+    <Compile Include="DESEncrypt.cs" />
+    <Compile Include="Files\ContentType.cs" />
+    <Compile Include="Files\Directory.cs" />
+    <Compile Include="Files\Download.cs" />
+    <Compile Include="Files\Drive.cs" />
+    <Compile Include="Files\File.cs" />
+    <Compile Include="Files\MD5Hash.cs" />
+    <Compile Include="Files\Read.cs" />
+    <Compile Include="Files\Size.cs" />
+    <Compile Include="Encrypt_Decrypt.cs" />
+    <Compile Include="EnumCollection.cs" />
+    <Compile Include="ExcelHelper.cs" />
+    <Compile Include="FileUp.cs" />
+    <Compile Include="GMConvert.cs" />
+    <Compile Include="HttpHelper.cs" />
+    <Compile Include="hx\EaseMobDemo.cs" />
+    <Compile Include="hx\Program.cs" />
+    <Compile Include="ImageUtil.cs" />
+    <Compile Include="JPush.cs" />
+    <Compile Include="JsonHelper.cs" />
+    <Compile Include="JsonUtil.cs" />
+    <Compile Include="MailHelper.cs" />
+    <Compile Include="NetLog.cs" />
+    <Compile Include="PageTemplate.cs" />
+    <Compile Include="PageValidate.cs" />
+    <Compile Include="PagingHelper.cs" />
+    <Compile Include="PhoneSMS.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QrCodeHelper.cs" />
+    <Compile Include="RequestHelper.cs" />
+    <Compile Include="SerializationHelper.cs" />
+    <Compile Include="Thumbnail.cs" />
+    <Compile Include="Utils.cs" />
+    <Compile Include="VideoThumbHelper.cs" />
+    <Compile Include="WaterMark.cs" />
+    <Compile Include="XmlHelper.cs" />
+    <Compile Include="YBDConvertToHashtable.cs" />
+    <Compile Include="YBDJsonResult.cs" />
+    <Compile Include="ZipLib\Checksums\Adler32.cs" />
+    <Compile Include="ZipLib\Checksums\CRC32.cs" />
+    <Compile Include="ZipLib\Checksums\IChecksum.cs" />
+    <Compile Include="ZipLib\Checksums\StrangeCRC.cs" />
+    <Compile Include="ZipLib\Core\FileSystemScanner.cs" />
+    <Compile Include="ZipLib\Core\INameTransform.cs" />
+    <Compile Include="ZipLib\Core\IScanFilter.cs" />
+    <Compile Include="ZipLib\Core\NameFilter.cs" />
+    <Compile Include="ZipLib\Core\PathFilter.cs" />
+    <Compile Include="ZipLib\Core\StreamUtils.cs" />
+    <Compile Include="ZipLib\Core\WindowsPathUtils.cs" />
+    <Compile Include="ZipLib\Encryption\PkzipClassic.cs" />
+    <Compile Include="ZipLib\Encryption\ZipAESStream.cs" />
+    <Compile Include="ZipLib\Encryption\ZipAESTransform.cs" />
+    <Compile Include="ZipLib\GZip\GZIPConstants.cs" />
+    <Compile Include="ZipLib\GZip\GZipException.cs" />
+    <Compile Include="ZipLib\GZip\GzipInputStream.cs" />
+    <Compile Include="ZipLib\GZip\GzipOutputStream.cs" />
+    <Compile Include="ZipLib\SharpZipBaseException.cs" />
+    <Compile Include="ZipLib\Zipper.cs" />
+    <Compile Include="ZipLib\Zip\Compression\Deflater.cs" />
+    <Compile Include="ZipLib\Zip\Compression\DeflaterConstants.cs" />
+    <Compile Include="ZipLib\Zip\Compression\DeflaterEngine.cs" />
+    <Compile Include="ZipLib\Zip\Compression\DeflaterHuffman.cs" />
+    <Compile Include="ZipLib\Zip\Compression\DeflaterPending.cs" />
+    <Compile Include="ZipLib\Zip\Compression\Inflater.cs" />
+    <Compile Include="ZipLib\Zip\Compression\InflaterDynHeader.cs" />
+    <Compile Include="ZipLib\Zip\Compression\InflaterHuffmanTree.cs" />
+    <Compile Include="ZipLib\Zip\Compression\PendingBuffer.cs" />
+    <Compile Include="ZipLib\Zip\Compression\Streams\DeflaterOutputStream.cs" />
+    <Compile Include="ZipLib\Zip\Compression\Streams\InflaterInputStream.cs" />
+    <Compile Include="ZipLib\Zip\Compression\Streams\OutputWindow.cs" />
+    <Compile Include="ZipLib\Zip\Compression\Streams\StreamManipulator.cs" />
+    <Compile Include="ZipLib\Zip\FastZip.cs" />
+    <Compile Include="ZipLib\Zip\IEntryFactory.cs" />
+    <Compile Include="ZipLib\Zip\WindowsNameTransform.cs" />
+    <Compile Include="ZipLib\Zip\ZipConstants.cs" />
+    <Compile Include="ZipLib\Zip\ZipEntry.cs" />
+    <Compile Include="ZipLib\Zip\ZipEntryFactory.cs" />
+    <Compile Include="ZipLib\Zip\ZipException.cs" />
+    <Compile Include="ZipLib\Zip\ZipExtraData.cs" />
+    <Compile Include="ZipLib\Zip\ZipFile.cs" />
+    <Compile Include="ZipLib\Zip\ZipHelperStream.cs" />
+    <Compile Include="ZipLib\Zip\ZipInputStream.cs" />
+    <Compile Include="ZipLib\Zip\ZipNameTransform.cs" />
+    <Compile Include="ZipLib\Zip\ZipOutputStream.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="hx\EasemobDemo.aspx" />
+    <Content Include="hx\lib\Newtonsoft.Json.dll" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

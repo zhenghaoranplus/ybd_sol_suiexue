@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, width=device-width">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>意见反馈</title>
+    <meta http-equiv="Cache-Control" content="must-revalidate,no-cache">
+    <link rel="stylesheet" href="css/style.css">
+    <script type="text/javascript" src="js/jquery-1.12.3.min.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+    <script src="script/layer_mobile/layer.js"></script>
+    <script src="script/core.js"></script>
+    <script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script src="script/wechat_config.js"></script>
+</head>
+<body>
+    <section class="feedback">
+        <div class="textarea">
+            <textarea id="b" placeholder="您的满意是我们前进的动力"></textarea>
+            <span id="a">0/200</span>
+        </div>
+        <p class="userbtn">
+            <input type="button" id="" name="" value="提交">
+        </p>
+    </section>
+    <script>
+    var ppl = 70//每条长
+    var maxl = 200//总长
+    document.onkeyup = function () {
+        var s = document.getElementById("b").value.length;
+        if (s > maxl) {
+            document.getElementById("b").value = document.getElementById("b").value.substr(0, maxl - 1);
+        }
+        else {
+            document.getElementById("a").innerHTML = "" + s + "/" + maxl + "";
+        }
+        if (document.getElementById("b").value.length == 0) {
+            document.getElementById("a").innerHTML = "" + 0 + "/" + maxl + "";
+        }
+    }
+    function cha() {
+        var txt = document.getElementById("b").value, tl = txt.length;
+        var txtArray = [], k = (tl / ppl <= 1) ? 1 : Math.ceil(tl / ppl);
+        for (var i = 0; i < k; i++) {
+            txtArray[i] = txt.substr(i * ppl, ppl);
+            alert(txtArray[i]);
+        }
+        document.getElementById("b").value = "";
+        document.getElementById("a").innerHTML = "0/200";
+    }
+
+    $('.userbtn input').click(function () {
+        if (islogin()) {
+            var uid = islogin().id;
+            var contents = $.trim($('#b').val());
+            if (!contents) {
+                dialogTips('请输入反馈内容');
+                return;
+            }
+
+            var data = {
+                user_id: uid,
+                contents: contents
+            };
+
+            dialogLoadingText('提交中');
+            sendAjaxSetFunc(data, '/tools/business_handler.ashx?action=FeedBack', function (result) {
+                layer.closeAll();
+                if (parseInt(result.code, 10) == 200) {
+                    dialogMsgFun('提交成功', function () {
+                        window.history.back(-1);
+                    });
+                } else {
+                    dialogMsg(result.message);
+                }
+            });
+        } else {
+            dialogMsgFun('您还没有登录，请先去登录', gotologin);
+        }
+    })
+    </script>
+</body>
+</html>

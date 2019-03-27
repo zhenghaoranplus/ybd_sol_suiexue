@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, width=device-width">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>我的</title>
+    <meta http-equiv="Cache-Control" content="must-revalidate,no-cache">
+    <link rel="stylesheet" href="css/style.css">
+    <script type="text/javascript" src="js/jquery-1.12.3.min.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+    <script src="script/layer_mobile/layer.js"></script>
+    <script src="script/core.js"></script>
+    <script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script src="script/wechat_config.js"></script>
+</head>
+<body class="userbody">
+    <section class="usertop">
+        <div class="userinfor">
+            <a href="personal_infor.html">
+                <span class="photo">
+                    <img src=""></span>
+                <p></p>
+            </a>
+        </div>
+        <div class="user_message"><a href="message.html"></a></div>
+        <div class="sign_in tosignin"><span>待签到</span><em>已签到</em></div>
+    </section>
+    <section class="user_nav">
+        <ul>
+            <li><a href="javascript:;">
+                <h2>0</h2>
+                <p>我的积分</p>
+            </a></li>
+            <li><a href="javascript:;">
+                <h2>0</h2>
+                <p>我的收藏</p>
+            </a></li>
+            <li><a href="javascript:;">
+                <h2>0</h2>
+                <p>购物车</p>
+            </a></li>
+        </ul>
+    </section>
+    <div class="user_order">
+        <div class="title">
+            <h1>我的订单</h1>
+            <div class="showall"><a href="javascript:;" title="全部订单">全部订单</a></div>
+        </div>
+        <ul>
+            <li><a href="javascript:;"><span class="icon">
+                <img src="images/order_ico1.png"><i>0</i></span><p>待发货</p>
+            </a></li>
+            <li><a href="javascript:;"><span class="icon">
+                <img src="images/order_ico2.png"><i>0</i></span><p>待收货</p>
+            </a></li>
+            <li><a href="javascript:;"><span class="icon">
+                <img src="images/order_ico3.png"><i>0</i></span><p>待评价</p>
+            </a></li>
+            <li><a href="javascript:;"><span class="icon">
+                <img src="images/order_ico4.png"></span><p>已完成</p>
+            </a></li>
+        </ul>
+    </div>
+    <div class="usermenu">
+        <ul>
+            <li><a href="javascript:;"><i>
+                <img src="images/usermenu_ico1.png"></i><span>我的分销</span><em></em></a></li>
+            <li><a href="javascript:;"><i>
+                <img src="images/usermenu_ico2.png"></i><span>我的课堂</span><em></em></a></li>
+            <li><a href="javascript:;"><i>
+                <img src="images/usermenu_ico3.png"></i><span>我的题库</span><em></em></a></li>
+        </ul>
+        <ul>
+            <li><a href="javascript:;"><i>
+                <img src="images/usermenu_ico4.png"></i><span>播放历史</span><em></em></a></li>
+            <li onclick="javascript:window.location.href='set.html';"><a href="javascript:;"><i>
+                <img src="images/usermenu_ico5.png"></i><span>更多设置</span><em></em></a></li>
+        </ul>
+    </div>
+    <footer class="footer">
+        <ul>
+            <li class="li1"><a href="index.html"><span></span>
+                <p>精品微课</p>
+            </a></li>
+            <li class="li2"><a href="classroom.html"><span></span>
+                <p>课堂</p>
+            </a></li>
+            <li class="li3"><a href="mall.html"><span></span>
+                <p>商城</p>
+            </a></li>
+            <li class="li4"><a href="my_center.html"><span></span>
+                <p>我的</p>
+            </a></li>
+        </ul>
+        <div class="scanli">
+            <a href="javascript:;" onclick="scanQrcode()">
+                <img src="images/scan.png"></a>
+        </div>
+    </footer>
+
+    <div class="signin_success">
+        <p>
+            <img src="images/signin_successbg.png">
+        </p>
+        <div class="signin_integrate">
+            <h1>已累计获得<i>0</i>积分</h1>
+            <h2><a href="javascript:;">查看积分</a></h2>
+        </div>
+    </div>
+    <div class="overloay"></div>
+    <script>
+        $('.user_order i').hide();
+        if (islogin()) {
+            sendAjaxSetFuncAsync(false, { user_id: islogin().id }, '/tools/business_handler.ashx?action=GetMyCenter', function (result) {
+                if (parseInt(result.code, 10) == 200) {
+                    var obj = result.data;
+                    var user = obj.user;
+                    var userInfo = user.UserInfo;
+                    var userTree = user.UserTree;
+                    var userOAuths = user.UserOAuths;
+                    setStorage('userInfo', encodeURIComponent(JSON.stringify(userInfo)));
+                    setStorage('userTree', encodeURIComponent(JSON.stringify(userTree)));
+                    setStorage('userOAuths', encodeURIComponent(JSON.stringify(userOAuths)));
+
+                    $('.userinfor a img').attr('src', userInfo.avatar);
+                    $('.userinfor a p').html(userInfo.nick_name);
+
+                    if (obj.is_signin == 1) {//已签到
+                        $('.sign_in').removeClass('tosignin');
+                        $('.sign_in span').hide();
+                        $('.sign_in em').show();
+                    } else {//未签到
+                        $('.sign_in').addClass('tosignin');
+                        $('.sign_in span').show();
+                        $('.sign_in em').hide();
+                        $('.sign_in').attr('onclick', 'tosignin()');
+                    }
+
+                    $('.user_nav li:eq(0) a h2').html(obj.integral);
+                    $('.user_nav li:eq(1) a h2').html(obj.collection);
+                    $('.user_nav li:eq(2) a h2').html(obj.cart_num);
+
+                    if (obj.send > 0) {
+                        $('.user_order li:eq(0) i').html(obj.send).show();
+                    }
+                    if (obj.receive > 0) {
+                        $('.user_order li:eq(1) i').html(obj.receive).show();
+                    }
+                    if (obj.eval > 0) {
+                        $('.user_order li:eq(2) i').html(obj.eval).show();
+                    }
+                } else {
+                    dialogMsg(result.message);
+                }
+            })
+
+            isloginclick();
+        } else {
+            var htmls = '<span class="photo"><img src=""></span><a href="login.html">登录</a> / <a href="register.html">注册</a>';
+            $('.userinfor').html(htmls);
+        }
+
+        function tosignin() {
+            var uid = islogin().id;
+            dialogLoadingText('签到中');
+            sendAjaxSetFunc({ user_id: uid }, '/tools/business_handler.ashx?action=DoSignIn', function (result) {
+                layer.closeAll();
+                if (parseInt(result.code, 10) == 200) {
+                    var obj = result.data[0];
+                    $('.signin_integrate h1 i').html(obj.count);
+                    $('.signin_integrate h2 a').attr('href', 'my_integral.html');
+                    $('.sign_in').removeAttr('onclick');
+                    $('.sign_in').removeClass('tosignin');
+                    $('.sign_in span').hide();
+                    $('.sign_in em').show();
+                    $(".signin_success,.overloay").show();
+                } else {
+                    dialogMsg(result.message);
+                }
+            })
+        }
+
+        function isloginclick() {
+            $('.user_nav li:eq(0) a').attr('href', 'my_integral.html');
+            $('.user_nav li:eq(1) a').attr('href', 'collect.html');
+            $('.user_nav li:eq(2) a').attr('href', 'cart.html');
+
+            //订单
+            $('.user_order .title').click(function () {
+                setStorage('ordertag', 'all');
+                window.location.href = 'my_order.html';
+            });
+            $('.user_order li:eq(0) a').click(function () {
+                setStorage('ordertag', 'send');
+                window.location.href = 'my_order.html';
+            });
+            $('.user_order li:eq(1) a').click(function () {
+                setStorage('ordertag', 'receive');
+                window.location.href = 'my_order.html';
+            });
+            $('.user_order li:eq(2) a').click(function () {
+                setStorage('ordertag', 'evaluate');
+                window.location.href = 'my_order.html';
+            });
+            $('.user_order li:eq(3) a').click(function () {
+                setStorage('ordertag', 'finish');
+                window.location.href = 'my_order.html';
+            });
+
+            //菜单
+            $('.usermenu li:eq(0)').click(function () {
+                window.location.href = 'my_distribution.html';
+            });
+            $('.usermenu li:eq(1)').click(function () {
+                window.location.href = 'my_classroom.html';
+            });
+            $('.usermenu li:eq(2)').click(function () {
+                window.location.href = 'my_question.html';
+            });
+            $('.usermenu li:eq(3)').click(function () {
+                window.location.href = 'history.html';
+            });
+        }
+    </script>
+</body>
+</html>

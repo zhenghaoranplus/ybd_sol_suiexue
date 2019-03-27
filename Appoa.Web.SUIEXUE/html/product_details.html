@@ -1,0 +1,387 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, width=device-width">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>商品详情</title>
+    <meta http-equiv="Cache-Control" content="must-revalidate,no-cache">
+    <link rel="stylesheet" href="css/style.css">
+    <script type="text/javascript" src="js/jquery-1.12.3.min.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+    <script src="script/layer_mobile/layer.js"></script>
+    <script src="script/core.js"></script>
+    <script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script src="script/wechat_config.js"></script>
+</head>
+<body>
+    <section class="product_details">
+        <div class="product_scrollimg">
+            <ul class="slide_box bxslider"></ul>
+            <script type="text/javascript" src="js/jquery.bxslider_e88acd1b.js"></script>
+        </div>
+        <div class="product_infor">
+            <h1></h1>
+            <div class="product_price"></div>
+            <div class="delivery_price">运费<span>10</span>元</div>
+        </div>
+
+        <div class="product-tabbar">
+            <ul>
+                <li><span>商品详情</span></li>
+                <li><span>规格参数</span></li>
+                <li><span>商品评价</span></li>
+            </ul>
+        </div>
+
+        <section class="product_content">
+            <div class="product_img">
+            </div>
+        </section>
+
+        <section class="product_content">
+            <div class="product_data">
+            </div>
+        </section>
+
+        <section class="product_content">
+            <div class="product_comment">
+                <div class="title">
+                    全部评论（<i>0</i>条）<div class="astar">0.0</div>
+                </div>
+                <section id="evalList"></section>
+            </div>
+            <div class="tip_line"><span>我是有底线滴！</span></div>
+        </section>
+    </section>
+
+    <section class="shopping_cart">
+        <ul>
+            <li class="addcart btn">
+                <input type="button" id="" name="" value="加入购物车">
+            </li>
+            <li class="buy btn">
+                <input type="submit" id="" name="" value="立即购买">
+            </li>
+        </ul>
+    </section>
+    <div class="float_cart">
+        <a href="cart.html">购物车<span class="cartnum">0</span></a>
+    </div>
+
+    <div class="specification">
+        <span class="closecart"></span>
+        <div class="goods_t">
+            <div class="img">
+                <img src="images/productimg.jpg">
+            </div>
+            <h1></h1>
+            <h2>￥16.00</h2>
+            <h3>运费<span>10</span>元</h3>
+        </div>
+        <div class="standard">
+            <dl class="iteminfo_parameter">
+                <dt>颜色</dt>
+                <dd>
+                    <input type="radio" name="color" id="radio1" class="radio" /><label for="radio1" class="color">平装</label>
+                    <input type="radio" name="color" id="radio2" class="radio" /><label for="radio2" class="color">精装</label>
+                </dd>
+            </dl>
+        </div>
+        <div class="selctaccount">
+            <div class="span">数量</div>
+            <div class="account">
+                <span class="reduce">-</span>
+                <input type="text" class="inputnum" value="1" onkeyup="this.value=this.value.replace(/[^\.\d]/g,'');this.value=this.value.replace('.','');">
+                <span class="add">+</span>
+            </div>
+        </div>
+        <div class="confirm">
+            <input type="button" id="" name="" class="confirmbtn" value="确定">
+        </div>
+    </div>
+    <div class="overloay"></div>
+    <div class="add_success">加入购物车成功</div>
+    <script>
+        var pageIndex = 1;
+        var pageSize = 6;
+        var itemid = 0;
+        delStorage("specid");
+
+        getDetails();
+
+        function getDetails() {
+            var id = getUrlParam('id');
+            var uid = 0;
+            if (islogin()) {
+                uid = islogin().id;
+            } else {
+                uid = 0;
+            }
+
+            var data = {
+                id: id,
+                user_id: uid
+            };
+
+            sendAjaxSetFunc(data, '/tools/business_handler.ashx?action=GetGoodsDetail', function (result) {
+                if (parseInt(result.code, 10) == 200) {
+                    var obj = result.data[0];
+
+                    /*---轮播图---begin---*/
+                    var imgList = obj.imgList;
+                    var specItemList = obj.specItemList;
+                    var htmls = '';
+                    $.each(imgList, function (k, v) {
+                        htmls += '<li><img src="' + v['original_path'] + '" alt=""></li>';
+                    })
+
+                    $('.slide_box').html(htmls);
+                    var slide_height = $(".product_details").width() / 1.6;
+                    $(".bxslider .bx-viewport,.bxslider img").css("height", slide_height);
+                    if (imgList.length == 1) {
+                        $(".bxslider li").attr('style', 'float: left; list-style: none; position: relative; width: 100%;');
+                    } else {
+                        $(".bxslider").bxSlider({
+                            auto: true
+                        });
+                    }
+                    /*---轮播图---end---*/
+
+                    $('.product_infor h1,.goods_t h1').html(obj.title);//标题
+
+                    //价格，根据分组显示价格或积分
+                    var group_id = obj.group_id;
+                    if (group_id == 1) {//教育
+                        $('.product_infor .product_price,.goods_t h2').html('&yen;' + obj.price);
+                    }
+                    if (group_id == 2) {//积分
+                        $('.product_infor .product_price,.goods_t h2').html(obj.price + '积分');
+                    }
+
+                    $('.delivery_price span,.goods_t h3 span').html(obj.express_money);//运费
+
+                    $('.product_img').html(obj.details);//详情
+                    $('.product_data').html(obj.parameters);//参数
+
+                    //购物车数量
+                    if (obj.cart_num == 0) {
+                        $('.cartnum').hide();
+                    } else {
+                        $('.cartnum').html(obj.cart_num);
+                    }
+
+                    //规格
+                    $('.iteminfo_parameter dt').html(specItemList[0].spec_name);
+                    htmls = '';
+                    var classname = '';
+                    $.each(specItemList[0].itemList, function (k, v) {
+                        if (k == 0) {
+                            classname = ' tb-selected';
+                        } else {
+                            classname = '';
+                        }
+                        htmls += '<input type="radio" name="color" id="radio' + v['spec_id'] + '" class="radio" /><label for="radio' + v['spec_id'] + '" class="color' + classname + '">' + v['spec_name'] + '</label>';
+                    })
+
+                    $('.iteminfo_parameter dd').html(htmls);
+                    $('.iteminfo_parameter dd label').each(function (k, v) {
+                        var index = $(v).hasClass('tb-selected');
+                        if (index) {
+                            itemid = $(v).attr('for').replace('radio', '');
+                            getSpecId(group_id);
+                        }
+                    })
+
+                    $(".iteminfo_parameter .color").click(function () {
+                        $(this).addClass("tb-selected");
+                        $(this).siblings().removeClass("tb-selected");
+
+                        itemid = $(this).attr('for').replace('radio', '');
+                        getSpecId(group_id);
+                    });
+
+                    //评论
+                    getEvaluate();
+                    scrollLoadEval();
+                } else {
+                    dialogMsg(result.message);
+                }
+            })
+        }
+
+        function getSpecId(group) {
+            var data = { itemid: itemid };
+
+            sendAjaxSetFunc(data, '/tools/business_handler.ashx?action=GetSpecType', function (result) {
+                if (parseInt(result.code, 10) == 200) {
+
+                    var obj = result.data[0];
+                    setStorage('specid', obj.id);
+                    if (group == 1) {//教育
+                        $('.product_infor .product_price,.goods_t h2').html('&yen;' + obj.price);
+                    }
+                    if (group == 2) {//积分
+                        $('.product_infor .product_price,.goods_t h2').html(obj.price + '积分');
+                    }
+                } else {
+                    delStorage("specid");
+                    dialogMsg(result.message);
+                }
+            })
+        }
+
+        //评论列表
+        function getEvaluate() {
+            var id = getUrlParam('id');
+            var data = {
+                goods_id: id,
+                page_index: pageIndex,
+                page_size: pageSize
+            };
+
+            sendAjaxSetFunc(data, '/tools/business_handler.ashx?action=GetGoodsEvaluate', function (result) {
+                if (parseInt(result.code, 10) == 200) {
+                    var obj = result.data;
+
+                    $('.product_comment .title i').html(obj.count);
+                    $('.product_comment .title .astar').html(parseFloat(obj.avg_star).toFixed(1));
+
+                    var list = obj.evalList;
+                    var htmls = '';
+                    $.each(list, function (k, v) {
+                        htmls += [
+                            '<div class="pcomment">',
+                            '<div class="heads">',
+                            '<img src="' + v['avatar'] + '">',
+                            '</div>',
+                            '<p class="name">' + v['nick_name'] + '</p>',
+                            '<div class="stars">',
+                            '<div class="comment_star star' + v['star'] + '"></div>',
+                            '</div>',
+                            '<div class="txt">' + v['contents'] + '</div>',
+                            '<p class="time">' + v['add_time'] + '</p>',
+                            '</div>'
+                        ].join('');
+                    })
+
+                    if (pageIndex == 1) {
+                        $("#evalList").html(htmls);
+                    } else {
+                        $("#evalList").append(htmls);
+                    }
+                } else if (parseInt(result.code, 10) != 300) {
+                    dialogMsg(result.message);
+                }
+            });
+        }
+
+        function scrollLoadEval() {
+            $(window).scroll(function () {
+                var scrollTop = $(this).scrollTop(); //滚动条距离顶部的高度
+                var scrollHeight = $(document).height(); //当前页面的总高度
+                var windowHeight = $(this).height(); //当前可视的页面高度
+
+                if (scrollHeight != windowHeight) {
+                    if ($('.product_content:eq(2)').is(':visible')) {
+                        //滚动条在顶部
+                        if (scrollTop <= 0) {
+                            pageIndex = 1;
+                            getEvaluate();
+                        }
+
+                        //距离顶部+当前高度 >=文档总高度 即代表滑动到底部
+                        if (scrollTop + windowHeight >= scrollHeight) {
+                            pageIndex++;
+                            getEvaluate();
+                        }
+                    }
+                }
+            });
+        }
+
+        $(".shopping_cart .addcart").click(function () {
+            $(".specification,.overloay").show();
+            $('.confirmbtn').attr('onclick', 'addToCart()');
+        });
+
+        $(".shopping_cart .buy").click(function () {
+            $(".specification,.overloay").show();
+            $('.confirmbtn').attr('onclick', 'buyNow()');
+        });
+
+        //加入购物车
+        function addToCart() {
+            if (islogin()) {
+                var id = getUrlParam('id');
+                var specid = getStorage('specid');
+                var nums = $('.inputnum').val();
+                var uid = islogin().id;
+
+                if (specid == 0) {
+                    dialogTips('您还没有选择规格');
+                    return;
+                }
+                if (nums == 0) {
+                    nums == 1;
+                }
+
+                var data = {
+                    gid: id,
+                    specid: specid,
+                    nums: nums,
+                    user_id: uid
+                };
+
+                dialogLoadingText('加载中');
+                sendAjaxSetFunc(data, '/tools/business_handler.ashx?action=AddToCart', function (result) {
+                    setTimeout(function () {
+                        layer.closeAll();
+                        $(".specification,.overloay").hide();
+                        if (parseInt(result.code, 10) == 200) {
+                            var obj = result.data[0];
+                            if (obj) {
+                                $('.cartnum').show();
+                                $('.cartnum').html(obj.cart_num);
+                            } else {
+                                $('.cartnum').html('0');
+                            }
+                            dialogTips('加入购物车成功');
+                        } else {
+                            dialogMsg(result.message);
+                        }
+                    }, 500);
+                })
+            } else {
+                dialogMsgFun('您还没有登录，请先去登录', gotologin);
+            }
+        }
+
+        //立即购买
+        function buyNow() {
+            if (islogin()) {
+                var id = getUrlParam('id');
+                var specid = getStorage('specid');
+                var nums = $('.inputnum').val();
+                var uid = islogin().id;
+
+                if (specid == 0) {
+                    dialogTips('您还没有选择规格');
+                    return;
+                }
+                if (nums == 0) {
+                    nums == 1;
+                }
+
+                var cids = id + ',' + specid + ',' + nums;
+                cids = encodeURIComponent(cids);
+                setStorage('cids', cids);
+                setStorage('orderfrom', 'buy');
+                window.location.href = 'order.html';
+            } else {
+                dialogMsgFun('您还没有登录，请先去登录', gotologin);
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,120 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, width=device-width">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta http-equiv="Cache-Control" content="must-revalidate,no-cache">
+    <title>文档资源</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script type="text/javascript" src="js/jquery-1.12.3.min.js"></script>
+    <script src="script/layer_mobile/layer.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+    <script src="script/core.js"></script>
+    <script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script src="script/wechat_config.js"></script>
+    <script>
+        var id = getUrlParam('id');
+        var method = getUrlParam('method');
+
+        $(function () {
+            getPath();
+        })
+
+        //获取资源地址
+        function getPath() {
+            if (method) {//从网页点击或扫码后认证后
+                if (method == 'click') {
+                    getDocument();
+                } else if (method == 'scan') {
+                    getFinalPath();
+                }
+            } else {//扫码后认证前
+                if (isWechatBrowser()) {//是微信浏览器
+                    var source_url = window.location.href.replace(/&/g, '*') + "*method=scan";
+                    var redirecturl = '/html/wxlogin.html?t=' + Math.random() + '&source_url=' + source_url
+
+                    window.location.href = redirecturl;
+                } else {//不是微信浏览器，查询公共资源
+                    getCommonPath();
+                }
+            }
+        }
+
+        //获取资源地址
+        function getDocument() {
+            if (islogin()) {
+                var data = {
+                    id: id,
+                    user_id: islogin().id
+                };
+                sendAjaxSetFuncAsync(false, data, '/tools/business_handler.ashx?action=GetResourcePath', function (result) {
+                    if (parseInt(result.code, 10) == 200) {
+                        var entity = result.data[0];
+                        var obj = entity.resource;
+                        var url = obj.path;
+                        url = url.toString();
+                        url = url.substr(0, url.lastIndexOf('.'));
+                        window.location.href = 'pdfjs/web/viewer.html?file=' + url + '.pdf';
+                    } else {
+                        dialogMsg(result.message);
+                    }
+                })
+            } else {
+                dialogMsgFun('您还没有登录，请先去登录', gotologin);
+            }
+        }
+
+        //获取最终资源地址
+        function getFinalPath() {
+            if (getUserOAuths()) {
+                var openid = getUserOAuths().appid;
+                var source_url = window.location.href;
+                sendAjaxSetFuncAsync(
+                    false,
+                    { openid: openid, source_url: source_url },
+                    '/tools/business_handler.ashx?action=GetFinalPath',
+                    function (result) {
+                        var code = parseInt(result.code, 10);
+                        if (code == 200) {
+                            var entity = result.data[0];
+                            var obj = entity.resource;
+                            var url = obj.path;
+                            url = url.toString();
+                            url = url.substr(0, url.lastIndexOf('.'));
+                            window.location.href = 'pdfjs/web/viewer.html?file=' + url + '.pdf';
+                        } else if (code == -1) {
+                            getCommonPath();
+                        } else {
+                            dialogMsg(result.message);
+                        }
+                    });
+            } else {
+                getCommonPath();
+            }
+        }
+
+        //获取学校资源对应的公共资源
+        function getCommonPath() {
+            var data = {
+                id: id
+            };
+            sendAjaxSetFuncAsync(false, data, '/tools/business_handler.ashx?action=GetCommonResourcePath', function (result) {
+                if (parseInt(result.code, 10) == 200) {
+                    var entity = result.data[0];
+                    var obj = entity.resource;
+                    var url = obj.path;
+                    url = url.toString();
+                    url = url.substr(0, url.lastIndexOf('.'));
+                    window.location.href = 'pdfjs/web/viewer.html?file=' + url + '.pdf';
+                } else {
+                    dialogMsg(result.message);
+                }
+            })
+        }
+    </script>
+</head>
+<body>
+
+</body>
+</html>

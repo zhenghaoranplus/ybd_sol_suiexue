@@ -1,0 +1,447 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, width=device-width">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>音视频资源</title>
+    <meta http-equiv="Cache-Control" content="must-revalidate,no-cache">
+    <link rel="stylesheet" href="css/style.css">
+    <script type="text/javascript" src="js/jquery-1.12.3.min.js"></script>
+    <script src="script/layer_mobile/layer.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+    <script src="script/core.js"></script>
+    <script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script src="script/wechat_config.js"></script>
+    <style>
+        .video_collect {
+            position: absolute;
+            top: 50%;
+            right: 1rem;
+            color: #a9a9a9;
+            margin-top: -10px;
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+    <section class="discuss">
+        <div class="discuss_video">
+            <section id="videoForm">
+                <video controls="controls" width="100%" webkit-playsinline playsinline>
+                    您的浏览器不支持 video 标签。
+                </video>
+            </section>
+        </div>
+        <div class="comments">
+            <div class="title" style="position:relative;">
+                全部评论
+                <span>(0条)</span>
+                <i class="video_collect" is_coll="0">收藏</i>
+            </div>
+            <section id="eval_contents"></section>
+        </div>
+        <div class="tip_line"><span>我是有底线滴！</span></div>
+        <div class="add_reply">
+            <div class="inputtxt">
+                <input type="text" id="plcontents" placeholder="在此输入评论..." iseval="true" value="">
+            </div>
+            <div class="replybtn">
+                <input type="button" id="" name="" value="发送">
+            </div>
+        </div>
+    </section>
+    <script>
+        var id = getUrlParam('id');
+        var pageIndex = 1;
+        var pageSize = 10;
+        var tuid = 0;
+        var did = 0;
+        var rid = 0;
+        var method = getUrlParam('method');
+
+        getPath();
+        getData();
+        scrollLoad();
+
+        //收藏、取消收藏
+        $('.video_collect').click(function () {
+            if (!islogin()) {
+                dialogMsgFun('您还没有登录，请先去登录', gotologin);
+            } else {
+                var is_coll = $('.video_collect').attr('is_coll');
+                if (is_coll == '1') {//已收藏，则取消收藏
+                    sendAjaxSetFunc({ group: 2, user_id: islogin().id, data_id: id }, '/tools/business_handler.ashx?action=CancelColletion', function (result) {
+                        if (parseInt(result.code, 10) == 200) {
+                            $('.video_collect').attr('is_coll', '0').html('收藏');
+                        } else {
+                            dialogMsg(result.message);
+                        }
+                    })
+                } else if (is_coll == '0') {//未收藏，收藏
+                    sendAjaxSetFunc({ group: 2, user_id: islogin().id, data_id: id }, '/tools/business_handler.ashx?action=DoColletion', function (result) {
+                        if (parseInt(result.code, 10) == 200) {
+                            $('.video_collect').attr('is_coll', '1').html('已收藏');
+                        } else {
+                            dialogMsg(result.message);
+                        }
+                    })
+                }
+            }
+        })
+
+        //回复按钮点击事件
+        function toreply(obj) {
+            tuid = $(obj).attr('tuid');
+            if (tuid == islogin().id) {
+                dialogTips('不能回复自己');
+                return;
+            }
+            did = $(obj).attr('eid');
+            rid = 0;
+
+            var to_nick_name = $(obj).parents().find('.username span').html();
+            $('.inputtxt input').attr('iseval', 'false');
+            $('.inputtxt input').attr('placeholder', '回复' + to_nick_name + '：');
+            $('.inputtxt input').focus();
+        }
+
+        //回复列表点击事件
+        function toreply2reply(obj) {
+            tuid = $(obj).attr('tuid');
+            did = $(obj).parent().parent().find('.toreply input').attr('eid');
+            rid = $(obj).attr('rid');
+            if (tuid == islogin().id) {
+                doDelEval({ id: rid, user_id: islogin().id });
+            } else {
+                var to_nick_name = $(obj).find('label').html();
+                $('.inputtxt input').attr('iseval', 'false');
+                $('.inputtxt input').attr('placeholder', '回复' + to_nick_name + '：');
+                $('.inputtxt input').focus();
+            }
+        }
+
+        //删除评论
+        function delEval(obj) {
+            var eval_uid = $(obj).attr('tuid');
+            if (eval_uid != islogin().id) {
+                return false;
+            }
+            var eid = $(obj).attr('eid');
+            doDelEval({ id: eid, user_id: islogin().id });
+        }
+
+        //执行删除操作
+        function doDelEval(data) {
+            dialogConfirmFun('确定要删除此评论吗？', function () {
+                sendAjaxSetFunc(
+                        data,
+                        '/tools/business_handler.ashx?action=DelEvaluate',
+                        function (result) {
+                            layer.closeAll();
+                            if (parseInt(result.code, 10) == 200) {
+                                pageIndex = 1;
+                                getData();
+                            } else {
+                                dialogMsg(result.message);
+                            }
+                        })
+            });
+        }
+
+        //讨论内容区域点击事件(清空回复状态)
+        $('.comments .title,.discuss_list').click(function () {
+            $('.inputtxt input').attr('iseval', 'true');
+            $('.inputtxt input').attr('placeholder', '在此输入评论...');
+            tuid = $('.comments').attr('tuid');
+            did = 0;
+            rid = 0;
+            $('.inputtxt input').blur();
+        })
+
+        //获得焦点时，滚动到底部
+        $('#plcontents').focus(function () {
+            setTimeout(function () {
+                document.body.scrollTop = document.body.scrollHeight;
+            }, 300);
+        })
+
+        //发送按钮点击事件
+        $('.replybtn input').click(function () {
+            var iseval = $('.inputtxt input').attr('iseval');
+            if (iseval == 'true') {
+                doEvaluate();
+            } else if (iseval == 'false') {
+                doReply();
+            }
+        })
+
+        //获取资源地址
+        function getPath() {
+            if (method) {//从网页点击或扫码后认证后
+                if (method == 'click') {
+                    getVideo();
+                } else if (method == 'scan') {
+                    getFinalPath();
+                }
+            } else {//扫码后认证前
+                if (isWechatBrowser()) {//是微信浏览器
+                    var source_url = window.location.href.replace(/&/g, '*') + "*method=scan";
+                    var redirecturl = '/html/wxlogin.html?t=' + Math.random() + '&source_url=' + source_url
+                    
+                    window.location.href = redirecturl;
+                } else {//不是微信浏览器，查询公共资源
+                    getCommonPath();
+                }
+            }
+        }
+
+        //获取资源地址
+        function getVideo() {
+            if (islogin()) {
+                var data = {
+                    id: id,
+                    user_id: islogin().id
+                };
+                sendAjaxSetFuncAsync(false, data, '/tools/business_handler.ashx?action=GetResourcePath', function (result) {
+                    if (parseInt(result.code, 10) == 200) {
+                        var entity = result.data[0];
+
+                        var is_collection = entity.is_collection;
+                        if (is_collection > 0) {//已收藏
+                            $('.video_collect').attr('is_coll', '1').html('已收藏');
+                        } else {
+                            $('.video_collect').attr('is_coll', '0').html('收藏');
+                        }
+
+                        var obj = entity.resource;
+                        sharedesc = obj.title;
+                        getInfo();
+
+                        $('title').html(obj.title);
+                        $('#videoForm video').attr('src', obj.path);
+                        $('.comments').attr('tuid', obj.user_id);
+                        tuid = obj.user_id;
+                    } else {
+                        $('.discuss').hide();
+                        dialogMsg(result.message);
+                    }
+                })
+            } else {
+                dialogMsgFun('您还没有登录，请先去登录', gotologin);
+            }
+        }
+
+        //获取最终资源地址
+        function getFinalPath() {
+            if (getUserOAuths()) {
+                var openid = getUserOAuths().appid;
+                var source_url = window.location.href;
+                sendAjaxSetFuncAsync(
+                    false,
+                    { openid: openid, source_url: source_url },
+                    '/tools/business_handler.ashx?action=GetFinalPath',
+                    function (result) {
+                        var code = parseInt(result.code, 10);
+                        if (code == 200) {
+                            var entity = result.data[0];
+
+                            var is_collection = entity.is_collection;
+                            if (is_collection > 0) {//已收藏
+                                $('.video_collect').attr('is_coll', '1').html('已收藏');
+                            } else {
+                                $('.video_collect').attr('is_coll', '0').html('收藏');
+                            }
+
+                            var obj = entity.resource;
+                            sharedesc = obj.title;
+                            getInfo();
+
+                            $('title').html(obj.title);
+                            $('#videoForm video').attr('src', obj.path);
+                            $('.comments').attr('tuid', obj.user_id);
+                            tuid = obj.user_id;
+                        } else if (code == -1) {
+                            getCommonPath();
+                        } else {
+                            $('.discuss').hide();
+                            dialogMsg(result.message);
+                        }
+                    });
+            } else {
+                getCommonPath();
+            }
+        }
+
+        //获取学校资源对应的公共资源
+        function getCommonPath() {
+            var data = {
+                id: id,
+                user_id: islogin() != null ? islogin() != 'undefined' ? islogin().id : 0 : 0
+            };
+            sendAjaxSetFuncAsync(false, data, '/tools/business_handler.ashx?action=GetCommonResourcePath', function (result) {
+                if (parseInt(result.code, 10) == 200) {
+                    var entity = result.data[0];
+
+                    var is_collection = entity.is_collection;
+                    if (is_collection > 0) {//已收藏
+                        $('.video_collect').attr('is_coll', '1').html('已收藏');
+                    } else {
+                        $('.video_collect').attr('is_coll', '0').html('收藏');
+                    }
+
+                    var obj = entity.resource;
+                    sharedesc = obj.title;
+                    getInfo();
+
+                    $('title').html(obj.title);
+                    $('#videoForm video').attr('src', obj.path);
+                    $('.comments').attr('tuid', obj.user_id);
+                    tuid = obj.user_id;
+                } else {
+                    $('.discuss').hide();
+                    dialogMsg(result.message);
+                }
+            })
+        }
+        //评论列表
+        function getData() {
+            sendAjaxSetFuncAsync(false, { id: id, page_index: pageIndex, page_size: pageSize }, '/tools/business_handler.ashx?action=GetVideoEvaluate', function (result) {
+                if (parseInt(result.code, 10) == 200) {
+                    var list = result.data;
+                    if (list && list.length > 0) {
+                        var html = '';
+                        var count = list[0].count;
+                        $('.message_num').html(count);
+                        $('.comments .title span').html('(' + count + '条)');
+
+                        $.each(list, function (k, v) {
+                            html += [
+                                '<div class="comment_list">',
+                                '<div class="pic"><img src="' + v['avatar'] + '"></div>',
+                                '<p class="username"><span>' + v['nick_name'] + '</span></p>',
+                                '<span class="date">' + v['add_time'] + '</span>',
+                                '<div class="txt" eid="' + v['id'] + '" tuid="' + v['user_id'] + '" onclick="delEval(this);">' + v['contents'] + '</div>',
+                                '' + SetReplyHtml(v['replyList']) + '',
+                                '<p class="toreply">',
+                                '<input type="button" id="" eid="' + v['id'] + '" tuid="' + v['user_id'] + '" value="回复" onclick="toreply(this);">',
+                                '</p>',
+                                '</div>'
+                            ].join('');
+                        })
+
+                        if (pageIndex == 1) {
+                            $('#eval_contents').html(html);
+                        } else {
+                            $('#eval_contents').append(html);
+                        }
+                    } else {
+                        if (pageIndex == 1) {
+                            $('#eval_contents').html('');
+                        }
+                    }
+                } else {
+                    $('#videoForm').html(result.message);
+                }
+            })
+        }
+
+        //拼接回复列表
+        function SetReplyHtml(replyList) {
+            var htmls = '';
+            if (replyList && replyList.length > 0) {
+                $.each(replyList, function (k, v) {
+                    htmls += [
+                        '<dl tuid="' + v['from_user_id'] + '" rid="' + v['id'] + '" onclick="toreply2reply(this)">',
+                        '<dt><label>' + v['from_nick_name'] + '</label><span>回复</span>' + v['to_nick_name'] + '：</dt>',
+                        '<dd>' + v['contents'] + '</dd>',
+                        '</dl>',
+                    ].join('');
+                })
+
+                htmls = '<div class="reply">' + htmls + '</div>';
+            }
+
+            return htmls;
+        }
+
+        //评论
+        function doEvaluate() {
+            var contents = $.trim($('#plcontents').val());
+            if (!contents) {
+                dialogTips('请输入评论内容');
+                return;
+            }
+
+            if (islogin()) {
+                var data = {
+                    group: 2,
+                    user_id: islogin().id,
+                    parent_id: id,
+                    to_user_id: tuid,
+                    data_id: did,
+                    type: 1,
+                    reply_id: rid,
+                    contents: contents
+                };
+
+                sendAjaxSetFunc(
+                    data,
+                    '/tools/business_handler.ashx?action=DoEvaluate',
+                    function (result) {
+                        if (parseInt(result.code, 10) == 200) {
+                            dialogTips('评论成功');
+                            $('#plcontents').val('');
+                            pageIndex = 1;
+                            getData();
+                            $('.comments .title,.discuss_list').click();
+                        } else {
+                            dialogMsg(result.message);
+                        }
+                    })
+            } else {
+                dialogMsgFun('您还没有登录，请先去登录', gotologin);
+            }
+        }
+
+        //回复
+        function doReply() {
+            var contents = $.trim($('#plcontents').val());
+            if (!contents) {
+                dialogTips('请输入回复内容');
+                return;
+            }
+
+            if (islogin()) {
+                var data = {
+                    group: 2,
+                    user_id: islogin().id,
+                    parent_id: id,
+                    to_user_id: tuid,
+                    data_id: did,
+                    type: 2,
+                    reply_id: rid,
+                    contents: contents
+                };
+
+                sendAjaxSetFunc(
+                    data,
+                    '/tools/business_handler.ashx?action=DoEvaluate',
+                    function (result) {
+                        if (parseInt(result.code, 10) == 200) {
+                            dialogTips('回复成功');
+                            $('#plcontents').val('');
+                            pageIndex = 1;
+                            getData();
+                            $('.comments .title,.discuss_list').click();
+                        } else {
+                            dialogMsg(result.message);
+                        }
+                    })
+            } else {
+                dialogMsgFun('您还没有登录，请先去登录', gotologin);
+            }
+        }
+    </script>
+</body>
+</html>

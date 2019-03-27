@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, width=device-width">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>扫一扫</title>
+    <meta http-equiv="Cache-Control" content="must-revalidate,no-cache">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/jquery-1.12.3.min.js"></script>
+    <script src="script/layer_mobile/layer.js"></script>
+    <script src="script/core.js"></script>
+    <script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script src="script/wechat_config.js"></script>
+</head>
+<body>
+    <div class="scan_img">
+        <img src="images/scanbg.jpg">
+    </div>
+    <div class="toscan"></div>
+    <div class="scan_txt">将二维码放入框内，即可自动扫描</div>
+    <div class="select_ewm">
+        <input type="button" value="从相册选取二维码" size="30" class="liulan">
+    </div>
+    <script>
+        $('.liulan').click(function () {
+            wx.scanQRCode({
+                needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
+                scanType: ["qrCode", "barCode"], // 可以指定扫二维码还是一维码，默认二者都有
+                success: function (res) {
+                    window.location.href = res.resultStr; // 当needResult 为 1 时，扫码返回的结果
+                }
+            });
+        });
+    </script>
+</body>
+</html>

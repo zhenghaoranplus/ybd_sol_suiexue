@@ -1,0 +1,166 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, width=device-width">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>收货地址</title>
+    <meta http-equiv="Cache-Control" content="must-revalidate,no-cache">
+    <link rel="stylesheet" href="css/style.css">
+    <script type="text/javascript" src="js/jquery-1.12.3.min.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+    <script src="script/layer_mobile/layer.js"></script>
+    <script src="script/core.js"></script>
+    <script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script src="script/wechat_config.js"></script>
+</head>
+<body>
+    <section class="delivery_address">
+        <div class="noaddress">您还没有添加收货地址</div>
+        <div class="toadd"><a href="modify_address.html">添加地址</a></div>
+    </section>
+    <section class="addres_manage">
+        <section id="useraddress"></section>
+        <div class="questions"><a href="modify_address.html">添加</a></div>
+    </section>
+    <script>
+        $('.addres_manage').show();
+        $('.delivery_address').hide();
+        var pageIndex = 1;
+        var pageSize = 10;
+
+        getData();
+        scrollLoad();
+        //查询地址列表
+        function getData() {
+            if (islogin()) {
+                var uid = islogin().id;
+                var data = {
+                    user_id: uid,
+                    page_index: pageIndex,
+                    page_size: pageSize
+                };
+
+                sendAjaxSetFunc(data, '/tools/business_handler.ashx?action=GetAdderssList', function (result) {
+                    if (parseInt(result.code, 10) == 200) {
+                        var list = result.data;
+                        var htmls = '';
+
+                        $('.addres_manage').show();
+                        $('.delivery_address').hide();
+
+                        var checkStr = '';
+                        $.each(list, function (k, v) {
+                            if (v['is_default'] == 1) {
+                                checkStr = 'checked ';
+                            } else {
+                                checkStr = '';
+                            }
+                            htmls += [
+                                '<div class="addreslist">',
+                                '<div class="infor" aid="' + v['id'] + '" onclick="selectAddress(this);">',
+                                '<h2><i>' + v['name'] + '</i><span phone="' + v['phone'] + '">' + formatPhone(v['phone']) + '</span></h2>',
+                                '<p>收货地址：<i>' + v['address'] + '</i></p>',
+                                '</div>',
+                                '<div class="operation">',
+                                '<div class="radio">',
+                                '<input type="radio" value="0" id="radio' + v['id'] + '" name="addressradio" ' + checkStr + ' onclick="setDefault(this)"/><label for="radio' + v['id'] + '">默认地址</label>',
+                                '</div>',
+                                '<input type="button" id="" class="deladdress" value="删除" aid="' + v['id'] + '" onclick="delAddress(this);"><a href="modify_address.html?id=' + v['id'] + '" class="editaddress">编辑</a>',
+                                '</div>',
+                                '</div>'
+                            ].join('');
+                        })
+
+                        if (pageIndex == 1) {
+                            if (htmls) {
+                                $('#useraddress').html(htmls);
+                            } else {
+                                $('.addres_manage').hide();
+                                $('.delivery_address').show();
+                            }
+                        } else if (pageIndex > 1) {
+                            $('#useraddress').append(htmls);
+                        }
+                    } else {
+                        dialogMsg(result.message);
+                    }
+                })
+            } else {
+                dialogMsgFun('您还没有登录，请先去登录', gotologin);
+            }
+        }
+
+        //选择地址
+        function selectAddress(obj) {
+            var aid = $(obj).attr('aid');
+            var name = $(obj).children('h2').children('i').html();
+            var phone = $(obj).children('h2').children('span').attr('phone');
+            var address = $(obj).children('p').children('i').html();
+            var is_default = $(obj).parent().find('input[type=radio]').prop('checked') == true ? 1 : 2;
+
+            var data = {
+                id: aid,
+                name: name,
+                phone: phone,
+                address: address,
+                is_default: is_default
+            };
+
+            var selectedAddress = encodeURIComponent(JSON.stringify(data));
+            setStorage('selectedAddress', selectedAddress);
+            window.location.href = 'order.html';
+        }
+
+        //设置默认地址
+        function setDefault(obj) {
+            if (islogin()) {
+                var uid = islogin().id;
+                var aid = $(obj).attr('id').replace('radio', '');
+
+                var data = {
+                    user_id: uid,
+                    aid: aid
+                };
+
+                sendAjaxSetFunc(data, '/tools/business_handler.ashx?action=SetDefaultAddress', function (result) {
+                    if (parseInt(result.code, 10) == 200) {
+                        pageIndex = 1;
+                        getData();
+                    } else {
+                        dialogMsg(result.message);
+                    }
+                })
+            } else {
+                dialogMsgFun('您还没有登录，请先去登录', gotologin);
+            }
+        }
+
+        //删除地址
+        function delAddress(obj) {
+            if (islogin()) {
+                dialogConfirmFun('确定要删除此地址吗？', function () {
+                    var uid = islogin().id;
+                    var aid = $(obj).attr('aid');
+
+                    var data = {
+                        user_id: uid,
+                        aid: aid
+                    };
+
+                    sendAjaxSetFunc(data, '/tools/business_handler.ashx?action=DelAddress', function (result) {
+                        layer.closeAll();
+                        if (parseInt(result.code, 10) == 200) {
+                            $(obj).parent().parent().remove();
+                        } else {
+                            dialogMsg(result.message);
+                        }
+                    }, obj)
+                })
+            } else {
+                dialogMsgFun('您还没有登录，请先去登录', gotologin);
+            }
+        }
+    </script>
+</body>
+</html>

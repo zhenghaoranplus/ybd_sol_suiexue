@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, width=device-width">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>申请加入</title>
+    <meta http-equiv="Cache-Control" content="must-revalidate,no-cache">
+    <link rel="stylesheet" href="css/style.css">
+    <script type="text/javascript" src="js/jquery-1.12.3.min.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+    <script src="script/layer_mobile/layer.js"></script>
+    <script src="script/core.js"></script>
+    <script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script src="script/wechat_config.js"></script>
+</head>
+<body>
+    <section class="application_join">
+        <h2>填写验证信息，等待老师通过</h2>
+        <div class="textarea">
+            <textarea id="verifyContent"></textarea>
+        </div>
+        <p class="userbtn">
+            <input type="button" value="发送" onclick="submitVerify()"/>
+        </p>
+    </section>
+    <script>
+        function submitVerify() {
+            if (islogin()) {
+                var id = getUrlParam('id');
+                var contents = $.trim($('#verifyContent').val());
+
+                if (!contents) {
+                    dialogTips('请填写验证信息');
+                    return false;
+                }
+
+                var data = {
+                    classroom_id: id,
+                    user_id: islogin().id,
+                    contents: contents
+                };
+
+                sendAjaxSetFunc(data, '/tools/business_handler.ashx?action=JoinClass', function (result) {
+                    if (parseInt(result.code, 10) == 200) {
+                        dialogMsgFun('验证信息已提交，请等待老师通过', function () {
+                            history.back(-2);
+                        });
+                    } else {
+                        dialogMsg(result.message);
+                    }
+                });
+            } else {
+                dialogMsgFun('您还没有登录，请先去登录', gotologin);
+            }
+        }
+    </script>
+</body>
+</html>

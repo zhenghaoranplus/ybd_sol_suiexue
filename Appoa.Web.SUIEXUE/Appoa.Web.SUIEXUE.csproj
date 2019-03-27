@@ -1,0 +1,3045 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{C68BF159-5589-48DC-8575-FA2C679B7418}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Appoa.Manage</RootNamespace>
+    <AssemblyName>Appoa.Manage</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AipSdk, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>files\AipSdk.dll</HintPath>
+    </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>files\NPOI\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
+    <Reference Include="LitJSON, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>files\LitJSON.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Office.Interop.PowerPoint, Version=12.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c">
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Microsoft.Office.Interop.Word, Version=12.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>files\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI, Version=2.2.1.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>files\NPOI\NPOI.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OOXML, Version=2.2.1.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>files\NPOI\NPOI.OOXML.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OpenXml4Net, Version=2.2.1.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>files\NPOI\NPOI.OpenXml4Net.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OpenXmlFormats, Version=2.2.1.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>files\NPOI\NPOI.OpenXmlFormats.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="ThoughtWorks.QRCode, Version=1.0.3990.25764, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>files\ThoughtWorks.QRCode.dll</HintPath>
+    </Reference>
+    <Reference Include="_7he7.ColorPicker, Version=1.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>files\_7he7.ColorPicker.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="admin\center.aspx" />
+    <Content Include="admin\classroom\article_edit.aspx" />
+    <Content Include="admin\classroom\article_list.aspx" />
+    <Content Include="admin\classroom\chapter_edit.aspx" />
+    <Content Include="admin\classroom\chapter_list.aspx" />
+    <Content Include="admin\classroom\classroom_list.aspx" />
+    <Content Include="admin\classroom\correct_work.aspx" />
+    <Content Include="admin\classroom\correct_work_list.aspx" />
+    <Content Include="admin\classroom\currect_answer_list.aspx" />
+    <Content Include="admin\classroom\currect_chapter_list.aspx" />
+    <Content Include="admin\classroom\currect_question_list.aspx" />
+    <Content Include="admin\classroom\file_edit.aspx" />
+    <Content Include="admin\classroom\file_list.aspx" />
+    <Content Include="admin\classroom\notice_edit.aspx" />
+    <Content Include="admin\classroom\notice_list.aspx" />
+    <Content Include="admin\classroom\resource_back.aspx" />
+    <Content Include="admin\classroom\resource_classroom.aspx" />
+    <Content Include="admin\classroom\verify_list.aspx" />
+    <Content Include="admin\classroom\video_add.aspx" />
+    <Content Include="admin\classroom\video_edit.aspx" />
+    <Content Include="admin\classroom\video_list.aspx" />
+    <Content Include="admin\classroom\work_edit.aspx" />
+    <Content Include="admin\classroom\work_list.aspx" />
+    <Content Include="admin\common\3d.aspx" />
+    <Content Include="admin\common\about_us.aspx" />
+    <Content Include="admin\common\default_logo.aspx" />
+    <Content Include="admin\common\dict_edit.aspx" />
+    <Content Include="admin\common\dict_list.aspx" />
+    <Content Include="admin\common\integral_rule.aspx" />
+    <Content Include="admin\common\questions_edit.aspx" />
+    <Content Include="admin\common\questions_list.aspx" />
+    <Content Include="admin\common\questions_options_ajax.aspx" />
+    <Content Include="admin\common\question_chapter_list.aspx" />
+    <Content Include="admin\common\question_course_list.aspx" />
+    <Content Include="admin\common\question_options.aspx" />
+    <Content Include="admin\common\question_options_edit.aspx" />
+    <Content Include="admin\common\school_edit.aspx" />
+    <Content Include="admin\common\school_list.aspx" />
+    <Content Include="admin\common\user_agreement.aspx" />
+    <Content Include="admin\common\voice_view.aspx" />
+    <Content Include="admin\course\adR_edit.aspx" />
+    <Content Include="admin\course\adR_list.aspx" />
+    <Content Include="admin\common\article_view.aspx" />
+    <Content Include="admin\course\category_edit.aspx" />
+    <Content Include="admin\course\category_list.aspx" />
+    <Content Include="admin\course\chapter_course_list.aspx" />
+    <Content Include="admin\course\chapter_edit.aspx" />
+    <Content Include="admin\course\chapter_list.aspx" />
+    <Content Include="admin\course\course_edit.aspx" />
+    <Content Include="admin\course\course_list.aspx" />
+    <Content Include="admin\course\discuss_edit.aspx" />
+    <Content Include="admin\course\discuss_list.aspx" />
+    <Content Include="admin\course\examination_edit.aspx" />
+    <Content Include="admin\course\examination_list.aspx" />
+    <Content Include="admin\course\questionnaire_edit.aspx" />
+    <Content Include="admin\course\questionnaire_list.aspx" />
+    <Content Include="admin\course\recommend_course.aspx" />
+    <Content Include="admin\course\resource_back.aspx" />
+    <Content Include="admin\course\resource_edit.aspx" />
+    <Content Include="admin\course\resource_list.aspx" />
+    <Content Include="admin\common\video_view.aspx" />
+    <Content Include="admin\course\word_voice_edit.aspx" />
+    <Content Include="admin\dialog\article_resource.aspx" />
+    <Content Include="admin\dialog\article_resource.html" />
+    <Content Include="admin\dialog\course_info.aspx" />
+    <Content Include="admin\dialog\dialog_SaveStock.aspx" />
+    <Content Include="admin\dialog\document_resource.html" />
+    <Content Include="admin\dialog\message_content.aspx" />
+    <Content Include="admin\dialog\multiUpload.aspx" />
+    <Content Include="admin\dialog\selected_question.aspx" />
+    <Content Include="admin\dialog\unselected_chapter.aspx" />
+    <Content Include="admin\dialog\unselected_course.aspx" />
+    <Content Include="admin\dialog\unselected_question.aspx" />
+    <Content Include="admin\dialog\video_resource.html" />
+    <Content Include="admin\dialog\wjjx_info.aspx" />
+    <Content Include="admin\index.aspx" />
+    <Content Include="admin\js\common.js" />
+    <Content Include="admin\js\images\ios6switch_shadow.png" />
+    <Content Include="admin\js\images\ios6switch_thumb.png" />
+    <Content Include="admin\js\img\uploadify-cancel.png" />
+    <Content Include="admin\js\ios6switch.css" />
+    <Content Include="admin\js\ios6switch.min.js" />
+    <Content Include="admin\js\jquery.form.js" />
+    <Content Include="admin\js\layer.js" />
+    <Content Include="admin\js\layer\layer.js" />
+    <Content Include="admin\js\layer\mobile\layer.js" />
+    <Content Include="admin\js\layer\mobile\need\layer.css" />
+    <Content Include="admin\js\layer\skin\default\icon-ext.png" />
+    <Content Include="admin\js\layer\skin\default\icon.png" />
+    <Content Include="admin\js\layer\skin\default\layer.css" />
+    <Content Include="admin\js\layer\skin\default\loading-0.gif" />
+    <Content Include="admin\js\layer\skin\default\loading-1.gif" />
+    <Content Include="admin\js\layer\skin\default\loading-2.gif" />
+    <Content Include="admin\js\layindex.js" />
+    <Content Include="admin\js\laymain.js" />
+    <Content Include="admin\js\layout.js" />
+    <Content Include="admin\js\lightense.js" />
+    <Content Include="admin\js\pinyin.js" />
+    <Content Include="admin\js\uploader.js" />
+    <Content Include="admin\js\uploadify\jquery.uploadify.js" />
+    <Content Include="admin\js\uploadify\jquery.uploadify.min.js" />
+    <Content Include="admin\js\uploadify\uploadify-cancel.png" />
+    <Content Include="admin\js\uploadify\uploadify.css" />
+    <Content Include="admin\js\uploadify\uploadify.swf" />
+    <Content Include="admin\js\vue-3d-model.min.js" />
+    <Content Include="admin\js\vue.js" />
+    <Content Include="admin\js\zoomify.min.css" />
+    <Content Include="admin\js\zoomify.min.js" />
+    <Content Include="admin\login.aspx" />
+    <Content Include="admin\manager\manager_edit.aspx" />
+    <Content Include="admin\manager\manager_list.aspx" />
+    <Content Include="admin\manager\manager_log.aspx" />
+    <Content Include="admin\manager\manager_pwd.aspx" />
+    <Content Include="admin\manager\role_edit.aspx" />
+    <Content Include="admin\manager\role_list.aspx" />
+    <Content Include="admin\message\message_list.aspx" />
+    <Content Include="admin\message\send_message.aspx" />
+    <Content Include="admin\pc\about_us.aspx" />
+    <Content Include="admin\pc\adR_edit.aspx" />
+    <Content Include="admin\pc\adR_list.aspx" />
+    <Content Include="admin\pc\case_category.aspx" />
+    <Content Include="admin\pc\case_category_edit.aspx" />
+    <Content Include="admin\pc\case_edit.aspx" />
+    <Content Include="admin\pc\case_list.aspx" />
+    <Content Include="admin\pc\mooc_item.aspx" />
+    <Content Include="admin\pc\mooc_item_edit.aspx" />
+    <Content Include="admin\pc\news_category.aspx" />
+    <Content Include="admin\pc\news_category_edit.aspx" />
+    <Content Include="admin\pc\news_edit.aspx" />
+    <Content Include="admin\pc\news_list.aspx" />
+    <Content Include="admin\pc\partner_edit.aspx" />
+    <Content Include="admin\pc\partner_list.aspx" />
+    <Content Include="admin\pc\services_edit.aspx" />
+    <Content Include="admin\pc\services_list.aspx" />
+    <Content Include="admin\pc\service_industry.aspx" />
+    <Content Include="admin\pc\service_industry_edit.aspx" />
+    <Content Include="admin\pc\service_items.aspx" />
+    <Content Include="admin\pc\service_items_edit.aspx" />
+    <Content Include="admin\pc\team_edit.aspx" />
+    <Content Include="admin\pc\team_list.aspx" />
+    <Content Include="admin\pc\video_view.aspx" />
+    <Content Include="admin\right.aspx" />
+    <Content Include="admin\settings\nav_edit.aspx" />
+    <Content Include="admin\settings\nav_list.aspx" />
+    <Content Include="admin\settings\sys_config.aspx" />
+    <Content Include="admin\shop\adR_edit.aspx" />
+    <Content Include="admin\shop\adR_list.aspx" />
+    <Content Include="admin\shop\category_edit.aspx" />
+    <Content Include="admin\shop\category_list.aspx" />
+    <Content Include="admin\shop\goods_edit.aspx" />
+    <Content Include="admin\shop\goods_evaluate.aspx" />
+    <Content Include="admin\shop\goods_list.aspx" />
+    <Content Include="admin\shop\goods_spec.aspx" />
+    <Content Include="admin\shop\goods_spec_edit.aspx" />
+    <Content Include="admin\shop\order_detail.aspx" />
+    <Content Include="admin\shop\order_list.aspx" />
+    <Content Include="admin\skin\base.css" />
+    <Content Include="admin\skin\default\bg.jpg" />
+    <Content Include="admin\skin\default\ie_update.jpg" />
+    <Content Include="admin\skin\default\loadimg.gif" />
+    <Content Include="admin\skin\default\logo.png" />
+    <Content Include="admin\skin\default\LogoImg.png" />
+    <Content Include="admin\skin\default\logoLogin.png" />
+    <Content Include="admin\skin\default\nav\home.png" />
+    <Content Include="admin\skin\default\nav\order.png" />
+    <Content Include="admin\skin\default\nav\pus.png" />
+    <Content Include="admin\skin\default\nav\sys.png" />
+    <Content Include="admin\skin\default\nav\user.png" />
+    <Content Include="admin\skin\default\order_speed.gif" />
+    <Content Include="admin\skin\default\skin_icons.png" />
+    <Content Include="admin\skin\default\style.css" />
+    <Content Include="admin\skin\default\valid_icons.png" />
+    <Content Include="admin\skin\icon\demo.css" />
+    <Content Include="admin\skin\icon\demo_fontclass.html" />
+    <Content Include="admin\skin\icon\demo_symbol.html" />
+    <Content Include="admin\skin\icon\demo_unicode.html" />
+    <Content Include="admin\skin\icon\iconfont.css" />
+    <Content Include="admin\skin\icon\iconfont.js" />
+    <Content Include="admin\skin\icon\iconfont.svg" />
+    <Content Include="admin\skin\layout.css" />
+    <Content Include="admin\user\share_user_edit.aspx" />
+    <Content Include="admin\user\share_user_list.aspx" />
+    <Content Include="admin\user\user_list.aspx" />
+    <Content Include="css\image1.gif" />
+    <Content Include="css\image2.gif" />
+    <Content Include="css\jcrop.gif" />
+    <Content Include="css\jquery.fancybox-1.3.4.css" />
+    <Content Include="css\jquery.jcrop.css" />
+    <Content Include="css\meneame.jpg" />
+    <Content Include="css\pagination.css" />
+    <Content Include="css\validate.css" />
+    <Content Include="css\valid_icons.png" />
+    <Content Include="editor\kindeditor-min.js" />
+    <Content Include="editor\kindeditor.js" />
+    <Content Include="editor\lang\ar.js" />
+    <Content Include="editor\lang\en.js" />
+    <Content Include="editor\lang\ko.js" />
+    <Content Include="editor\lang\ru.js" />
+    <Content Include="editor\lang\zh-CN.js" />
+    <Content Include="editor\lang\zh-TW.js" />
+    <Content Include="editor\plugins\anchor\anchor.js" />
+    <Content Include="editor\plugins\autoheight\autoheight.js" />
+    <Content Include="editor\plugins\baidumap\baidumap.js" />
+    <Content Include="editor\plugins\baidumap\index.html" />
+    <Content Include="editor\plugins\baidumap\map.html" />
+    <Content Include="editor\plugins\clearhtml\clearhtml.js" />
+    <Content Include="editor\plugins\code\code.js" />
+    <Content Include="editor\plugins\code\prettify.css" />
+    <Content Include="editor\plugins\code\prettify.js" />
+    <Content Include="editor\plugins\emoticons\emoticons.js" />
+    <Content Include="editor\plugins\emoticons\images\0.gif" />
+    <Content Include="editor\plugins\emoticons\images\1.gif" />
+    <Content Include="editor\plugins\emoticons\images\10.gif" />
+    <Content Include="editor\plugins\emoticons\images\100.gif" />
+    <Content Include="editor\plugins\emoticons\images\101.gif" />
+    <Content Include="editor\plugins\emoticons\images\102.gif" />
+    <Content Include="editor\plugins\emoticons\images\103.gif" />
+    <Content Include="editor\plugins\emoticons\images\104.gif" />
+    <Content Include="editor\plugins\emoticons\images\105.gif" />
+    <Content Include="editor\plugins\emoticons\images\106.gif" />
+    <Content Include="editor\plugins\emoticons\images\107.gif" />
+    <Content Include="editor\plugins\emoticons\images\108.gif" />
+    <Content Include="editor\plugins\emoticons\images\109.gif" />
+    <Content Include="editor\plugins\emoticons\images\11.gif" />
+    <Content Include="editor\plugins\emoticons\images\110.gif" />
+    <Content Include="editor\plugins\emoticons\images\111.gif" />
+    <Content Include="editor\plugins\emoticons\images\112.gif" />
+    <Content Include="editor\plugins\emoticons\images\113.gif" />
+    <Content Include="editor\plugins\emoticons\images\114.gif" />
+    <Content Include="editor\plugins\emoticons\images\115.gif" />
+    <Content Include="editor\plugins\emoticons\images\116.gif" />
+    <Content Include="editor\plugins\emoticons\images\117.gif" />
+    <Content Include="editor\plugins\emoticons\images\118.gif" />
+    <Content Include="editor\plugins\emoticons\images\119.gif" />
+    <Content Include="editor\plugins\emoticons\images\12.gif" />
+    <Content Include="editor\plugins\emoticons\images\120.gif" />
+    <Content Include="editor\plugins\emoticons\images\121.gif" />
+    <Content Include="editor\plugins\emoticons\images\122.gif" />
+    <Content Include="editor\plugins\emoticons\images\123.gif" />
+    <Content Include="editor\plugins\emoticons\images\124.gif" />
+    <Content Include="editor\plugins\emoticons\images\125.gif" />
+    <Content Include="editor\plugins\emoticons\images\126.gif" />
+    <Content Include="editor\plugins\emoticons\images\127.gif" />
+    <Content Include="editor\plugins\emoticons\images\128.gif" />
+    <Content Include="editor\plugins\emoticons\images\129.gif" />
+    <Content Include="editor\plugins\emoticons\images\13.gif" />
+    <Content Include="editor\plugins\emoticons\images\130.gif" />
+    <Content Include="editor\plugins\emoticons\images\131.gif" />
+    <Content Include="editor\plugins\emoticons\images\132.gif" />
+    <Content Include="editor\plugins\emoticons\images\133.gif" />
+    <Content Include="editor\plugins\emoticons\images\134.gif" />
+    <Content Include="editor\plugins\emoticons\images\14.gif" />
+    <Content Include="editor\plugins\emoticons\images\15.gif" />
+    <Content Include="editor\plugins\emoticons\images\16.gif" />
+    <Content Include="editor\plugins\emoticons\images\17.gif" />
+    <Content Include="editor\plugins\emoticons\images\18.gif" />
+    <Content Include="editor\plugins\emoticons\images\19.gif" />
+    <Content Include="editor\plugins\emoticons\images\2.gif" />
+    <Content Include="editor\plugins\emoticons\images\20.gif" />
+    <Content Include="editor\plugins\emoticons\images\21.gif" />
+    <Content Include="editor\plugins\emoticons\images\22.gif" />
+    <Content Include="editor\plugins\emoticons\images\23.gif" />
+    <Content Include="editor\plugins\emoticons\images\24.gif" />
+    <Content Include="editor\plugins\emoticons\images\25.gif" />
+    <Content Include="editor\plugins\emoticons\images\26.gif" />
+    <Content Include="editor\plugins\emoticons\images\27.gif" />
+    <Content Include="editor\plugins\emoticons\images\28.gif" />
+    <Content Include="editor\plugins\emoticons\images\29.gif" />
+    <Content Include="editor\plugins\emoticons\images\3.gif" />
+    <Content Include="editor\plugins\emoticons\images\30.gif" />
+    <Content Include="editor\plugins\emoticons\images\31.gif" />
+    <Content Include="editor\plugins\emoticons\images\32.gif" />
+    <Content Include="editor\plugins\emoticons\images\33.gif" />
+    <Content Include="editor\plugins\emoticons\images\34.gif" />
+    <Content Include="editor\plugins\emoticons\images\35.gif" />
+    <Content Include="editor\plugins\emoticons\images\36.gif" />
+    <Content Include="editor\plugins\emoticons\images\37.gif" />
+    <Content Include="editor\plugins\emoticons\images\38.gif" />
+    <Content Include="editor\plugins\emoticons\images\39.gif" />
+    <Content Include="editor\plugins\emoticons\images\4.gif" />
+    <Content Include="editor\plugins\emoticons\images\40.gif" />
+    <Content Include="editor\plugins\emoticons\images\41.gif" />
+    <Content Include="editor\plugins\emoticons\images\42.gif" />
+    <Content Include="editor\plugins\emoticons\images\43.gif" />
+    <Content Include="editor\plugins\emoticons\images\44.gif" />
+    <Content Include="editor\plugins\emoticons\images\45.gif" />
+    <Content Include="editor\plugins\emoticons\images\46.gif" />
+    <Content Include="editor\plugins\emoticons\images\47.gif" />
+    <Content Include="editor\plugins\emoticons\images\48.gif" />
+    <Content Include="editor\plugins\emoticons\images\49.gif" />
+    <Content Include="editor\plugins\emoticons\images\5.gif" />
+    <Content Include="editor\plugins\emoticons\images\50.gif" />
+    <Content Include="editor\plugins\emoticons\images\51.gif" />
+    <Content Include="editor\plugins\emoticons\images\52.gif" />
+    <Content Include="editor\plugins\emoticons\images\53.gif" />
+    <Content Include="editor\plugins\emoticons\images\54.gif" />
+    <Content Include="editor\plugins\emoticons\images\55.gif" />
+    <Content Include="editor\plugins\emoticons\images\56.gif" />
+    <Content Include="editor\plugins\emoticons\images\57.gif" />
+    <Content Include="editor\plugins\emoticons\images\58.gif" />
+    <Content Include="editor\plugins\emoticons\images\59.gif" />
+    <Content Include="editor\plugins\emoticons\images\6.gif" />
+    <Content Include="editor\plugins\emoticons\images\60.gif" />
+    <Content Include="editor\plugins\emoticons\images\61.gif" />
+    <Content Include="editor\plugins\emoticons\images\62.gif" />
+    <Content Include="editor\plugins\emoticons\images\63.gif" />
+    <Content Include="editor\plugins\emoticons\images\64.gif" />
+    <Content Include="editor\plugins\emoticons\images\65.gif" />
+    <Content Include="editor\plugins\emoticons\images\66.gif" />
+    <Content Include="editor\plugins\emoticons\images\67.gif" />
+    <Content Include="editor\plugins\emoticons\images\68.gif" />
+    <Content Include="editor\plugins\emoticons\images\69.gif" />
+    <Content Include="editor\plugins\emoticons\images\7.gif" />
+    <Content Include="editor\plugins\emoticons\images\70.gif" />
+    <Content Include="editor\plugins\emoticons\images\71.gif" />
+    <Content Include="editor\plugins\emoticons\images\72.gif" />
+    <Content Include="editor\plugins\emoticons\images\73.gif" />
+    <Content Include="editor\plugins\emoticons\images\74.gif" />
+    <Content Include="editor\plugins\emoticons\images\75.gif" />
+    <Content Include="editor\plugins\emoticons\images\76.gif" />
+    <Content Include="editor\plugins\emoticons\images\77.gif" />
+    <Content Include="editor\plugins\emoticons\images\78.gif" />
+    <Content Include="editor\plugins\emoticons\images\79.gif" />
+    <Content Include="editor\plugins\emoticons\images\8.gif" />
+    <Content Include="editor\plugins\emoticons\images\80.gif" />
+    <Content Include="editor\plugins\emoticons\images\81.gif" />
+    <Content Include="editor\plugins\emoticons\images\82.gif" />
+    <Content Include="editor\plugins\emoticons\images\83.gif" />
+    <Content Include="editor\plugins\emoticons\images\84.gif" />
+    <Content Include="editor\plugins\emoticons\images\85.gif" />
+    <Content Include="editor\plugins\emoticons\images\86.gif" />
+    <Content Include="editor\plugins\emoticons\images\87.gif" />
+    <Content Include="editor\plugins\emoticons\images\88.gif" />
+    <Content Include="editor\plugins\emoticons\images\89.gif" />
+    <Content Include="editor\plugins\emoticons\images\9.gif" />
+    <Content Include="editor\plugins\emoticons\images\90.gif" />
+    <Content Include="editor\plugins\emoticons\images\91.gif" />
+    <Content Include="editor\plugins\emoticons\images\92.gif" />
+    <Content Include="editor\plugins\emoticons\images\93.gif" />
+    <Content Include="editor\plugins\emoticons\images\94.gif" />
+    <Content Include="editor\plugins\emoticons\images\95.gif" />
+    <Content Include="editor\plugins\emoticons\images\96.gif" />
+    <Content Include="editor\plugins\emoticons\images\97.gif" />
+    <Content Include="editor\plugins\emoticons\images\98.gif" />
+    <Content Include="editor\plugins\emoticons\images\99.gif" />
+    <Content Include="editor\plugins\emoticons\images\static.gif" />
+    <Content Include="editor\plugins\filemanager\filemanager.js" />
+    <Content Include="editor\plugins\filemanager\images\file-16.gif" />
+    <Content Include="editor\plugins\filemanager\images\file-64.gif" />
+    <Content Include="editor\plugins\filemanager\images\folder-16.gif" />
+    <Content Include="editor\plugins\filemanager\images\folder-64.gif" />
+    <Content Include="editor\plugins\filemanager\images\go-up.gif" />
+    <Content Include="editor\plugins\fixtoolbar\fixtoolbar.js" />
+    <Content Include="editor\plugins\flash\flash.js" />
+    <Content Include="editor\plugins\image\image.js" />
+    <Content Include="editor\plugins\image\images\align_left.gif" />
+    <Content Include="editor\plugins\image\images\align_right.gif" />
+    <Content Include="editor\plugins\image\images\align_top.gif" />
+    <Content Include="editor\plugins\image\images\refresh.png" />
+    <Content Include="editor\plugins\insertfile\insertfile.js" />
+    <Content Include="editor\plugins\lineheight\lineheight.js" />
+    <Content Include="editor\plugins\link\link.js" />
+    <Content Include="editor\plugins\map\map.html" />
+    <Content Include="editor\plugins\map\map.js" />
+    <Content Include="editor\plugins\media\media.js" />
+    <Content Include="editor\plugins\multiimage\images\image.png" />
+    <Content Include="editor\plugins\multiimage\images\select-files-en.png" />
+    <Content Include="editor\plugins\multiimage\images\select-files-zh-CN.png" />
+    <Content Include="editor\plugins\multiimage\images\swfupload.swf" />
+    <Content Include="editor\plugins\multiimage\multiimage.js" />
+    <Content Include="editor\plugins\pagebreak\pagebreak.js" />
+    <Content Include="editor\plugins\plainpaste\plainpaste.js" />
+    <Content Include="editor\plugins\preview\preview.js" />
+    <Content Include="editor\plugins\quickformat\quickformat.js" />
+    <Content Include="editor\plugins\table\table.js" />
+    <Content Include="editor\plugins\template\html\1.html" />
+    <Content Include="editor\plugins\template\html\2.html" />
+    <Content Include="editor\plugins\template\html\3.html" />
+    <Content Include="editor\plugins\template\template.js" />
+    <Content Include="editor\plugins\wordpaste\wordpaste.js" />
+    <Content Include="editor\themes\common\anchor.gif" />
+    <Content Include="editor\themes\common\blank.gif" />
+    <Content Include="editor\themes\common\flash.gif" />
+    <Content Include="editor\themes\common\loading.gif" />
+    <Content Include="editor\themes\common\media.gif" />
+    <Content Include="editor\themes\common\rm.gif" />
+    <Content Include="editor\themes\default\background.png" />
+    <Content Include="editor\themes\default\default.css" />
+    <Content Include="editor\themes\default\default.png" />
+    <Content Include="editor\themes\qq\editor.gif" />
+    <Content Include="editor\themes\qq\qq.css" />
+    <Content Include="editor\themes\simple\simple.css" />
+    <Content Include="favicon.ico" />
+    <Content Include="files\AipSdk.dll" />
+    <Content Include="files\AipSdk.XML" />
+    <Content Include="files\ffmpeg\ffmpeg.exe" />
+    <Content Include="files\ffmpeg\ffplay.exe" />
+    <Content Include="files\ffmpeg\ffprobe.exe" />
+    <Content Include="files\LitJSON.dll" />
+    <Content Include="files\Newtonsoft.Json.dll" />
+    <Content Include="files\Newtonsoft.Json.xml" />
+    <Content Include="files\NPOI\ICSharpCode.SharpZipLib.dll" />
+    <Content Include="files\NPOI\NPOI.dll" />
+    <Content Include="files\NPOI\NPOI.OOXML.dll" />
+    <Content Include="files\NPOI\NPOI.OpenXml4Net.dll" />
+    <Content Include="files\NPOI\NPOI.OpenXmlFormats.dll" />
+    <Content Include="files\NPOI\NPOI.XML" />
+    <Content Include="files\ThoughtWorks.QRCode.dll" />
+    <Content Include="files\_7he7.ColorPicker.dll" />
+    <Content Include="Global.asax" />
+    <Content Include="html\3d.html" />
+    <Content Include="html\aboutus.html" />
+    <Content Include="html\address.html" />
+    <Content Include="html\add_address.html" />
+    <Content Include="html\all_course.html" />
+    <Content Include="html\article_details.html" />
+    <Content Include="html\bind_phone.html" />
+    <Content Include="html\cart.html" />
+    <Content Include="html\classroom.html" />
+    <Content Include="html\class_details.html" />
+    <Content Include="html\class_notice.html" />
+    <Content Include="html\class_size.html" />
+    <Content Include="html\collect.html" />
+    <Content Include="html\course.html" />
+    <Content Include="html\courseware.html" />
+    <Content Include="html\course_details.html" />
+    <Content Include="html\create_class.html" />
+    <Content Include="html\css\style.css" />
+    <Content Include="html\discuss_details.html" />
+    <Content Include="html\dist\css\swiper.css" />
+    <Content Include="html\dist\css\swiper.min.css" />
+    <Content Include="html\dist\js\swiper.jquery.js" />
+    <Content Include="html\dist\js\swiper.jquery.min.js" />
+    <Content Include="html\dist\js\swiper.jquery.umd.js" />
+    <Content Include="html\dist\js\swiper.jquery.umd.min.js" />
+    <Content Include="html\dist\js\swiper.js" />
+    <Content Include="html\dist\js\swiper.min.js" />
+    <Content Include="html\doc_detail.html" />
+    <Content Include="html\edit_class.html" />
+    <Content Include="html\evaluate.html" />
+    <Content Include="html\feedback.html" />
+    <Content Include="html\getpwd.html" />
+    <Content Include="html\history.html" />
+    <Content Include="html\images\add.png" />
+    <Content Include="html\images\addhead.jpg" />
+    <Content Include="html\images\addicon.png" />
+    <Content Include="html\images\addimg.png" />
+    <Content Include="html\images\addressico.png" />
+    <Content Include="html\images\address_bg.png" />
+    <Content Include="html\images\addvideo.png" />
+    <Content Include="html\images\audio_player_120.png" />
+    <Content Include="html\images\bottomico1.png" />
+    <Content Include="html\images\bottomico1_1.png" />
+    <Content Include="html\images\bottomico2.png" />
+    <Content Include="html\images\bottomico2_1.png" />
+    <Content Include="html\images\bottomico3.png" />
+    <Content Include="html\images\bottomico3_1.png" />
+    <Content Include="html\images\bottomico4.png" />
+    <Content Include="html\images\bottomico4_1.png" />
+    <Content Include="html\images\cart.png" />
+    <Content Include="html\images\cart2.png" />
+    <Content Include="html\images\classify.png" />
+    <Content Include="html\images\classroom_img.jpg" />
+    <Content Include="html\images\class_banner.jpg" />
+    <Content Include="html\images\class_head.png" />
+    <Content Include="html\images\class_ico1.png" />
+    <Content Include="html\images\class_ico2.png" />
+    <Content Include="html\images\class_ico3.png" />
+    <Content Include="html\images\class_ico4.png" />
+    <Content Include="html\images\class_ico5.png" />
+    <Content Include="html\images\class_ico6.png" />
+    <Content Include="html\images\class_icon1.png" />
+    <Content Include="html\images\class_icon2.png" />
+    <Content Include="html\images\close.png" />
+    <Content Include="html\images\closecart.png" />
+    <Content Include="html\images\code.jpg" />
+    <Content Include="html\images\code.png" />
+    <Content Include="html\images\collection.png" />
+    <Content Include="html\images\collection2.png" />
+    <Content Include="html\images\correct.png" />
+    <Content Include="html\images\count-down.png" />
+    <Content Include="html\images\course1.png" />
+    <Content Include="html\images\course2.png" />
+    <Content Include="html\images\course3.png" />
+    <Content Include="html\images\course4.png" />
+    <Content Include="html\images\course5.png" />
+    <Content Include="html\images\course6.png" />
+    <Content Include="html\images\course7.png" />
+    <Content Include="html\images\course8.png" />
+    <Content Include="html\images\course_banner.jpg" />
+    <Content Include="html\images\course_icon.png" />
+    <Content Include="html\images\course_img1.jpg" />
+    <Content Include="html\images\course_img2.jpg" />
+    <Content Include="html\images\create.png" />
+    <Content Include="html\images\c_checkbox_off.png" />
+    <Content Include="html\images\c_checkbox_off2.png" />
+    <Content Include="html\images\c_checkbox_on.png" />
+    <Content Include="html\images\c_checkbox_on2.png" />
+    <Content Include="html\images\del2.png" />
+    <Content Include="html\images\dico1.png" />
+    <Content Include="html\images\dico2.png" />
+    <Content Include="html\images\distribution_icon1.png" />
+    <Content Include="html\images\distribution_icon2.png" />
+    <Content Include="html\images\distribution_icon3.png" />
+    <Content Include="html\images\edit.png" />
+    <Content Include="html\images\edit2.png" />
+    <Content Include="html\images\error.png" />
+    <Content Include="html\images\file_type1.png" />
+    <Content Include="html\images\file_type2.png" />
+    <Content Include="html\images\file_type3.png" />
+    <Content Include="html\images\file_type4.png" />
+    <Content Include="html\images\file_type5.png" />
+    <Content Include="html\images\file_type6.png" />
+    <Content Include="html\images\file_type7.png" />
+    <Content Include="html\images\headcount.png" />
+    <Content Include="html\images\heads_img1.png" />
+    <Content Include="html\images\heads_img2.png" />
+    <Content Include="html\images\heads_img3.png" />
+    <Content Include="html\images\heads_img4.png" />
+    <Content Include="html\images\head_img1.jpg" />
+    <Content Include="html\images\head_img2.jpg" />
+    <Content Include="html\images\head_img3.jpg" />
+    <Content Include="html\images\head_img4.jpg" />
+    <Content Include="html\images\head_img5.jpg" />
+    <Content Include="html\images\head_img6.jpg" />
+    <Content Include="html\images\img1.jpg" />
+    <Content Include="html\images\img2.jpg" />
+    <Content Include="html\images\img3.jpg" />
+    <Content Include="html\images\index_banner.png" />
+    <Content Include="html\images\index_nav1.png" />
+    <Content Include="html\images\index_nav2.png" />
+    <Content Include="html\images\index_nav3.png" />
+    <Content Include="html\images\index_nav4.png" />
+    <Content Include="html\images\index_nav5.png" />
+    <Content Include="html\images\index_nav6.png" />
+    <Content Include="html\images\index_nav7.png" />
+    <Content Include="html\images\index_nav8.png" />
+    <Content Include="html\images\index_nav9.png" />
+    <Content Include="html\images\index_nav_all.png" />
+    <Content Include="html\images\jtico.png" />
+    <Content Include="html\images\jtico2.png" />
+    <Content Include="html\images\jticon.png" />
+    <Content Include="html\images\loginico1.png" />
+    <Content Include="html\images\loginico2.png" />
+    <Content Include="html\images\loginico3.png" />
+    <Content Include="html\images\loginico4.png" />
+    <Content Include="html\images\login_icon.png" />
+    <Content Include="html\images\login_logo.png" />
+    <Content Include="html\images\Logo.png" />
+    <Content Include="html\images\mall_banner.jpg" />
+    <Content Include="html\images\materials_icon1.png" />
+    <Content Include="html\images\materials_icon2.png" />
+    <Content Include="html\images\materials_icon3.png" />
+    <Content Include="html\images\materials_icon4.png" />
+    <Content Include="html\images\message.png" />
+    <Content Include="html\images\message_icon.png" />
+    <Content Include="html\images\message_img.png" />
+    <Content Include="html\images\myhead.png" />
+    <Content Include="html\images\m_icon1.png" />
+    <Content Include="html\images\m_icon2.png" />
+    <Content Include="html\images\m_icon3.png" />
+    <Content Include="html\images\m_icon4.png" />
+    <Content Include="html\images\noaddress.png" />
+    <Content Include="html\images\noordericon.png" />
+    <Content Include="html\images\noticeimg.jpg" />
+    <Content Include="html\images\notice_img1.jpg" />
+    <Content Include="html\images\notice_img2.jpg" />
+    <Content Include="html\images\notice_img3.jpg" />
+    <Content Include="html\images\notice_img4.jpg" />
+    <Content Include="html\images\notice_img5.jpg" />
+    <Content Include="html\images\num1.png" />
+    <Content Include="html\images\num2.png" />
+    <Content Include="html\images\num3.png" />
+    <Content Include="html\images\orderimg.png" />
+    <Content Include="html\images\order_ico.png" />
+    <Content Include="html\images\order_ico1.png" />
+    <Content Include="html\images\order_ico2.png" />
+    <Content Include="html\images\order_ico3.png" />
+    <Content Include="html\images\order_ico4.png" />
+    <Content Include="html\images\photo1.png" />
+    <Content Include="html\images\photo2.png" />
+    <Content Include="html\images\playicon.png" />
+    <Content Include="html\images\productimg.jpg" />
+    <Content Include="html\images\productimg1.jpg" />
+    <Content Include="html\images\productimg2.jpg" />
+    <Content Include="html\images\productimg3.jpg" />
+    <Content Include="html\images\productimg4.jpg" />
+    <Content Include="html\images\productimg5.jpg" />
+    <Content Include="html\images\productimg6.jpg" />
+    <Content Include="html\images\product_detailsimg.jpg" />
+    <Content Include="html\images\product_img.jpg" />
+    <Content Include="html\images\product_img1.jpg" />
+    <Content Include="html\images\product_img2.jpg" />
+    <Content Include="html\images\product_img3.jpg" />
+    <Content Include="html\images\product_img4.jpg" />
+    <Content Include="html\images\product_img5.jpg" />
+    <Content Include="html\images\product_img6.jpg" />
+    <Content Include="html\images\publish_icon1.png" />
+    <Content Include="html\images\publish_icon2.png" />
+    <Content Include="html\images\recommended.png" />
+    <Content Include="html\images\release_icon.png" />
+    <Content Include="html\images\rule_icon.png" />
+    <Content Include="html\images\scan.png" />
+    <Content Include="html\images\scanbg.jpg" />
+    <Content Include="html\images\scancover.png" />
+    <Content Include="html\images\school_icon.png" />
+    <Content Include="html\images\score.png" />
+    <Content Include="html\images\search.png" />
+    <Content Include="html\images\search2.png" />
+    <Content Include="html\images\setdefaulticon.png" />
+    <Content Include="html\images\setdefaulticon2.png" />
+    <Content Include="html\images\share_img.jpg" />
+    <Content Include="html\images\signin_successbg.png" />
+    <Content Include="html\images\sign_in.png" />
+    <Content Include="html\images\star.png" />
+    <Content Include="html\images\star2.png" />
+    <Content Include="html\images\star3.png" />
+    <Content Include="html\images\star4.png" />
+    <Content Include="html\images\success_icon.png" />
+    <Content Include="html\images\test_icon1.png" />
+    <Content Include="html\images\test_icon2.png" />
+    <Content Include="html\images\test_icon3.png" />
+    <Content Include="html\images\topics.png" />
+    <Content Include="html\images\totest.png" />
+    <Content Include="html\images\usermenu_ico1.png" />
+    <Content Include="html\images\usermenu_ico2.png" />
+    <Content Include="html\images\usermenu_ico3.png" />
+    <Content Include="html\images\usermenu_ico4.png" />
+    <Content Include="html\images\usermenu_ico5.png" />
+    <Content Include="html\images\userphoto.jpg" />
+    <Content Include="html\images\userphoto.png" />
+    <Content Include="html\images\usertop.jpg" />
+    <Content Include="html\images\video.jpg" />
+    <Content Include="html\images\video_img.jpg" />
+    <Content Include="html\images\video_thumb.jpg" />
+    <Content Include="html\images\file_type8.png" />
+    <Content Include="html\index.html" />
+    <Content Include="html\integral.html" />
+    <Content Include="html\integral_rule.html" />
+    <Content Include="html\join_class.html" />
+    <Content Include="html\js\hammer.js" />
+    <Content Include="html\js\iscroll-zoom.js" />
+    <Content Include="html\js\jquery-1.12.3.min.js" />
+    <Content Include="html\js\jquery.bxslider_e88acd1b.js" />
+    <Content Include="html\js\jquery.photoClip.js" />
+    <Content Include="html\js\LArea.js" />
+    <Content Include="html\js\LArea.min.js" />
+    <Content Include="html\js\LAreaData1.js" />
+    <Content Include="html\js\LAreaData2.js" />
+    <Content Include="html\js\main.js" />
+    <Content Include="html\js\star.js" />
+    <Content Include="html\js\swiper\idangerous.swiper.min.js" />
+    <Content Include="html\js\swiper\swiper.min.css" />
+    <Content Include="html\js\vue-3d-model.min.js" />
+    <Content Include="html\js\vue.js" />
+    <Content Include="html\js\zepto.min.js" />
+    <Content Include="html\knowledge.html" />
+    <Content Include="html\knowledge_details.html" />
+    <Content Include="html\login.html" />
+    <Content Include="html\mall.html" />
+    <Content Include="html\materials.html" />
+    <Content Include="html\member_data.html" />
+    <Content Include="html\message.html" />
+    <Content Include="html\message2.html" />
+    <Content Include="html\message_details.html" />
+    <Content Include="html\modify_address.html" />
+    <Content Include="html\modify_password.html" />
+    <Content Include="html\modify_phone.html" />
+    <Content Include="html\my_center.html" />
+    <Content Include="html\my_classroom.html" />
+    <Content Include="html\my_distribution.html" />
+    <Content Include="html\my_integral.html" />
+    <Content Include="html\my_order.html" />
+    <Content Include="html\my_question.html" />
+    <Content Include="html\notice_details.html" />
+    <Content Include="html\order.html" />
+    <Content Include="html\order_details.html" />
+    <Content Include="html\parsing.html" />
+    <Content Include="html\pascal.html" />
+    <Content Include="html\pascal1.html" />
+    <Content Include="html\pascal_parsing.html" />
+    <Content Include="html\pascal_results.html" />
+    <Content Include="html\pdfjs\build\pdf.js" />
+    <Content Include="html\pdfjs\build\pdf.worker.js" />
+    <Content Include="html\pdfjs\web\compatibility.js" />
+    <Content Include="html\pdfjs\web\debugger.js" />
+    <Content Include="html\pdfjs\web\images\annotation-check.svg" />
+    <Content Include="html\pdfjs\web\images\annotation-comment.svg" />
+    <Content Include="html\pdfjs\web\images\annotation-help.svg" />
+    <Content Include="html\pdfjs\web\images\annotation-insert.svg" />
+    <Content Include="html\pdfjs\web\images\annotation-key.svg" />
+    <Content Include="html\pdfjs\web\images\annotation-newparagraph.svg" />
+    <Content Include="html\pdfjs\web\images\annotation-noicon.svg" />
+    <Content Include="html\pdfjs\web\images\annotation-note.svg" />
+    <Content Include="html\pdfjs\web\images\annotation-paragraph.svg" />
+    <Content Include="html\pdfjs\web\images\findbarButton-next%402x.png" />
+    <Content Include="html\pdfjs\web\images\findbarButton-next-rtl%402x.png" />
+    <Content Include="html\pdfjs\web\images\findbarButton-next-rtl.png" />
+    <Content Include="html\pdfjs\web\images\findbarButton-next.png" />
+    <Content Include="html\pdfjs\web\images\findbarButton-previous%402x.png" />
+    <Content Include="html\pdfjs\web\images\findbarButton-previous-rtl%402x.png" />
+    <Content Include="html\pdfjs\web\images\findbarButton-previous-rtl.png" />
+    <Content Include="html\pdfjs\web\images\findbarButton-previous.png" />
+    <Content Include="html\pdfjs\web\images\grab.cur" />
+    <Content Include="html\pdfjs\web\images\grabbing.cur" />
+    <Content Include="html\pdfjs\web\images\loading-icon.gif" />
+    <Content Include="html\pdfjs\web\images\loading-small.png" />
+    <Content Include="html\pdfjs\web\images\secondaryToolbarButton-documentProperties%402x.png" />
+    <Content Include="html\pdfjs\web\images\secondaryToolbarButton-documentProperties.png" />
+    <Content Include="html\pdfjs\web\images\secondaryToolbarButton-firstPage%402x.png" />
+    <Content Include="html\pdfjs\web\images\secondaryToolbarButton-firstPage.png" />
+    <Content Include="html\pdfjs\web\images\secondaryToolbarButton-handTool%402x.png" />
+    <Content Include="html\pdfjs\web\images\secondaryToolbarButton-handTool.png" />
+    <Content Include="html\pdfjs\web\images\secondaryToolbarButton-lastPage%402x.png" />
+    <Content Include="html\pdfjs\web\images\secondaryToolbarButton-lastPage.png" />
+    <Content Include="html\pdfjs\web\images\secondaryToolbarButton-rotateCcw%402x.png" />
+    <Content Include="html\pdfjs\web\images\secondaryToolbarButton-rotateCcw.png" />
+    <Content Include="html\pdfjs\web\images\secondaryToolbarButton-rotateCw%402x.png" />
+    <Content Include="html\pdfjs\web\images\secondaryToolbarButton-rotateCw.png" />
+    <Content Include="html\pdfjs\web\images\shadow.png" />
+    <Content Include="html\pdfjs\web\images\texture.png" />
+    <Content Include="html\pdfjs\web\images\toolbarButton-bookmark%402x.png" />
+    <Content Include="html\pdfjs\web\images\toolbarButton-bookmark.png" />
+    <Content Include="html\pdfjs\web\images\toolbarButton-download%402x.png" />
+    <Content Include="html\pdfjs\web\images\toolbarButton-download.png" />
+    <Content Include="html\pdfjs\web\images\toolbarButton-menuArrows%402x.png" />
+    <Content Include="html\pdfjs\web\images\toolbarButton-menuArrows.png" />
+    <Content Include="html\pdfjs\web\images\toolbarButton-openFile%402x.png" />
+    <Content Include="html\pdfjs\web\images\toolbarButton-openFile.png" />
+    <Content Include="html\pdfjs\web\images\toolbarButton-pageDown%402x.png" />
+    <Content Include="html\pdfjs\web\images\toolbarButton-pageDown-rtl%402x.png" />
+    <Content Include="html\pdfjs\web\images\toolbarButton-pageDown-rtl.png" />
+    <Content Include="html\pdfjs\web\images\toolbarButton-pageDown.png" />
+    <Content Include="html\pdfjs\web\images\toolbarButton-pageUp%402x.png" />
+    <Content Include="html\pdfjs\web\images\toolbarButton-pageUp-rtl%402x.png" />
+    <Content Include="html\pdfjs\web\images\toolbarButton-pageUp-rtl.png" />
+    <Content Include="html\pdfjs\web\images\toolbarButton-pageUp.png" />
+    <Content Include="html\pdfjs\web\images\toolbarButton-presentationMode%402x.png" />
+    <Content Include="html\pdfjs\web\images\toolbarButton-presentationMode.png" />
+    <Content Include="html\pdfjs\web\images\toolbarButton-print%402x.png" />
+    <Content Include="html\pdfjs\web\images\toolbarButton-print.png" />
+    <Content Include="html\pdfjs\web\images\toolbarButton-search%402x.png" />
+    <Content Include="html\pdfjs\web\images\toolbarButton-search.png" />
+    <Content Include="html\pdfjs\web\images\toolbarButton-secondaryToolbarToggle%402x.png" />
+    <Content Include="html\pdfjs\web\images\toolbarButton-secondaryToolbarToggle-rtl%402x.png" />
+    <Content Include="html\pdfjs\web\images\toolbarButton-secondaryToolbarToggle-rtl.png" />
+    <Content Include="html\pdfjs\web\images\toolbarButton-secondaryToolbarToggle.png" />
+    <Content Include="html\pdfjs\web\images\toolbarButton-sidebarToggle%402x.png" />
+    <Content Include="html\pdfjs\web\images\toolbarButton-sidebarToggle-rtl%402x.png" />
+    <Content Include="html\pdfjs\web\images\toolbarButton-sidebarToggle-rtl.png" />
+    <Content Include="html\pdfjs\web\images\toolbarButton-sidebarToggle.png" />
+    <Content Include="html\pdfjs\web\images\toolbarButton-viewAttachments%402x.png" />
+    <Content Include="html\pdfjs\web\images\toolbarButton-viewAttachments.png" />
+    <Content Include="html\pdfjs\web\images\toolbarButton-viewOutline%402x.png" />
+    <Content Include="html\pdfjs\web\images\toolbarButton-viewOutline-rtl%402x.png" />
+    <Content Include="html\pdfjs\web\images\toolbarButton-viewOutline-rtl.png" />
+    <Content Include="html\pdfjs\web\images\toolbarButton-viewOutline.png" />
+    <Content Include="html\pdfjs\web\images\toolbarButton-viewThumbnail%402x.png" />
+    <Content Include="html\pdfjs\web\images\toolbarButton-viewThumbnail.png" />
+    <Content Include="html\pdfjs\web\images\toolbarButton-zoomIn%402x.png" />
+    <Content Include="html\pdfjs\web\images\toolbarButton-zoomIn.png" />
+    <Content Include="html\pdfjs\web\images\toolbarButton-zoomOut%402x.png" />
+    <Content Include="html\pdfjs\web\images\toolbarButton-zoomOut.png" />
+    <Content Include="html\pdfjs\web\l10n.js" />
+    <Content Include="html\pdfjs\web\viewer.css" />
+    <Content Include="html\pdfjs\web\viewer.html" />
+    <Content Include="html\pdfjs\web\viewer.js" />
+    <Content Include="html\personal_infor.html" />
+    <Content Include="html\post_photo.html" />
+    <Content Include="html\post_video.html" />
+    <Content Include="html\product.html" />
+    <Content Include="html\product_details.html" />
+    <Content Include="html\questionnaire.html" />
+    <Content Include="html\questionnaire1.html" />
+    <Content Include="html\questionnaire2.html" />
+    <Content Include="html\questions.html" />
+    <Content Include="html\question_details.html" />
+    <Content Include="html\question_list.html" />
+    <Content Include="html\rank.html" />
+    <Content Include="html\rank2.html" />
+    <Content Include="html\recommend_list.html" />
+    <Content Include="html\register.html" />
+    <Content Include="html\scan.html" />
+    <Content Include="html\script\core.js" />
+    <Content Include="html\script\course.js" />
+    <Content Include="html\script\course_details.js" />
+    <Content Include="html\script\discuss_details.js" />
+    <Content Include="html\script\index.js" />
+    <Content Include="html\script\layer_mobile\layer.js" />
+    <Content Include="html\script\layer_mobile\need\layer.css" />
+    <Content Include="html\script\lrz.all.bundle.js" />
+    <Content Include="html\script\wechat_config.js" />
+    <Content Include="html\search.html" />
+    <Content Include="html\search2.html" />
+    <Content Include="html\search_result.html" />
+    <Content Include="html\search_result2.html" />
+    <Content Include="html\set.html" />
+    <Content Include="html\subordinate.html" />
+    <Content Include="html\task.html" />
+    <Content Include="html\test.html" />
+    <Content Include="html\test1.html" />
+    <Content Include="html\test_rank.html" />
+    <Content Include="html\test_results.html" />
+    <Content Include="html\verify.html" />
+    <Content Include="html\video.html" />
+    <Content Include="html\video_details.html" />
+    <Content Include="html\video_details1.html" />
+    <Content Include="html\voice_detail.html" />
+    <Content Include="html\wxlogin.html" />
+    <Content Include="images\man.jpg" />
+    <Content Include="images\man.png" />
+    <Content Include="images\oauth\feixin.png" />
+    <Content Include="images\oauth\kaixin.png" />
+    <Content Include="images\oauth\qq.png" />
+    <Content Include="images\oauth\renren.png" />
+    <Content Include="images\oauth\taobao.png" />
+    <Content Include="images\oauth\weibo.png" />
+    <Content Include="index.html" />
+    <Content Include="pc\about_us.aspx" />
+    <Content Include="pc\case_info.aspx" />
+    <Content Include="pc\case_list.aspx" />
+    <Content Include="pc\contact_us.aspx" />
+    <Content Include="pc\index.aspx" />
+    <Content Include="pc\news_info.aspx" />
+    <Content Include="pc\news_list.aspx" />
+    <Content Include="pc\service_item.aspx" />
+    <Content Include="pc\skin\css\animate.css" />
+    <Content Include="pc\skin\css\cui.css" />
+    <Content Include="pc\skin\css\flexslider.css" />
+    <Content Include="pc\skin\css\less.css" />
+    <Content Include="pc\skin\css\style.css" />
+    <Content Include="pc\skin\images\14415953225349.jpg" />
+    <Content Include="pc\skin\images\14415956107965.jpg" />
+    <Content Include="pc\skin\images\14415956337556.jpg" />
+    <Content Include="pc\skin\images\14415956565984.jpg" />
+    <Content Include="pc\skin\images\14415956833641.jpg" />
+    <Content Include="pc\skin\images\14417685061923.png" />
+    <Content Include="pc\skin\images\14417770416979.png" />
+    <Content Include="pc\skin\images\14417770728965.png" />
+    <Content Include="pc\skin\images\14417770931301.png" />
+    <Content Include="pc\skin\images\14417772151236.png" />
+    <Content Include="pc\skin\images\14417772351016.png" />
+    <Content Include="pc\skin\images\14417773256917.png" />
+    <Content Include="pc\skin\images\14417773644618.png" />
+    <Content Include="pc\skin\images\14417777895049.png" />
+    <Content Include="pc\skin\images\14417778261716.png" />
+    <Content Include="pc\skin\images\14423868578860.jpg" />
+    <Content Include="pc\skin\images\14423880884104.jpg" />
+    <Content Include="pc\skin\images\14423881046487.jpg" />
+    <Content Include="pc\skin\images\14429937758428.png" />
+    <Content Include="pc\skin\images\alpha_black_70.png" />
+    <Content Include="pc\skin\images\alpha_blue_60.png" />
+    <Content Include="pc\skin\images\alpha_red_80.png" />
+    <Content Include="pc\skin\images\arr1.jpg" />
+    <Content Include="pc\skin\images\arr2.png" />
+    <Content Include="pc\skin\images\arr3.png" />
+    <Content Include="pc\skin\images\arr_b.png" />
+    <Content Include="pc\skin\images\arr_t.png" />
+    <Content Include="pc\skin\images\article_next.png" />
+    <Content Include="pc\skin\images\article_prev.png" />
+    <Content Include="pc\skin\images\b1.png" />
+    <Content Include="pc\skin\images\b2.png" />
+    <Content Include="pc\skin\images\b3.png" />
+    <Content Include="pc\skin\images\b4.png" />
+    <Content Include="pc\skin\images\banner1.jpg" />
+    <Content Include="pc\skin\images\banner2.jpg" />
+    <Content Include="pc\skin\images\banner3.jpg" />
+    <Content Include="pc\skin\images\ban_bg.png" />
+    <Content Include="pc\skin\images\ban_bg_top.png" />
+    <Content Include="pc\skin\images\ban_k.png" />
+    <Content Include="pc\skin\images\ban_next.png" />
+    <Content Include="pc\skin\images\ban_prev.png" />
+    <Content Include="pc\skin\images\bg_1.png" />
+    <Content Include="pc\skin\images\bg_2.png" />
+    <Content Include="pc\skin\images\bg_3.jpg" />
+    <Content Include="pc\skin\images\bg_4.png" />
+    <Content Include="pc\skin\images\bg_5.png" />
+    <Content Include="pc\skin\images\c1.png" />
+    <Content Include="pc\skin\images\c2.png" />
+    <Content Include="pc\skin\images\c3.png" />
+    <Content Include="pc\skin\images\c4.png" />
+    <Content Include="pc\skin\images\c5.png" />
+    <Content Include="pc\skin\images\c6.png" />
+    <Content Include="pc\skin\images\c7.png" />
+    <Content Include="pc\skin\images\c8.png" />
+    <Content Include="pc\skin\images\circle.png" />
+    <Content Include="pc\skin\images\circle1.png" />
+    <Content Include="pc\skin\images\close.png" />
+    <Content Include="pc\skin\images\computer.png" />
+    <Content Include="pc\skin\images\d1.png" />
+    <Content Include="pc\skin\images\d10.png" />
+    <Content Include="pc\skin\images\d11.png" />
+    <Content Include="pc\skin\images\d12.png" />
+    <Content Include="pc\skin\images\d13.png" />
+    <Content Include="pc\skin\images\d14.png" />
+    <Content Include="pc\skin\images\d2.png" />
+    <Content Include="pc\skin\images\d3.png" />
+    <Content Include="pc\skin\images\d4.png" />
+    <Content Include="pc\skin\images\d5.png" />
+    <Content Include="pc\skin\images\d6.png" />
+    <Content Include="pc\skin\images\d7.png" />
+    <Content Include="pc\skin\images\d8.png" />
+    <Content Include="pc\skin\images\d9.png" />
+    <Content Include="pc\skin\images\disc2.png" />
+    <Content Include="pc\skin\images\disc3.png" />
+    <Content Include="pc\skin\images\disc4.png" />
+    <Content Include="pc\skin\images\ewm.jpg" />
+    <Content Include="pc\skin\images\fd_bg.png" />
+    <Content Include="pc\skin\images\fd_icon1.png" />
+    <Content Include="pc\skin\images\fd_icon2.png" />
+    <Content Include="pc\skin\images\icon1.png" />
+    <Content Include="pc\skin\images\icon2.png" />
+    <Content Include="pc\skin\images\icon3.png" />
+    <Content Include="pc\skin\images\icon_solution.png" />
+    <Content Include="pc\skin\images\icon_solution_h.png" />
+    <Content Include="pc\skin\images\img18.png" />
+    <Content Include="pc\skin\images\i_icon1.png" />
+    <Content Include="pc\skin\images\i_icon1_h.png" />
+    <Content Include="pc\skin\images\i_icon2.png" />
+    <Content Include="pc\skin\images\jia.png" />
+    <Content Include="pc\skin\images\jian.png" />
+    <Content Include="pc\skin\images\jjd.png" />
+    <Content Include="pc\skin\images\line3.png" />
+    <Content Include="pc\skin\images\logo.jpg" />
+    <Content Include="pc\skin\images\logo.png" />
+    <Content Include="pc\skin\images\logo_small.png" />
+    <Content Include="pc\skin\images\m1.png" />
+    <Content Include="pc\skin\images\m2.png" />
+    <Content Include="pc\skin\images\m3.png" />
+    <Content Include="pc\skin\images\m4.png" />
+    <Content Include="pc\skin\images\m5.png" />
+    <Content Include="pc\skin\images\m6.png" />
+    <Content Include="pc\skin\images\m7.png" />
+    <Content Include="pc\skin\images\m8.png" />
+    <Content Include="pc\skin\images\map_bg2.png" />
+    <Content Include="pc\skin\images\map_bg3.png" />
+    <Content Include="pc\skin\images\map_down.png" />
+    <Content Include="pc\skin\images\map_s.png" />
+    <Content Include="pc\skin\images\mark.gif" />
+    <Content Include="pc\skin\images\menu_add.png" />
+    <Content Include="pc\skin\images\more1.png" />
+    <Content Include="pc\skin\images\n1.png" />
+    <Content Include="pc\skin\images\n10.png" />
+    <Content Include="pc\skin\images\n11.png" />
+    <Content Include="pc\skin\images\n12.png" />
+    <Content Include="pc\skin\images\n13.png" />
+    <Content Include="pc\skin\images\n14.png" />
+    <Content Include="pc\skin\images\n2.png" />
+    <Content Include="pc\skin\images\n3.png" />
+    <Content Include="pc\skin\images\n4.png" />
+    <Content Include="pc\skin\images\n5.png" />
+    <Content Include="pc\skin\images\n6.png" />
+    <Content Include="pc\skin\images\n7.png" />
+    <Content Include="pc\skin\images\n8.png" />
+    <Content Include="pc\skin\images\n9.png" />
+    <Content Include="pc\skin\images\o1.png" />
+    <Content Include="pc\skin\images\o10.png" />
+    <Content Include="pc\skin\images\o11.png" />
+    <Content Include="pc\skin\images\o12.png" />
+    <Content Include="pc\skin\images\o13.png" />
+    <Content Include="pc\skin\images\o14.png" />
+    <Content Include="pc\skin\images\o15.png" />
+    <Content Include="pc\skin\images\o16.png" />
+    <Content Include="pc\skin\images\o17.png" />
+    <Content Include="pc\skin\images\o18.png" />
+    <Content Include="pc\skin\images\o19.png" />
+    <Content Include="pc\skin\images\o2.png" />
+    <Content Include="pc\skin\images\o20.png" />
+    <Content Include="pc\skin\images\o21.png" />
+    <Content Include="pc\skin\images\o22.png" />
+    <Content Include="pc\skin\images\o3.png" />
+    <Content Include="pc\skin\images\o4.png" />
+    <Content Include="pc\skin\images\o5.png" />
+    <Content Include="pc\skin\images\o6.png" />
+    <Content Include="pc\skin\images\o7.png" />
+    <Content Include="pc\skin\images\o8.png" />
+    <Content Include="pc\skin\images\o9.png" />
+    <Content Include="pc\skin\images\process_bg.png" />
+    <Content Include="pc\skin\images\q1.png" />
+    <Content Include="pc\skin\images\q2.png" />
+    <Content Include="pc\skin\images\q3.png" />
+    <Content Include="pc\skin\images\q4.png" />
+    <Content Include="pc\skin\images\q5.png" />
+    <Content Include="pc\skin\images\q6.png" />
+    <Content Include="pc\skin\images\r1.png" />
+    <Content Include="pc\skin\images\r2.png" />
+    <Content Include="pc\skin\images\r3.png" />
+    <Content Include="pc\skin\images\r4.png" />
+    <Content Include="pc\skin\images\r5.png" />
+    <Content Include="pc\skin\images\r6.png" />
+    <Content Include="pc\skin\images\r7.png" />
+    <Content Include="pc\skin\images\r_icon1.png" />
+    <Content Include="pc\skin\images\r_icon2.png" />
+    <Content Include="pc\skin\images\shou.png" />
+    <Content Include="pc\skin\images\side_icon01.png" />
+    <Content Include="pc\skin\images\side_icon02.png" />
+    <Content Include="pc\skin\images\side_icon03.png" />
+    <Content Include="pc\skin\images\t1.png" />
+    <Content Include="pc\skin\images\t2.png" />
+    <Content Include="pc\skin\images\t3.png" />
+    <Content Include="pc\skin\images\t4.png" />
+    <Content Include="pc\skin\images\t5.png" />
+    <Content Include="pc\skin\images\t6.png" />
+    <Content Include="pc\skin\images\t7.png" />
+    <Content Include="pc\skin\images\t8.png" />
+    <Content Include="pc\skin\images\t9.png" />
+    <Content Include="pc\skin\images\tel_bg.png" />
+    <Content Include="pc\skin\images\w1.png" />
+    <Content Include="pc\skin\images\w2.png" />
+    <Content Include="pc\skin\images\w3.png" />
+    <Content Include="pc\skin\images\w4.png" />
+    <Content Include="pc\skin\images\w5.png" />
+    <Content Include="pc\skin\images\w6.png" />
+    <Content Include="pc\skin\images\w7.png" />
+    <Content Include="pc\skin\images\w8.png" />
+    <Content Include="pc\skin\images\w9.png" />
+    <Content Include="pc\skin\images\二维码.png" />
+    <Content Include="pc\skin\js\banner.js" />
+    <Content Include="pc\skin\js\ditu.js" />
+    <Content Include="pc\skin\js\flexslider.js" />
+    <Content Include="pc\skin\js\jquery.js" />
+    <Content Include="pc\skin\js\lib.js" />
+    <Content Include="pc\skin\js\map.js" />
+    <Content Include="pc\uploads\allimg\160421\1-160421150R70-L.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1-160421151I50-L.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1-1604211543140-L.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1-1604211543380-L.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1-1604211544070-L.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1-1604211544350-L.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1-1604211545010-L.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1-1604211545370-L.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1-1604211546360-L.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1-1604211549300-L.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1-1604211549540-L.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1-160421154F90-L.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1-160421154J50-L.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1-160421154R70-L.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1-1604211550350-L.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1-1604211550560-L.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1-1604211551200-L.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1-1604211553440-L.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1-1604211554190-L.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1-1604211554530-L.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1-1604211555190-L.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1-1604211555390-L.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1-1604211600200-L.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1-1604211601060-L.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1-1604211601260-L.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1-1604211602000-L.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1-16042116021D54.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1-160421160222M8.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1-16042116022YS.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1-160421160234648.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1-1604211602405T.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1-16042116024DB.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1-1604211604010-L.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1-1604211604220-L.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1-1604211604450-L.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1-1604211605220-L.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1-1604211605430-L.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1-1604211609260-L.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1-1604211609480-L.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1-160421160A80-L.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1-160421160H90-L.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1-160421160J50-L.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1-160421160P90-L.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1-160421160T60-L.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1-160421160Z60-L.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1-1604211610090-L.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1-1604211610300-L.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1-1604211610550-L.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1-1604211611180-L.png" />
+    <Content Include="pc\uploads\allimg\160421\1-1604211611480-L.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1-1604211612010-L.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1-1604211612370-L.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1-1604211613250-L.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1-1604211614010-L.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1-1604211614250-L.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1-1604211614440-L.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1-1604211615020-L.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1-1604211615200-L.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1-1604211615370-L.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1-1604211615580-L.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1-1604211616200-L.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1-1604211616410-L.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1-1604211619220-L.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1-1604211619440-L.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1-160421161F20-L.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1-160421161J30-L.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1-160421161P00-L.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1-160421161Q70-L.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1-160421161S40-L.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1-160421161U90-L.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1-1604211620020-L.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1-1604211620240-L.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1-1604211620420-L.jpg" />
+    <Content Include="pc\uploads\allimg\160421\151K634c-0.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1545561615-4.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1545563037-7.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1545563546-2.jpg" />
+    <Content Include="pc\uploads\allimg\160421\15455635K-3.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1545563c9-0.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1545563S4-6.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1545564C1-1.jpg" />
+    <Content Include="pc\uploads\allimg\160421\15455A437-8.jpg" />
+    <Content Include="pc\uploads\allimg\160421\15455Ab2-5.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1546491621-5.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1546492037-4.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1546492257-3.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1546492U0-2.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1546493036-6.jpg" />
+    <Content Include="pc\uploads\allimg\160421\15464a111-0.jpg" />
+    <Content Include="pc\uploads\allimg\160421\15464aD1-1.jpg" />
+    <Content Include="pc\uploads\allimg\160421\154GG343-5.jpg" />
+    <Content Include="pc\uploads\allimg\160421\154GG560-4.jpg" />
+    <Content Include="pc\uploads\allimg\160421\154GI212-0.jpg" />
+    <Content Include="pc\uploads\allimg\160421\154GIL5-3.jpg" />
+    <Content Include="pc\uploads\allimg\160421\154GJI7-6.jpg" />
+    <Content Include="pc\uploads\allimg\160421\154GL426-2.jpg" />
+    <Content Include="pc\uploads\allimg\160421\154GM328-1.jpg" />
+    <Content Include="pc\uploads\allimg\160421\154PQ494-6.jpg" />
+    <Content Include="pc\uploads\allimg\160421\154PRZ1-3.jpg" />
+    <Content Include="pc\uploads\allimg\160421\154PTE7-0.jpg" />
+    <Content Include="pc\uploads\allimg\160421\154PTP8-4.jpg" />
+    <Content Include="pc\uploads\allimg\160421\154PW222-5.jpg" />
+    <Content Include="pc\uploads\allimg\160421\154PW255-2.jpg" />
+    <Content Include="pc\uploads\allimg\160421\154PW4M-1.jpg" />
+    <Content Include="pc\uploads\allimg\160421\154SQ1M-2.jpg" />
+    <Content Include="pc\uploads\allimg\160421\154SR1W-3.jpg" />
+    <Content Include="pc\uploads\allimg\160421\154SRb6-6.jpg" />
+    <Content Include="pc\uploads\allimg\160421\154SS0I-1.jpg" />
+    <Content Include="pc\uploads\allimg\160421\154SS212-0.jpg" />
+    <Content Include="pc\uploads\allimg\160421\154SSc6-4.jpg" />
+    <Content Include="pc\uploads\allimg\160421\154SU157-5.jpg" />
+    <Content Include="pc\uploads\allimg\160421\15540943Z-0.jpg" />
+    <Content Include="pc\uploads\allimg\160421\155441MU-0.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1555091151-0.jpg" />
+    <Content Include="pc\uploads\allimg\160421\15552a961-0.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1555501262-2.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1555501344-0.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1555503208-3.jpg" />
+    <Content Include="pc\uploads\allimg\160421\155550I96-4.png" />
+    <Content Include="pc\uploads\allimg\160421\155550IK-1.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1600352J9-0.jpg" />
+    <Content Include="pc\uploads\allimg\160421\16010S151-0.jpg" />
+    <Content Include="pc\uploads\allimg\160421\16012TT7-0.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1604104228-1.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1604105Z3-2.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1604106213-0.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1604351134-0.jpg" />
+    <Content Include="pc\uploads\allimg\160421\16043539D-1.jpg" />
+    <Content Include="pc\uploads\allimg\160421\16043541Q-2.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1604561527-1.gif" />
+    <Content Include="pc\uploads\allimg\160421\1604562I5-0.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1604562Q2-2.jpg" />
+    <Content Include="pc\uploads\allimg\160421\16045641E-4.gif" />
+    <Content Include="pc\uploads\allimg\160421\16045B354-3.png" />
+    <Content Include="pc\uploads\allimg\160421\16053425H-0.jpg" />
+    <Content Include="pc\uploads\allimg\160421\16055K130-2.jpg" />
+    <Content Include="pc\uploads\allimg\160421\16055M041-1.jpg" />
+    <Content Include="pc\uploads\allimg\160421\16055M556-0.jpg" />
+    <Content Include="pc\uploads\allimg\160421\16091I2U-0.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1609351H4-0.jpg" />
+    <Content Include="pc\uploads\allimg\160421\16095U2T-0.jpg" />
+    <Content Include="pc\uploads\allimg\160421\160FV402-0.jpg" />
+    <Content Include="pc\uploads\allimg\160421\160I22C9-0.jpg" />
+    <Content Include="pc\uploads\allimg\160421\160KJ523-0.jpg" />
+    <Content Include="pc\uploads\allimg\160421\160QJ419-0.jpg" />
+    <Content Include="pc\uploads\allimg\160421\160UB392-0.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1610201221-0.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1610441031-2.jpg" />
+    <Content Include="pc\uploads\allimg\160421\16104410H-3.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1610441620-1.jpg" />
+    <Content Include="pc\uploads\allimg\160421\161044G30-0.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1611035M6-0.jpg" />
+    <Content Include="pc\uploads\allimg\160421\161125E37-0.png" />
+    <Content Include="pc\uploads\allimg\160421\1611515356-0.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1612132105-0.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1612412915-0.jpg" />
+    <Content Include="pc\uploads\allimg\160421\16132T610-0.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1614113137-0.jpg" />
+    <Content Include="pc\uploads\allimg\160421\161411MZ-1.png" />
+    <Content Include="pc\uploads\allimg\160421\1614342354-1.png" />
+    <Content Include="pc\uploads\allimg\160421\16143463R-0.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1614521161-0.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1614526423-1.jpg" />
+    <Content Include="pc\uploads\allimg\160421\161452J96-2.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1615104033-0.jpg" />
+    <Content Include="pc\uploads\allimg\160421\16152JG7-0.jpg" />
+    <Content Include="pc\uploads\allimg\160421\16154W009-0.jpg" />
+    <Content Include="pc\uploads\allimg\160421\16161031a-0.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1616314426-0.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1619344633-0.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1619521307-0.jpg" />
+    <Content Include="pc\uploads\allimg\160421\161A32O4-0.jpg" />
+    <Content Include="pc\uploads\allimg\160421\161G110G-0.jpg" />
+    <Content Include="pc\uploads\allimg\160421\161K03062-2.jpg" />
+    <Content Include="pc\uploads\allimg\160421\161K05318-3.jpg" />
+    <Content Include="pc\uploads\allimg\160421\161K06053-0.jpg" />
+    <Content Include="pc\uploads\allimg\160421\161K06062-1.jpg" />
+    <Content Include="pc\uploads\allimg\160421\161PRc3-0.jpg" />
+    <Content Include="pc\uploads\allimg\160421\161R51307-0.jpg" />
+    <Content Include="pc\uploads\allimg\160421\161T61452-0.jpg" />
+    <Content Include="pc\uploads\allimg\160421\161Z94603-0.jpg" />
+    <Content Include="pc\uploads\allimg\160421\162010E39-0.jpg" />
+    <Content Include="pc\uploads\allimg\160421\162031AP-0.jpg" />
+    <Content Include="pc\uploads\allimg\160421\1620521262-1.gif" />
+    <Content Include="pc\uploads\allimg\160421\1620521301-8.png" />
+    <Content Include="pc\uploads\allimg\160421\16205215C-4.png" />
+    <Content Include="pc\uploads\allimg\160421\1620522096-3.gif" />
+    <Content Include="pc\uploads\allimg\160421\1620522554-2.png" />
+    <Content Include="pc\uploads\allimg\160421\1620522C2-5.gif" />
+    <Content Include="pc\uploads\allimg\160421\1620522N8-6.png" />
+    <Content Include="pc\uploads\allimg\160421\16205243N-7.gif" />
+    <Content Include="pc\uploads\allimg\160421\1620524Y5-10.png" />
+    <Content Include="pc\uploads\allimg\160421\1620525294-0.jpg" />
+    <Content Include="pc\uploads\allimg\160421\162052G58-9.gif" />
+    <Content Include="pc\uploads\allimg\index.html" />
+    <Content Include="pc\uploads\flink\index.html" />
+    <Content Include="pc\uploads\index.html" />
+    <Content Include="pc\uploads\litimg\index.html" />
+    <Content Include="pc\uploads\media\index.html" />
+    <Content Include="pc\uploads\soft\index.html" />
+    <Content Include="pc\uploads\userup\index.html" />
+    <Content Include="pc\usercontrol\contact_us.ascx" />
+    <Content Include="pc\usercontrol\foot.ascx" />
+    <Content Include="pc\usercontrol\head.ascx" />
+    <Content Include="pc\usercontrol\m_head.ascx" />
+    <Content Include="plugins\feedback\admin\index.aspx" />
+    <Content Include="plugins\feedback\admin\reply.aspx" />
+    <Content Include="plugins\feedback\templet\feedback.html" />
+    <Content Include="plugins\link\admin\index.aspx" />
+    <Content Include="plugins\link\admin\link_edit.aspx" />
+    <Content Include="plugins\link\templet\link.html" />
+    <Content Include="QrCode.aspx" />
+    <Content Include="scripts\artdialog\dialog-min.js" />
+    <Content Include="scripts\artdialog\dialog-plus-min.js" />
+    <Content Include="scripts\artdialog\ui-dialog.css" />
+    <Content Include="scripts\ckplayer\ckplayer.js" />
+    <Content Include="scripts\ckplayer\ckplayer.swf" />
+    <Content Include="scripts\ckplayer\ckplayer.xml" />
+    <Content Include="scripts\ckplayer\language.xml" />
+    <Content Include="scripts\ckplayer\related.xml" />
+    <Content Include="scripts\ckplayer\share.xml" />
+    <Content Include="scripts\ckplayer\share\feixin.png" />
+    <Content Include="scripts\ckplayer\share\google.png" />
+    <Content Include="scripts\ckplayer\share\kaixin001.png" />
+    <Content Include="scripts\ckplayer\share\msn.png" />
+    <Content Include="scripts\ckplayer\share\qq.png" />
+    <Content Include="scripts\ckplayer\share\qq2.png" />
+    <Content Include="scripts\ckplayer\share\qzone.png" />
+    <Content Include="scripts\ckplayer\share\rr.png" />
+    <Content Include="scripts\ckplayer\share\sina.png" />
+    <Content Include="scripts\ckplayer\share\sohu.png" />
+    <Content Include="scripts\ckplayer\share\tianya.png" />
+    <Content Include="scripts\ckplayer\style.swf" />
+    <Content Include="scripts\datepicker\calendar.js" />
+    <Content Include="scripts\datepicker\lang\en.js" />
+    <Content Include="scripts\datepicker\lang\zh-cn.js" />
+    <Content Include="scripts\datepicker\lang\zh-tw.js" />
+    <Content Include="scripts\datepicker\skin\datePicker.gif" />
+    <Content Include="scripts\datepicker\skin\default\datepicker.css" />
+    <Content Include="scripts\datepicker\skin\default\img.gif" />
+    <Content Include="scripts\datepicker\skin\WdatePicker.css" />
+    <Content Include="scripts\datepicker\skin\whyGreen\bg.jpg" />
+    <Content Include="scripts\datepicker\skin\whyGreen\datepicker.css" />
+    <Content Include="scripts\datepicker\skin\whyGreen\img.gif" />
+    <Content Include="scripts\datepicker\WdatePicker.js" />
+    <Content Include="scripts\JQuery\jquery-1.10.2.min.js" />
+    <Content Include="scripts\JQuery\jquery-1.11.2.min.js" />
+    <Content Include="scripts\JQuery\jquery-1.4.1.min.js" />
+    <Content Include="scripts\JQuery\jquery.form.min.js" />
+    <Content Include="scripts\JQuery\jquery.jcrop.min.js" />
+    <Content Include="scripts\JQuery\jquery.jqzoom.js" />
+    <Content Include="scripts\JQuery\jquery.lazyload.min.js" />
+    <Content Include="scripts\JQuery\jquery.nicescroll.js" />
+    <Content Include="scripts\JQuery\jquery.pagination.js" />
+    <Content Include="scripts\JQuery\PCASClass.js" />
+    <Content Include="scripts\JQuery\Validform_v5.3.2_min.js" />
+    <Content Include="scripts\lhgdialog\lhgdialog.js" />
+    <Content Include="scripts\lhgdialog\skins\blue.css" />
+    <Content Include="scripts\lhgdialog\skins\blue\blue_s.png" />
+    <Content Include="scripts\lhgdialog\skins\blue\blue_s2.png" />
+    <Content Include="scripts\lhgdialog\skins\blue\ie6\blue_titbtn.gif" />
+    <Content Include="scripts\lhgdialog\skins\blue\ie6\ui_b.png" />
+    <Content Include="scripts\lhgdialog\skins\blue\ie6\ui_l.png" />
+    <Content Include="scripts\lhgdialog\skins\blue\ie6\ui_lb.png" />
+    <Content Include="scripts\lhgdialog\skins\blue\ie6\ui_lt.png" />
+    <Content Include="scripts\lhgdialog\skins\blue\ie6\ui_lt2.png" />
+    <Content Include="scripts\lhgdialog\skins\blue\ie6\ui_r.png" />
+    <Content Include="scripts\lhgdialog\skins\blue\ie6\ui_rb.png" />
+    <Content Include="scripts\lhgdialog\skins\blue\ie6\ui_rt.png" />
+    <Content Include="scripts\lhgdialog\skins\blue\ie6\ui_rt2.png" />
+    <Content Include="scripts\lhgdialog\skins\blue\ie6\ui_t.png" />
+    <Content Include="scripts\lhgdialog\skins\blue\ie6\ui_t2.png" />
+    <Content Include="scripts\lhgdialog\skins\chrome.css" />
+    <Content Include="scripts\lhgdialog\skins\chrome\chrome_s.gif" />
+    <Content Include="scripts\lhgdialog\skins\chrome\chrome_s2.gif" />
+    <Content Include="scripts\lhgdialog\skins\chrome\chrome_s3.gif" />
+    <Content Include="scripts\lhgdialog\skins\default.css" />
+    <Content Include="scripts\lhgdialog\skins\discuz.css" />
+    <Content Include="scripts\lhgdialog\skins\iblack.css" />
+    <Content Include="scripts\lhgdialog\skins\iblack\iblack_s.png" />
+    <Content Include="scripts\lhgdialog\skins\iblack\iblack_s2.png" />
+    <Content Include="scripts\lhgdialog\skins\iblack\ie6\ui_b.png" />
+    <Content Include="scripts\lhgdialog\skins\iblack\ie6\ui_l.png" />
+    <Content Include="scripts\lhgdialog\skins\iblack\ie6\ui_lb.png" />
+    <Content Include="scripts\lhgdialog\skins\iblack\ie6\ui_lt.png" />
+    <Content Include="scripts\lhgdialog\skins\iblack\ie6\ui_lt2.png" />
+    <Content Include="scripts\lhgdialog\skins\iblack\ie6\ui_r.png" />
+    <Content Include="scripts\lhgdialog\skins\iblack\ie6\ui_rb.png" />
+    <Content Include="scripts\lhgdialog\skins\iblack\ie6\ui_rt.png" />
+    <Content Include="scripts\lhgdialog\skins\iblack\ie6\ui_rt2.png" />
+    <Content Include="scripts\lhgdialog\skins\iblack\ie6\ui_t.png" />
+    <Content Include="scripts\lhgdialog\skins\iblack\ie6\ui_t2.png" />
+    <Content Include="scripts\lhgdialog\skins\iblue.css" />
+    <Content Include="scripts\lhgdialog\skins\iblue\iblue_s.png" />
+    <Content Include="scripts\lhgdialog\skins\iblue\iblue_s2.png" />
+    <Content Include="scripts\lhgdialog\skins\iblue\ie6\ui_b.png" />
+    <Content Include="scripts\lhgdialog\skins\iblue\ie6\ui_l.png" />
+    <Content Include="scripts\lhgdialog\skins\iblue\ie6\ui_lb.png" />
+    <Content Include="scripts\lhgdialog\skins\iblue\ie6\ui_lt.png" />
+    <Content Include="scripts\lhgdialog\skins\iblue\ie6\ui_lt2.png" />
+    <Content Include="scripts\lhgdialog\skins\iblue\ie6\ui_r.png" />
+    <Content Include="scripts\lhgdialog\skins\iblue\ie6\ui_rb.png" />
+    <Content Include="scripts\lhgdialog\skins\iblue\ie6\ui_rt.png" />
+    <Content Include="scripts\lhgdialog\skins\iblue\ie6\ui_rt2.png" />
+    <Content Include="scripts\lhgdialog\skins\iblue\ie6\ui_t.png" />
+    <Content Include="scripts\lhgdialog\skins\iblue\ie6\ui_t2.png" />
+    <Content Include="scripts\lhgdialog\skins\icons\32X32\fail.png" />
+    <Content Include="scripts\lhgdialog\skins\icons\32X32\hits.png" />
+    <Content Include="scripts\lhgdialog\skins\icons\32X32\i.png" />
+    <Content Include="scripts\lhgdialog\skins\icons\32X32\succ.png" />
+    <Content Include="scripts\lhgdialog\skins\icons\alert.gif" />
+    <Content Include="scripts\lhgdialog\skins\icons\confirm.gif" />
+    <Content Include="scripts\lhgdialog\skins\icons\discuz_bg.gif" />
+    <Content Include="scripts\lhgdialog\skins\icons\error.gif" />
+    <Content Include="scripts\lhgdialog\skins\icons\face-sad.png" />
+    <Content Include="scripts\lhgdialog\skins\icons\face-smile.png" />
+    <Content Include="scripts\lhgdialog\skins\icons\gb_tip_layer.png" />
+    <Content Include="scripts\lhgdialog\skins\icons\gb_tip_layer_ie6.png" />
+    <Content Include="scripts\lhgdialog\skins\icons\lhgcore.gif" />
+    <Content Include="scripts\lhgdialog\skins\icons\loading.gif" />
+    <Content Include="scripts\lhgdialog\skins\icons\prompt.gif" />
+    <Content Include="scripts\lhgdialog\skins\icons\success.gif" />
+    <Content Include="scripts\lhgdialog\skins\icons\tips.gif" />
+    <Content Include="scripts\lhgdialog\skins\idialog.css" />
+    <Content Include="scripts\lhgdialog\skins\idialog\idialog_s.png" />
+    <Content Include="scripts\lhgdialog\skins\idialog\idialog_s2.png" />
+    <Content Include="scripts\lhgdialog\skins\idialog\ie6\ui_b.png" />
+    <Content Include="scripts\lhgdialog\skins\idialog\ie6\ui_close.hover.png" />
+    <Content Include="scripts\lhgdialog\skins\idialog\ie6\ui_close.png" />
+    <Content Include="scripts\lhgdialog\skins\idialog\ie6\ui_l.png" />
+    <Content Include="scripts\lhgdialog\skins\idialog\ie6\ui_lb.png" />
+    <Content Include="scripts\lhgdialog\skins\idialog\ie6\ui_lt.png" />
+    <Content Include="scripts\lhgdialog\skins\idialog\ie6\ui_r.png" />
+    <Content Include="scripts\lhgdialog\skins\idialog\ie6\ui_rb.png" />
+    <Content Include="scripts\lhgdialog\skins\idialog\ie6\ui_rt.png" />
+    <Content Include="scripts\lhgdialog\skins\idialog\ie6\ui_t.png" />
+    <Content Include="scripts\lhgdialog\skins\igreen.css" />
+    <Content Include="scripts\lhgdialog\skins\igreen\ie6\ui_b.png" />
+    <Content Include="scripts\lhgdialog\skins\igreen\ie6\ui_l.png" />
+    <Content Include="scripts\lhgdialog\skins\igreen\ie6\ui_lb.png" />
+    <Content Include="scripts\lhgdialog\skins\igreen\ie6\ui_lt.png" />
+    <Content Include="scripts\lhgdialog\skins\igreen\ie6\ui_r.png" />
+    <Content Include="scripts\lhgdialog\skins\igreen\ie6\ui_rb.png" />
+    <Content Include="scripts\lhgdialog\skins\igreen\ie6\ui_rt.png" />
+    <Content Include="scripts\lhgdialog\skins\igreen\ie6\ui_t.png" />
+    <Content Include="scripts\lhgdialog\skins\igreen\igreen_s.png" />
+    <Content Include="scripts\lhgdialog\skins\igreen\igreen_s2.png" />
+    <Content Include="scripts\lhgdialog\skins\jtop.css" />
+    <Content Include="scripts\lhgdialog\skins\mac.css" />
+    <Content Include="scripts\Validform_v5.3.2\Validform_v5.3.2_min.js" />
+    <Content Include="scripts\web-im-1.1.1\index.html" />
+    <Content Include="scripts\web-im-1.1.1\static\css\bootstrap.css" />
+    <Content Include="scripts\web-im-1.1.1\static\css\font\iconfont.svg" />
+    <Content Include="scripts\web-im-1.1.1\static\css\webim.css" />
+    <Content Include="scripts\web-im-1.1.1\static\img\bg.gif" />
+    <Content Include="scripts\web-im-1.1.1\static\img\bg.jpg" />
+    <Content Include="scripts\web-im-1.1.1\static\img\chat.jpg" />
+    <Content Include="scripts\web-im-1.1.1\static\img\chat_bar_bg.jpg" />
+    <Content Include="scripts\web-im-1.1.1\static\img\chat_title_bg.jpg" />
+    <Content Include="scripts\web-im-1.1.1\static\img\e_logo.png" />
+    <Content Include="scripts\web-im-1.1.1\static\img\faces\ee_1.png" />
+    <Content Include="scripts\web-im-1.1.1\static\img\faces\ee_10.png" />
+    <Content Include="scripts\web-im-1.1.1\static\img\faces\ee_11.png" />
+    <Content Include="scripts\web-im-1.1.1\static\img\faces\ee_12.png" />
+    <Content Include="scripts\web-im-1.1.1\static\img\faces\ee_13.png" />
+    <Content Include="scripts\web-im-1.1.1\static\img\faces\ee_14.png" />
+    <Content Include="scripts\web-im-1.1.1\static\img\faces\ee_15.png" />
+    <Content Include="scripts\web-im-1.1.1\static\img\faces\ee_16.png" />
+    <Content Include="scripts\web-im-1.1.1\static\img\faces\ee_17.png" />
+    <Content Include="scripts\web-im-1.1.1\static\img\faces\ee_18.png" />
+    <Content Include="scripts\web-im-1.1.1\static\img\faces\ee_19.png" />
+    <Content Include="scripts\web-im-1.1.1\static\img\faces\ee_2.png" />
+    <Content Include="scripts\web-im-1.1.1\static\img\faces\ee_20.png" />
+    <Content Include="scripts\web-im-1.1.1\static\img\faces\ee_21.png" />
+    <Content Include="scripts\web-im-1.1.1\static\img\faces\ee_22.png" />
+    <Content Include="scripts\web-im-1.1.1\static\img\faces\ee_23.png" />
+    <Content Include="scripts\web-im-1.1.1\static\img\faces\ee_24.png" />
+    <Content Include="scripts\web-im-1.1.1\static\img\faces\ee_25.png" />
+    <Content Include="scripts\web-im-1.1.1\static\img\faces\ee_26.png" />
+    <Content Include="scripts\web-im-1.1.1\static\img\faces\ee_27.png" />
+    <Content Include="scripts\web-im-1.1.1\static\img\faces\ee_28.png" />
+    <Content Include="scripts\web-im-1.1.1\static\img\faces\ee_29.png" />
+    <Content Include="scripts\web-im-1.1.1\static\img\faces\ee_3.png" />
+    <Content Include="scripts\web-im-1.1.1\static\img\faces\ee_30.png" />
+    <Content Include="scripts\web-im-1.1.1\static\img\faces\ee_31.png" />
+    <Content Include="scripts\web-im-1.1.1\static\img\faces\ee_32.png" />
+    <Content Include="scripts\web-im-1.1.1\static\img\faces\ee_33.png" />
+    <Content Include="scripts\web-im-1.1.1\static\img\faces\ee_34.png" />
+    <Content Include="scripts\web-im-1.1.1\static\img\faces\ee_35.png" />
+    <Content Include="scripts\web-im-1.1.1\static\img\faces\ee_4.png" />
+    <Content Include="scripts\web-im-1.1.1\static\img\faces\ee_5.png" />
+    <Content Include="scripts\web-im-1.1.1\static\img\faces\ee_6.png" />
+    <Content Include="scripts\web-im-1.1.1\static\img\faces\ee_7.png" />
+    <Content Include="scripts\web-im-1.1.1\static\img\faces\ee_8.png" />
+    <Content Include="scripts\web-im-1.1.1\static\img\faces\ee_9.png" />
+    <Content Include="scripts\web-im-1.1.1\static\img\head\2016.jpg" />
+    <Content Include="scripts\web-im-1.1.1\static\img\head\contact_normal.png" />
+    <Content Include="scripts\web-im-1.1.1\static\img\head\find_more_friend_addfriend_icon.png" />
+    <Content Include="scripts\web-im-1.1.1\static\img\head\group_normal.png" />
+    <Content Include="scripts\web-im-1.1.1\static\img\head\header2.jpg" />
+    <Content Include="scripts\web-im-1.1.1\static\img\head\mm_title_btn_add_contact_normal.png" />
+    <Content Include="scripts\web-im-1.1.1\static\img\head\mm_title_btn_compose_normal.png" />
+    <Content Include="scripts\web-im-1.1.1\static\img\icon.png" />
+    <Content Include="scripts\web-im-1.1.1\static\img\layer_arrow.png" />
+    <Content Include="scripts\web-im-1.1.1\static\img\recycle.png" />
+    <Content Include="scripts\web-im-1.1.1\static\img\send_btn.jpg" />
+    <Content Include="scripts\web-im-1.1.1\static\img\status.gif" />
+    <Content Include="scripts\web-im-1.1.1\static\img\title-bg.png" />
+    <Content Include="scripts\web-im-1.1.1\static\img\title_bg.jpg" />
+    <Content Include="scripts\web-im-1.1.1\static\img\waitting.gif" />
+    <Content Include="scripts\web-im-1.1.1\static\img\wlf_bg.png" />
+    <Content Include="scripts\web-im-1.1.1\static\img\wlf_title_bg.jpg" />
+    <Content Include="scripts\web-im-1.1.1\static\img\wlf_title_btn.jpg" />
+    <Content Include="scripts\web-im-1.1.1\static\js\bootstrap.js" />
+    <Content Include="scripts\web-im-1.1.1\static\js\easemob.im.config.js" />
+    <Content Include="scripts\web-im-1.1.1\static\js\jplayer\jquery.jplayer.min.js" />
+    <Content Include="scripts\web-im-1.1.1\static\js\jplayer\jquery.jplayer.swf" />
+    <Content Include="scripts\web-im-1.1.1\static\js\jquery-1.11.1.js" />
+    <Content Include="scripts\web-im-1.1.1\static\js\swfupload\swfupload.cookie.js" />
+    <Content Include="scripts\web-im-1.1.1\static\js\swfupload\swfupload.js" />
+    <Content Include="scripts\web-im-1.1.1\static\js\swfupload\swfupload.swf" />
+    <Content Include="scripts\web-im-1.1.1\static\js\webim.js" />
+    <Content Include="scripts\web-im-1.1.1\static\js\webim.ybd.eet.js" />
+    <Content Include="scripts\web-im-1.1.1\static\sdk\easemob.im-1.1.1.js" />
+    <Content Include="scripts\web-im-1.1.1\static\sdk\easemob.im.shim.js" />
+    <Content Include="scripts\web-im-1.1.1\static\sdk\release.txt" />
+    <Content Include="scripts\web-im-1.1.1\static\sdk\strophe.js" />
+    <Content Include="scripts\web-im-1.1.2\demo\images\default.png" />
+    <Content Include="scripts\web-im-1.1.2\demo\images\faces\ee_1.png" />
+    <Content Include="scripts\web-im-1.1.2\demo\images\faces\ee_10.png" />
+    <Content Include="scripts\web-im-1.1.2\demo\images\faces\ee_11.png" />
+    <Content Include="scripts\web-im-1.1.2\demo\images\faces\ee_12.png" />
+    <Content Include="scripts\web-im-1.1.2\demo\images\faces\ee_13.png" />
+    <Content Include="scripts\web-im-1.1.2\demo\images\faces\ee_14.png" />
+    <Content Include="scripts\web-im-1.1.2\demo\images\faces\ee_15.png" />
+    <Content Include="scripts\web-im-1.1.2\demo\images\faces\ee_16.png" />
+    <Content Include="scripts\web-im-1.1.2\demo\images\faces\ee_17.png" />
+    <Content Include="scripts\web-im-1.1.2\demo\images\faces\ee_18.png" />
+    <Content Include="scripts\web-im-1.1.2\demo\images\faces\ee_19.png" />
+    <Content Include="scripts\web-im-1.1.2\demo\images\faces\ee_2.png" />
+    <Content Include="scripts\web-im-1.1.2\demo\images\faces\ee_20.png" />
+    <Content Include="scripts\web-im-1.1.2\demo\images\faces\ee_21.png" />
+    <Content Include="scripts\web-im-1.1.2\demo\images\faces\ee_22.png" />
+    <Content Include="scripts\web-im-1.1.2\demo\images\faces\ee_23.png" />
+    <Content Include="scripts\web-im-1.1.2\demo\images\faces\ee_24.png" />
+    <Content Include="scripts\web-im-1.1.2\demo\images\faces\ee_25.png" />
+    <Content Include="scripts\web-im-1.1.2\demo\images\faces\ee_26.png" />
+    <Content Include="scripts\web-im-1.1.2\demo\images\faces\ee_27.png" />
+    <Content Include="scripts\web-im-1.1.2\demo\images\faces\ee_28.png" />
+    <Content Include="scripts\web-im-1.1.2\demo\images\faces\ee_29.png" />
+    <Content Include="scripts\web-im-1.1.2\demo\images\faces\ee_3.png" />
+    <Content Include="scripts\web-im-1.1.2\demo\images\faces\ee_30.png" />
+    <Content Include="scripts\web-im-1.1.2\demo\images\faces\ee_31.png" />
+    <Content Include="scripts\web-im-1.1.2\demo\images\faces\ee_32.png" />
+    <Content Include="scripts\web-im-1.1.2\demo\images\faces\ee_33.png" />
+    <Content Include="scripts\web-im-1.1.2\demo\images\faces\ee_34.png" />
+    <Content Include="scripts\web-im-1.1.2\demo\images\faces\ee_35.png" />
+    <Content Include="scripts\web-im-1.1.2\demo\images\faces\ee_4.png" />
+    <Content Include="scripts\web-im-1.1.2\demo\images\faces\ee_5.png" />
+    <Content Include="scripts\web-im-1.1.2\demo\images\faces\ee_6.png" />
+    <Content Include="scripts\web-im-1.1.2\demo\images\faces\ee_7.png" />
+    <Content Include="scripts\web-im-1.1.2\demo\images\faces\ee_8.png" />
+    <Content Include="scripts\web-im-1.1.2\demo\images\faces\ee_9.png" />
+    <Content Include="scripts\web-im-1.1.2\demo\images\group_user.png" />
+    <Content Include="scripts\web-im-1.1.2\demo\images\loading.gif" />
+    <Content Include="scripts\web-im-1.1.2\demo\images\logo.png" />
+    <Content Include="scripts\web-im-1.1.2\demo\javascript\dist\demo.js" />
+    <Content Include="scripts\web-im-1.1.2\demo\javascript\dist\swfupload\swfupload.min.js" />
+    <Content Include="scripts\web-im-1.1.2\demo\javascript\dist\swfupload\swfupload.swf" />
+    <Content Include="scripts\web-im-1.1.2\demo\javascript\dist\webim.config.js" />
+    <Content Include="scripts\web-im-1.1.2\demo\javascript\src\api.js" />
+    <Content Include="scripts\web-im-1.1.2\demo\javascript\src\components\chat\chat.js" />
+    <Content Include="scripts\web-im-1.1.2\demo\javascript\src\components\chat\chatWindow.js" />
+    <Content Include="scripts\web-im-1.1.2\demo\javascript\src\components\chat\emoji.js" />
+    <Content Include="scripts\web-im-1.1.2\demo\javascript\src\components\chat\sendwrapper.js" />
+    <Content Include="scripts\web-im-1.1.2\demo\javascript\src\components\chat\subscribe.js" />
+    <Content Include="scripts\web-im-1.1.2\demo\javascript\src\components\chat\uploadShim.js" />
+    <Content Include="scripts\web-im-1.1.2\demo\javascript\src\components\common\avatar.js" />
+    <Content Include="scripts\web-im-1.1.2\demo\javascript\src\components\common\loading.js" />
+    <Content Include="scripts\web-im-1.1.2\demo\javascript\src\components\common\notify.js" />
+    <Content Include="scripts\web-im-1.1.2\demo\javascript\src\components\common\webim-demo.js" />
+    <Content Include="scripts\web-im-1.1.2\demo\javascript\src\components\contact\contact.js" />
+    <Content Include="scripts\web-im-1.1.2\demo\javascript\src\components\contact\contactItem.js" />
+    <Content Include="scripts\web-im-1.1.2\demo\javascript\src\components\language.js" />
+    <Content Include="scripts\web-im-1.1.2\demo\javascript\src\components\leftbar\addFriend.js" />
+    <Content Include="scripts\web-im-1.1.2\demo\javascript\src\components\leftbar\cate.js" />
+    <Content Include="scripts\web-im-1.1.2\demo\javascript\src\components\leftbar\delFriend.js" />
+    <Content Include="scripts\web-im-1.1.2\demo\javascript\src\components\leftbar\leftbar.js" />
+    <Content Include="scripts\web-im-1.1.2\demo\javascript\src\components\leftbar\operations.js" />
+    <Content Include="scripts\web-im-1.1.2\demo\javascript\src\components\message\audio.js" />
+    <Content Include="scripts\web-im-1.1.2\demo\javascript\src\components\message\file.js" />
+    <Content Include="scripts\web-im-1.1.2\demo\javascript\src\components\message\img.js" />
+    <Content Include="scripts\web-im-1.1.2\demo\javascript\src\components\message\loc.js" />
+    <Content Include="scripts\web-im-1.1.2\demo\javascript\src\components\message\txt.js" />
+    <Content Include="scripts\web-im-1.1.2\demo\javascript\src\components\message\video.js" />
+    <Content Include="scripts\web-im-1.1.2\demo\javascript\src\components\sign\signin.js" />
+    <Content Include="scripts\web-im-1.1.2\demo\javascript\src\components\sign\signup.js" />
+    <Content Include="scripts\web-im-1.1.2\demo\javascript\src\components\webim.js" />
+    <Content Include="scripts\web-im-1.1.2\demo\javascript\src\entry.js" />
+    <Content Include="scripts\web-im-1.1.2\demo\javascript\src\swfupload\swfupload.cookie.js" />
+    <Content Include="scripts\web-im-1.1.2\demo\javascript\src\swfupload\swfupload.js" />
+    <Content Include="scripts\web-im-1.1.2\demo\javascript\src\swfupload\swfupload.swf" />
+    <Content Include="scripts\web-im-1.1.2\demo\javascript\src\test.js" />
+    <Content Include="scripts\web-im-1.1.2\demo\stylesheet\src\font\iconfont.svg" />
+    <Content Include="scripts\web-im-1.1.2\gulpfile.js" />
+    <Content Include="scripts\web-im-1.1.2\index.html" />
+    <Content Include="scripts\web-im-1.1.2\sdk\dist\strophe.js" />
+    <Content Include="scripts\web-im-1.1.2\sdk\dist\websdk-1.1.2.js" />
+    <Content Include="scripts\web-im-1.1.2\sdk\dist\websdk.shim.js" />
+    <Content Include="scripts\web-im-1.1.2\sdk\src\connection.js" />
+    <Content Include="scripts\web-im-1.1.2\sdk\src\message.js" />
+    <Content Include="scripts\web-im-1.1.2\sdk\src\status.js" />
+    <Content Include="scripts\web-im-1.1.2\sdk\src\utils.js" />
+    <Content Include="scripts\web-im-1.1.2\webpack.config.js" />
+    <Content Include="scripts\webuploader\uploader.swf" />
+    <Content Include="scripts\webuploader\webuploader.min.js" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="admin\center.aspx.cs">
+      <DependentUpon>center.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\center.aspx.designer.cs">
+      <DependentUpon>center.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\classroom\article_edit.aspx.cs">
+      <DependentUpon>article_edit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\classroom\article_edit.aspx.designer.cs">
+      <DependentUpon>article_edit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\classroom\article_list.aspx.cs">
+      <DependentUpon>article_list.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\classroom\article_list.aspx.designer.cs">
+      <DependentUpon>article_list.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\classroom\chapter_edit.aspx.cs">
+      <DependentUpon>chapter_edit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\classroom\chapter_edit.aspx.designer.cs">
+      <DependentUpon>chapter_edit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\classroom\chapter_list.aspx.cs">
+      <DependentUpon>chapter_list.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\classroom\chapter_list.aspx.designer.cs">
+      <DependentUpon>chapter_list.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\classroom\classroom_list.aspx.cs">
+      <DependentUpon>classroom_list.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\classroom\classroom_list.aspx.designer.cs">
+      <DependentUpon>classroom_list.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\classroom\correct_work.aspx.cs">
+      <DependentUpon>correct_work.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\classroom\correct_work.aspx.designer.cs">
+      <DependentUpon>correct_work.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\classroom\correct_work_list.aspx.cs">
+      <DependentUpon>correct_work_list.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\classroom\correct_work_list.aspx.designer.cs">
+      <DependentUpon>correct_work_list.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\classroom\currect_answer_list.aspx.cs">
+      <DependentUpon>currect_answer_list.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\classroom\currect_answer_list.aspx.designer.cs">
+      <DependentUpon>currect_answer_list.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\classroom\currect_chapter_list.aspx.cs">
+      <DependentUpon>currect_chapter_list.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\classroom\currect_chapter_list.aspx.designer.cs">
+      <DependentUpon>currect_chapter_list.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\classroom\currect_question_list.aspx.cs">
+      <DependentUpon>currect_question_list.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\classroom\currect_question_list.aspx.designer.cs">
+      <DependentUpon>currect_question_list.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\classroom\file_edit.aspx.cs">
+      <DependentUpon>file_edit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\classroom\file_edit.aspx.designer.cs">
+      <DependentUpon>file_edit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\classroom\file_list.aspx.cs">
+      <DependentUpon>file_list.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\classroom\file_list.aspx.designer.cs">
+      <DependentUpon>file_list.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\classroom\notice_edit.aspx.cs">
+      <DependentUpon>notice_edit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\classroom\notice_edit.aspx.designer.cs">
+      <DependentUpon>notice_edit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\classroom\notice_list.aspx.cs">
+      <DependentUpon>notice_list.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\classroom\notice_list.aspx.designer.cs">
+      <DependentUpon>notice_list.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\classroom\resource_back.aspx.cs">
+      <DependentUpon>resource_back.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\classroom\resource_back.aspx.designer.cs">
+      <DependentUpon>resource_back.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\classroom\resource_classroom.aspx.cs">
+      <DependentUpon>resource_classroom.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\classroom\resource_classroom.aspx.designer.cs">
+      <DependentUpon>resource_classroom.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\classroom\verify_list.aspx.cs">
+      <DependentUpon>verify_list.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\classroom\verify_list.aspx.designer.cs">
+      <DependentUpon>verify_list.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\classroom\video_add.aspx.cs">
+      <DependentUpon>video_add.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\classroom\video_add.aspx.designer.cs">
+      <DependentUpon>video_add.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\classroom\video_edit.aspx.cs">
+      <DependentUpon>video_edit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\classroom\video_edit.aspx.designer.cs">
+      <DependentUpon>video_edit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\classroom\video_list.aspx.cs">
+      <DependentUpon>video_list.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\classroom\video_list.aspx.designer.cs">
+      <DependentUpon>video_list.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\classroom\work_edit.aspx.cs">
+      <DependentUpon>work_edit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\classroom\work_edit.aspx.designer.cs">
+      <DependentUpon>work_edit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\classroom\work_list.aspx.cs">
+      <DependentUpon>work_list.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\classroom\work_list.aspx.designer.cs">
+      <DependentUpon>work_list.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\common\3d.aspx.cs">
+      <DependentUpon>3d.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\common\3d.aspx.designer.cs">
+      <DependentUpon>3d.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\common\about_us.aspx.cs">
+      <DependentUpon>about_us.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\common\about_us.aspx.designer.cs">
+      <DependentUpon>about_us.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\common\default_logo.aspx.cs">
+      <DependentUpon>default_logo.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\common\default_logo.aspx.designer.cs">
+      <DependentUpon>default_logo.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\common\dict_edit.aspx.cs">
+      <DependentUpon>dict_edit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\common\dict_edit.aspx.designer.cs">
+      <DependentUpon>dict_edit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\common\dict_list.aspx.cs">
+      <DependentUpon>dict_list.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\common\dict_list.aspx.designer.cs">
+      <DependentUpon>dict_list.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\common\integral_rule.aspx.cs">
+      <DependentUpon>integral_rule.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\common\integral_rule.aspx.designer.cs">
+      <DependentUpon>integral_rule.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\common\questions_edit.aspx.cs">
+      <DependentUpon>questions_edit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\common\questions_edit.aspx.designer.cs">
+      <DependentUpon>questions_edit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\common\questions_list.aspx.cs">
+      <DependentUpon>questions_list.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\common\questions_list.aspx.designer.cs">
+      <DependentUpon>questions_list.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\common\questions_options_ajax.aspx.cs">
+      <DependentUpon>questions_options_ajax.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\common\questions_options_ajax.aspx.designer.cs">
+      <DependentUpon>questions_options_ajax.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\common\question_chapter_list.aspx.cs">
+      <DependentUpon>question_chapter_list.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\common\question_chapter_list.aspx.designer.cs">
+      <DependentUpon>question_chapter_list.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\common\question_course_list.aspx.cs">
+      <DependentUpon>question_course_list.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\common\question_course_list.aspx.designer.cs">
+      <DependentUpon>question_course_list.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\common\question_options.aspx.cs">
+      <DependentUpon>question_options.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\common\question_options.aspx.designer.cs">
+      <DependentUpon>question_options.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\common\question_options_edit.aspx.cs">
+      <DependentUpon>question_options_edit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\common\question_options_edit.aspx.designer.cs">
+      <DependentUpon>question_options_edit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\common\school_edit.aspx.cs">
+      <DependentUpon>school_edit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\common\school_edit.aspx.designer.cs">
+      <DependentUpon>school_edit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\common\school_list.aspx.cs">
+      <DependentUpon>school_list.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\common\school_list.aspx.designer.cs">
+      <DependentUpon>school_list.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\common\user_agreement.aspx.cs">
+      <DependentUpon>user_agreement.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\common\user_agreement.aspx.designer.cs">
+      <DependentUpon>user_agreement.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\common\voice_view.aspx.cs">
+      <DependentUpon>voice_view.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\common\voice_view.aspx.designer.cs">
+      <DependentUpon>voice_view.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\course\adR_edit.aspx.cs">
+      <DependentUpon>adR_edit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\course\adR_edit.aspx.designer.cs">
+      <DependentUpon>adR_edit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\course\adR_list.aspx.cs">
+      <DependentUpon>adR_list.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\course\adR_list.aspx.designer.cs">
+      <DependentUpon>adR_list.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\common\article_view.aspx.cs">
+      <DependentUpon>article_view.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\common\article_view.aspx.designer.cs">
+      <DependentUpon>article_view.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\course\category_edit.aspx.cs">
+      <DependentUpon>category_edit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\course\category_edit.aspx.designer.cs">
+      <DependentUpon>category_edit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\course\category_list.aspx.cs">
+      <DependentUpon>category_list.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\course\category_list.aspx.designer.cs">
+      <DependentUpon>category_list.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\course\chapter_course_list.aspx.cs">
+      <DependentUpon>chapter_course_list.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\course\chapter_course_list.aspx.designer.cs">
+      <DependentUpon>chapter_course_list.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\course\chapter_edit.aspx.cs">
+      <DependentUpon>chapter_edit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\course\chapter_edit.aspx.designer.cs">
+      <DependentUpon>chapter_edit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\course\chapter_list.aspx.cs">
+      <DependentUpon>chapter_list.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\course\chapter_list.aspx.designer.cs">
+      <DependentUpon>chapter_list.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\course\course_edit.aspx.cs">
+      <DependentUpon>course_edit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\course\course_edit.aspx.designer.cs">
+      <DependentUpon>course_edit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\course\course_list.aspx.cs">
+      <DependentUpon>course_list.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\course\course_list.aspx.designer.cs">
+      <DependentUpon>course_list.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\course\discuss_edit.aspx.cs">
+      <DependentUpon>discuss_edit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\course\discuss_edit.aspx.designer.cs">
+      <DependentUpon>discuss_edit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\course\discuss_list.aspx.cs">
+      <DependentUpon>discuss_list.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\course\discuss_list.aspx.designer.cs">
+      <DependentUpon>discuss_list.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\course\examination_edit.aspx.cs">
+      <DependentUpon>examination_edit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\course\examination_edit.aspx.designer.cs">
+      <DependentUpon>examination_edit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\course\examination_list.aspx.cs">
+      <DependentUpon>examination_list.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\course\examination_list.aspx.designer.cs">
+      <DependentUpon>examination_list.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\course\questionnaire_edit.aspx.cs">
+      <DependentUpon>questionnaire_edit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\course\questionnaire_edit.aspx.designer.cs">
+      <DependentUpon>questionnaire_edit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\course\questionnaire_list.aspx.cs">
+      <DependentUpon>questionnaire_list.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\course\questionnaire_list.aspx.designer.cs">
+      <DependentUpon>questionnaire_list.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\course\recommend_course.aspx.cs">
+      <DependentUpon>recommend_course.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\course\recommend_course.aspx.designer.cs">
+      <DependentUpon>recommend_course.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\course\resource_back.aspx.cs">
+      <DependentUpon>resource_back.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\course\resource_back.aspx.designer.cs">
+      <DependentUpon>resource_back.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\course\resource_edit.aspx.cs">
+      <DependentUpon>resource_edit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\course\resource_edit.aspx.designer.cs">
+      <DependentUpon>resource_edit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\course\resource_list.aspx.cs">
+      <DependentUpon>resource_list.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\course\resource_list.aspx.designer.cs">
+      <DependentUpon>resource_list.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\common\video_view.aspx.cs">
+      <DependentUpon>video_view.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\common\video_view.aspx.designer.cs">
+      <DependentUpon>video_view.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\course\word_voice_edit.aspx.cs">
+      <DependentUpon>word_voice_edit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\course\word_voice_edit.aspx.designer.cs">
+      <DependentUpon>word_voice_edit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\dialog\article_resource.aspx.cs">
+      <DependentUpon>article_resource.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\dialog\article_resource.aspx.designer.cs">
+      <DependentUpon>article_resource.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\dialog\course_info.aspx.cs">
+      <DependentUpon>course_info.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\dialog\course_info.aspx.designer.cs">
+      <DependentUpon>course_info.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\dialog\dialog_SaveStock.aspx.cs">
+      <DependentUpon>dialog_SaveStock.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\dialog\dialog_SaveStock.aspx.designer.cs">
+      <DependentUpon>dialog_SaveStock.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\dialog\message_content.aspx.cs">
+      <DependentUpon>message_content.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\dialog\message_content.aspx.designer.cs">
+      <DependentUpon>message_content.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\dialog\multiUpload.aspx.cs">
+      <DependentUpon>multiUpload.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\dialog\multiUpload.aspx.designer.cs">
+      <DependentUpon>multiUpload.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\dialog\selected_question.aspx.cs">
+      <DependentUpon>selected_question.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\dialog\selected_question.aspx.designer.cs">
+      <DependentUpon>selected_question.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\dialog\unselected_chapter.aspx.cs">
+      <DependentUpon>unselected_chapter.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\dialog\unselected_chapter.aspx.designer.cs">
+      <DependentUpon>unselected_chapter.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\dialog\unselected_course.aspx.cs">
+      <DependentUpon>unselected_course.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\dialog\unselected_course.aspx.designer.cs">
+      <DependentUpon>unselected_course.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\dialog\unselected_question.aspx.cs">
+      <DependentUpon>unselected_question.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\dialog\unselected_question.aspx.designer.cs">
+      <DependentUpon>unselected_question.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\dialog\wjjx_info.aspx.cs">
+      <DependentUpon>wjjx_info.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\dialog\wjjx_info.aspx.designer.cs">
+      <DependentUpon>wjjx_info.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\index.aspx.cs">
+      <DependentUpon>index.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\index.aspx.designer.cs">
+      <DependentUpon>index.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\login.aspx.cs">
+      <DependentUpon>login.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\login.aspx.designer.cs">
+      <DependentUpon>login.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\manager\manager_edit.aspx.cs">
+      <DependentUpon>manager_edit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\manager\manager_edit.aspx.designer.cs">
+      <DependentUpon>manager_edit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\manager\manager_list.aspx.cs">
+      <DependentUpon>manager_list.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\manager\manager_list.aspx.designer.cs">
+      <DependentUpon>manager_list.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\manager\manager_log.aspx.cs">
+      <DependentUpon>manager_log.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\manager\manager_log.aspx.designer.cs">
+      <DependentUpon>manager_log.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\manager\manager_pwd.aspx.cs">
+      <DependentUpon>manager_pwd.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\manager\manager_pwd.aspx.designer.cs">
+      <DependentUpon>manager_pwd.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\manager\role_edit.aspx.cs">
+      <DependentUpon>role_edit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\manager\role_edit.aspx.designer.cs">
+      <DependentUpon>role_edit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\manager\role_list.aspx.cs">
+      <DependentUpon>role_list.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\manager\role_list.aspx.designer.cs">
+      <DependentUpon>role_list.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\message\message_list.aspx.cs">
+      <DependentUpon>message_list.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\message\message_list.aspx.designer.cs">
+      <DependentUpon>message_list.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\message\send_message.aspx.cs">
+      <DependentUpon>send_message.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\message\send_message.aspx.designer.cs">
+      <DependentUpon>send_message.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\pc\about_us.aspx.cs">
+      <DependentUpon>about_us.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\pc\about_us.aspx.designer.cs">
+      <DependentUpon>about_us.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\pc\adR_edit.aspx.cs">
+      <DependentUpon>adR_edit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\pc\adR_edit.aspx.designer.cs">
+      <DependentUpon>adR_edit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\pc\adR_list.aspx.cs">
+      <DependentUpon>adR_list.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\pc\adR_list.aspx.designer.cs">
+      <DependentUpon>adR_list.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\pc\case_category.aspx.cs">
+      <DependentUpon>case_category.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\pc\case_category.aspx.designer.cs">
+      <DependentUpon>case_category.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\pc\case_category_edit.aspx.cs">
+      <DependentUpon>case_category_edit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\pc\case_category_edit.aspx.designer.cs">
+      <DependentUpon>case_category_edit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\pc\case_edit.aspx.cs">
+      <DependentUpon>case_edit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\pc\case_edit.aspx.designer.cs">
+      <DependentUpon>case_edit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\pc\case_list.aspx.cs">
+      <DependentUpon>case_list.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\pc\case_list.aspx.designer.cs">
+      <DependentUpon>case_list.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\pc\mooc_item.aspx.cs">
+      <DependentUpon>mooc_item.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\pc\mooc_item.aspx.designer.cs">
+      <DependentUpon>mooc_item.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\pc\mooc_item_edit.aspx.cs">
+      <DependentUpon>mooc_item_edit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\pc\mooc_item_edit.aspx.designer.cs">
+      <DependentUpon>mooc_item_edit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\pc\news_category.aspx.cs">
+      <DependentUpon>news_category.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\pc\news_category.aspx.designer.cs">
+      <DependentUpon>news_category.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\pc\news_category_edit.aspx.cs">
+      <DependentUpon>news_category_edit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\pc\news_category_edit.aspx.designer.cs">
+      <DependentUpon>news_category_edit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\pc\news_edit.aspx.cs">
+      <DependentUpon>news_edit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\pc\news_edit.aspx.designer.cs">
+      <DependentUpon>news_edit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\pc\news_list.aspx.cs">
+      <DependentUpon>news_list.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\pc\news_list.aspx.designer.cs">
+      <DependentUpon>news_list.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\pc\partner_edit.aspx.cs">
+      <DependentUpon>partner_edit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\pc\partner_edit.aspx.designer.cs">
+      <DependentUpon>partner_edit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\pc\partner_list.aspx.cs">
+      <DependentUpon>partner_list.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\pc\partner_list.aspx.designer.cs">
+      <DependentUpon>partner_list.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\pc\services_edit.aspx.cs">
+      <DependentUpon>services_edit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\pc\services_edit.aspx.designer.cs">
+      <DependentUpon>services_edit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\pc\services_list.aspx.cs">
+      <DependentUpon>services_list.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\pc\services_list.aspx.designer.cs">
+      <DependentUpon>services_list.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\pc\service_industry.aspx.cs">
+      <DependentUpon>service_industry.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\pc\service_industry.aspx.designer.cs">
+      <DependentUpon>service_industry.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\pc\service_industry_edit.aspx.cs">
+      <DependentUpon>service_industry_edit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\pc\service_industry_edit.aspx.designer.cs">
+      <DependentUpon>service_industry_edit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\pc\service_items.aspx.cs">
+      <DependentUpon>service_items.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\pc\service_items.aspx.designer.cs">
+      <DependentUpon>service_items.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\pc\service_items_edit.aspx.cs">
+      <DependentUpon>service_items_edit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\pc\service_items_edit.aspx.designer.cs">
+      <DependentUpon>service_items_edit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\pc\team_edit.aspx.cs">
+      <DependentUpon>team_edit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\pc\team_edit.aspx.designer.cs">
+      <DependentUpon>team_edit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\pc\team_list.aspx.cs">
+      <DependentUpon>team_list.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\pc\team_list.aspx.designer.cs">
+      <DependentUpon>team_list.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\pc\video_view.aspx.cs">
+      <DependentUpon>video_view.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\pc\video_view.aspx.designer.cs">
+      <DependentUpon>video_view.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\right.aspx.cs">
+      <DependentUpon>right.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\right.aspx.designer.cs">
+      <DependentUpon>right.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\settings\nav_edit.aspx.cs">
+      <DependentUpon>nav_edit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\settings\nav_edit.aspx.designer.cs">
+      <DependentUpon>nav_edit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\settings\nav_list.aspx.cs">
+      <DependentUpon>nav_list.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\settings\nav_list.aspx.designer.cs">
+      <DependentUpon>nav_list.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\settings\sys_config.aspx.cs">
+      <DependentUpon>sys_config.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\settings\sys_config.aspx.designer.cs">
+      <DependentUpon>sys_config.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\shop\adR_edit.aspx.cs">
+      <DependentUpon>adR_edit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\shop\adR_edit.aspx.designer.cs">
+      <DependentUpon>adR_edit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\shop\adR_list.aspx.cs">
+      <DependentUpon>adR_list.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\shop\adR_list.aspx.designer.cs">
+      <DependentUpon>adR_list.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\shop\category_edit.aspx.cs">
+      <DependentUpon>category_edit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\shop\category_edit.aspx.designer.cs">
+      <DependentUpon>category_edit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\shop\category_list.aspx.cs">
+      <DependentUpon>category_list.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\shop\category_list.aspx.designer.cs">
+      <DependentUpon>category_list.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\shop\goods_edit.aspx.cs">
+      <DependentUpon>goods_edit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\shop\goods_edit.aspx.designer.cs">
+      <DependentUpon>goods_edit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\shop\goods_evaluate.aspx.cs">
+      <DependentUpon>goods_evaluate.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\shop\goods_evaluate.aspx.designer.cs">
+      <DependentUpon>goods_evaluate.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\shop\goods_list.aspx.cs">
+      <DependentUpon>goods_list.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\shop\goods_list.aspx.designer.cs">
+      <DependentUpon>goods_list.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\shop\goods_spec.aspx.cs">
+      <DependentUpon>goods_spec.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\shop\goods_spec.aspx.designer.cs">
+      <DependentUpon>goods_spec.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\shop\goods_spec_edit.aspx.cs">
+      <DependentUpon>goods_spec_edit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\shop\goods_spec_edit.aspx.designer.cs">
+      <DependentUpon>goods_spec_edit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\shop\order_detail.aspx.cs">
+      <DependentUpon>order_detail.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\shop\order_detail.aspx.designer.cs">
+      <DependentUpon>order_detail.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\shop\order_list.aspx.cs">
+      <DependentUpon>order_list.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\shop\order_list.aspx.designer.cs">
+      <DependentUpon>order_list.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\user\share_user_edit.aspx.cs">
+      <DependentUpon>share_user_edit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\user\share_user_edit.aspx.designer.cs">
+      <DependentUpon>share_user_edit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\user\share_user_list.aspx.cs">
+      <DependentUpon>share_user_list.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\user\share_user_list.aspx.designer.cs">
+      <DependentUpon>share_user_list.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\user\user_list.aspx.cs">
+      <DependentUpon>user_list.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\user\user_list.aspx.designer.cs">
+      <DependentUpon>user_list.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="pc\about_us.aspx.cs">
+      <DependentUpon>about_us.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="pc\about_us.aspx.designer.cs">
+      <DependentUpon>about_us.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="pc\case_info.aspx.cs">
+      <DependentUpon>case_info.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="pc\case_info.aspx.designer.cs">
+      <DependentUpon>case_info.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="pc\case_list.aspx.cs">
+      <DependentUpon>case_list.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="pc\case_list.aspx.designer.cs">
+      <DependentUpon>case_list.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="pc\contact_us.aspx.cs">
+      <DependentUpon>contact_us.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="pc\contact_us.aspx.designer.cs">
+      <DependentUpon>contact_us.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="pc\index.aspx.cs">
+      <DependentUpon>index.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="pc\index.aspx.designer.cs">
+      <DependentUpon>index.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="pc\news_info.aspx.cs">
+      <DependentUpon>news_info.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="pc\news_info.aspx.designer.cs">
+      <DependentUpon>news_info.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="pc\news_list.aspx.cs">
+      <DependentUpon>news_list.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="pc\news_list.aspx.designer.cs">
+      <DependentUpon>news_list.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="pc\PageListHelper.cs" />
+    <Compile Include="pc\service_item.aspx.cs">
+      <DependentUpon>service_item.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="pc\service_item.aspx.designer.cs">
+      <DependentUpon>service_item.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="pc\usercontrol\contact_us.ascx.cs">
+      <DependentUpon>contact_us.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="pc\usercontrol\contact_us.ascx.designer.cs">
+      <DependentUpon>contact_us.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="pc\usercontrol\foot.ascx.cs">
+      <DependentUpon>foot.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="pc\usercontrol\foot.ascx.designer.cs">
+      <DependentUpon>foot.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="pc\usercontrol\head.ascx.cs">
+      <DependentUpon>head.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="pc\usercontrol\head.ascx.designer.cs">
+      <DependentUpon>head.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="pc\usercontrol\m_head.ascx.cs">
+      <DependentUpon>m_head.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="pc\usercontrol\m_head.ascx.designer.cs">
+      <DependentUpon>m_head.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QrCode.aspx.cs">
+      <DependentUpon>QrCode.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="QrCode.aspx.designer.cs">
+      <DependentUpon>QrCode.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="tools\admin_ajax.ashx.cs">
+      <DependentUpon>admin_ajax.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="tools\ajax_action.ashx.cs">
+      <DependentUpon>ajax_action.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="tools\business_handler.ashx.cs">
+      <DependentUpon>business_handler.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="tools\download_qrcode.ashx.cs">
+      <DependentUpon>download_qrcode.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="tools\SpeechDemo.cs" />
+    <Compile Include="tools\UploadHandler.ashx.cs">
+      <DependentUpon>UploadHandler.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="tools\upload_ajax.ashx.cs">
+      <DependentUpon>upload_ajax.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="tools\verify_code.ashx.cs">
+      <DependentUpon>verify_code.ashx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="admin\skin\default\logo.psd" />
+    <Content Include="plugins\feedback\ajax.ashx" />
+    <Content Include="plugins\feedback\plugin.config" />
+    <Content Include="plugins\link\ajax.ashx" />
+    <Content Include="plugins\link\plugin.config" />
+    <Content Include="scripts\web-im-1.1.1\.gitignore" />
+    <Content Include="scripts\web-im-1.1.1\LICENSE" />
+    <Content Include="scripts\web-im-1.1.1\README.md" />
+    <Content Include="scripts\web-im-1.1.1\static\css\font\iconfont.eot" />
+    <Content Include="scripts\web-im-1.1.1\static\css\font\iconfont.ttf" />
+    <Content Include="scripts\web-im-1.1.1\static\css\font\iconfont.woff" />
+    <Content Include="scripts\web-im-1.1.1\static\sdk\LICENSE" />
+    <Content Include="scripts\web-im-1.1.1\static\sdk\quickstart.md" />
+    <Content Include="scripts\web-im-1.1.2\.gitignore" />
+    <Content Include="scripts\web-im-1.1.2\.travis.yml" />
+    <Content Include="scripts\web-im-1.1.2\demo\stylesheet\demo.scss" />
+    <Content Include="scripts\web-im-1.1.2\demo\stylesheet\src\font\iconfont.eot" />
+    <Content Include="scripts\web-im-1.1.2\demo\stylesheet\src\font\iconfont.ttf" />
+    <Content Include="scripts\web-im-1.1.2\demo\stylesheet\src\font\iconfont.woff" />
+    <Content Include="scripts\web-im-1.1.2\demo\stylesheet\src\_chat.scss" />
+    <Content Include="scripts\web-im-1.1.2\demo\stylesheet\src\_common.scss" />
+    <Content Include="scripts\web-im-1.1.2\demo\stylesheet\src\_dialog.scss" />
+    <Content Include="scripts\web-im-1.1.2\demo\stylesheet\src\_global.scss" />
+    <Content Include="scripts\web-im-1.1.2\demo\stylesheet\src\_layer.scss" />
+    <Content Include="scripts\web-im-1.1.2\demo\stylesheet\src\_leftbar.scss" />
+    <Content Include="scripts\web-im-1.1.2\demo\stylesheet\src\_loading.scss" />
+    <Content Include="scripts\web-im-1.1.2\demo\stylesheet\src\_msg.scss" />
+    <Content Include="scripts\web-im-1.1.2\demo\stylesheet\src\_notify.scss" />
+    <Content Include="scripts\web-im-1.1.2\demo\stylesheet\src\_sign.scss" />
+    <Content Include="scripts\web-im-1.1.2\demo\stylesheet\src\_ui.scss" />
+    <Content Include="scripts\web-im-1.1.2\package.json" />
+    <Content Include="scripts\web-im-1.1.2\README.md" />
+    <Content Include="tools\admin_ajax.ashx" />
+    <Content Include="tools\ajax_action.ashx" />
+    <Content Include="tools\upload_ajax.ashx" />
+    <Content Include="tools\verify_code.ashx" />
+    <Content Include="tools\business_handler.ashx" />
+    <Content Include="tools\UploadHandler.ashx" />
+    <Content Include="html\dist\js\maps\swiper.jquery.min.js.map" />
+    <Content Include="html\dist\js\maps\swiper.jquery.umd.min.js.map" />
+    <Content Include="html\dist\js\maps\swiper.min.js.map" />
+    <Content Include="admin\skin\icon\iconfont.eot" />
+    <Content Include="admin\skin\icon\iconfont.ttf" />
+    <Content Include="admin\skin\icon\iconfont.woff" />
+    <Content Include="html\pdfjs\web\cmaps\78-EUC-H.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\78-EUC-V.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\78-H.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\78-RKSJ-H.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\78-RKSJ-V.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\78-V.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\78ms-RKSJ-H.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\78ms-RKSJ-V.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\83pv-RKSJ-H.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\90ms-RKSJ-H.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\90ms-RKSJ-V.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\90msp-RKSJ-H.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\90msp-RKSJ-V.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\90pv-RKSJ-H.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\90pv-RKSJ-V.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\Add-H.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\Add-RKSJ-H.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\Add-RKSJ-V.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\Add-V.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\Adobe-CNS1-0.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\Adobe-CNS1-1.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\Adobe-CNS1-2.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\Adobe-CNS1-3.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\Adobe-CNS1-4.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\Adobe-CNS1-5.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\Adobe-CNS1-6.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\Adobe-CNS1-UCS2.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\Adobe-GB1-0.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\Adobe-GB1-1.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\Adobe-GB1-2.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\Adobe-GB1-3.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\Adobe-GB1-4.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\Adobe-GB1-5.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\Adobe-GB1-UCS2.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\Adobe-Japan1-0.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\Adobe-Japan1-1.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\Adobe-Japan1-2.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\Adobe-Japan1-3.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\Adobe-Japan1-4.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\Adobe-Japan1-5.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\Adobe-Japan1-6.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\Adobe-Japan1-UCS2.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\Adobe-Korea1-0.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\Adobe-Korea1-1.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\Adobe-Korea1-2.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\Adobe-Korea1-UCS2.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\B5-H.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\B5-V.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\B5pc-H.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\B5pc-V.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\CNS-EUC-H.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\CNS-EUC-V.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\CNS1-H.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\CNS1-V.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\CNS2-H.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\CNS2-V.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\ETen-B5-H.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\ETen-B5-V.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\ETenms-B5-H.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\ETenms-B5-V.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\ETHK-B5-H.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\ETHK-B5-V.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\EUC-H.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\EUC-V.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\Ext-H.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\Ext-RKSJ-H.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\Ext-RKSJ-V.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\Ext-V.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\GB-EUC-H.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\GB-EUC-V.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\GB-H.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\GB-V.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\GBK-EUC-H.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\GBK-EUC-V.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\GBK2K-H.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\GBK2K-V.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\GBKp-EUC-H.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\GBKp-EUC-V.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\GBpc-EUC-H.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\GBpc-EUC-V.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\GBT-EUC-H.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\GBT-EUC-V.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\GBT-H.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\GBT-V.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\GBTpc-EUC-H.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\GBTpc-EUC-V.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\H.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\Hankaku.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\Hiragana.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\HKdla-B5-H.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\HKdla-B5-V.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\HKdlb-B5-H.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\HKdlb-B5-V.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\HKgccs-B5-H.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\HKgccs-B5-V.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\HKm314-B5-H.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\HKm314-B5-V.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\HKm471-B5-H.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\HKm471-B5-V.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\HKscs-B5-H.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\HKscs-B5-V.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\Katakana.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\KSC-EUC-H.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\KSC-EUC-V.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\KSC-H.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\KSC-Johab-H.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\KSC-Johab-V.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\KSC-V.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\KSCms-UHC-H.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\KSCms-UHC-HW-H.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\KSCms-UHC-HW-V.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\KSCms-UHC-V.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\KSCpc-EUC-H.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\KSCpc-EUC-V.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\LICENSE" />
+    <Content Include="html\pdfjs\web\cmaps\NWP-H.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\NWP-V.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\RKSJ-H.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\RKSJ-V.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\Roman.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\UniCNS-UCS2-H.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\UniCNS-UCS2-V.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\UniCNS-UTF16-H.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\UniCNS-UTF16-V.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\UniCNS-UTF32-H.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\UniCNS-UTF32-V.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\UniCNS-UTF8-H.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\UniCNS-UTF8-V.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\UniGB-UCS2-H.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\UniGB-UCS2-V.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\UniGB-UTF16-H.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\UniGB-UTF16-V.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\UniGB-UTF32-H.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\UniGB-UTF32-V.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\UniGB-UTF8-H.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\UniGB-UTF8-V.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\UniJIS-UCS2-H.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\UniJIS-UCS2-HW-H.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\UniJIS-UCS2-HW-V.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\UniJIS-UCS2-V.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\UniJIS-UTF16-H.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\UniJIS-UTF16-V.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\UniJIS-UTF32-H.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\UniJIS-UTF32-V.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\UniJIS-UTF8-H.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\UniJIS-UTF8-V.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\UniJIS2004-UTF16-H.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\UniJIS2004-UTF16-V.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\UniJIS2004-UTF32-H.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\UniJIS2004-UTF32-V.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\UniJIS2004-UTF8-H.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\UniJIS2004-UTF8-V.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\UniJISPro-UCS2-HW-V.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\UniJISPro-UCS2-V.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\UniJISPro-UTF8-V.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\UniJISX0213-UTF32-H.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\UniJISX0213-UTF32-V.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\UniJISX02132004-UTF32-H.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\UniJISX02132004-UTF32-V.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\UniKS-UCS2-H.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\UniKS-UCS2-V.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\UniKS-UTF16-H.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\UniKS-UTF16-V.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\UniKS-UTF32-H.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\UniKS-UTF32-V.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\UniKS-UTF8-H.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\UniKS-UTF8-V.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\V.bcmap" />
+    <Content Include="html\pdfjs\web\cmaps\WP-Symbol.bcmap" />
+    <Content Include="html\pdfjs\web\locale\ach\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\af\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\ak\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\an\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\ar\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\ast\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\as\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\az\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\be\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\bg\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\bn-BD\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\bn-IN\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\br\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\bs\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\ca\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\csb\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\cs\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\cy\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\da\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\de\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\el\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\en-GB\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\en-US\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\en-ZA\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\eo\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\es-AR\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\es-CL\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\es-ES\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\es-MX\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\et\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\eu\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\fa\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\ff\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\fi\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\fr\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\fy-NL\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\ga-IE\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\gd\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\gl\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\gu-IN\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\he\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\hi-IN\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\hr\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\hu\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\hy-AM\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\id\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\is\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\it\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\ja\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\ka\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\kk\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\km\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\kn\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\ko\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\ku\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\lg\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\lij\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\locale.properties" />
+    <Content Include="html\pdfjs\web\locale\lt\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\lv\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\mai\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\mk\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\ml\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\mn\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\mr\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\ms\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\my\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\nb-NO\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\nl\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\nn-NO\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\nso\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\oc\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\or\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\pa-IN\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\pl\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\pt-BR\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\pt-PT\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\rm\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\ro\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\ru\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\rw\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\sah\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\si\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\sk\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\sl\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\son\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\sq\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\sr\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\sv-SE\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\sw\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\ta-LK\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\ta\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\te\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\th\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\tl\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\tn\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\tr\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\uk\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\ur\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\vi\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\wo\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\xh\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\zh-CN\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\zh-TW\viewer.properties" />
+    <Content Include="html\pdfjs\web\locale\zu\viewer.properties" />
+    <Content Include="pc\skin\images\readme.ini" />
+    <None Include="Properties\PublishProfiles\Web.config.pubxml" />
+    <Content Include="tools\download_qrcode.ashx" />
+    <None Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <Content Include="xmlconfig\alipaypc.config" />
+    <Content Include="xmlconfig\order.config" />
+    <Content Include="xmlconfig\site.config" />
+    <Content Include="xmlconfig\tenpaypc.config" />
+    <Content Include="xmlconfig\urls.config" />
+    <Content Include="xmlconfig\user.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="api\" />
+    <Folder Include="aspnet_client\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Appoa.API\Appoa.API.csproj">
+      <Project>{84aaaffb-7fbb-4a0c-9f7b-3851b6dc0788}</Project>
+      <Name>Appoa.API</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Appoa.BLL\Appoa.BLL.csproj">
+      <Project>{e286d591-e8bd-4ef2-89c0-71fb58c01b59}</Project>
+      <Name>Appoa.BLL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Appoa.Common\Appoa.Common.csproj">
+      <Project>{800ea747-e444-4f57-8495-7e4090e08b25}</Project>
+      <Name>Appoa.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Appoa.DBUtility\Appoa.DBUtility.csproj">
+      <Project>{c8eebfe6-444a-42a5-ba36-0855af98571e}</Project>
+      <Name>Appoa.DBUtility</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Appoa.Model\Appoa.Model.csproj">
+      <Project>{1a05d408-6e9a-4bb4-9900-2fd6681cf447}</Project>
+      <Name>Appoa.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Appoa.Web.UI\Appoa.Web.UI.csproj">
+      <Project>{29f9a336-50cc-4277-a4e4-2d69c6719e65}</Project>
+      <Name>Appoa.Web.UI</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="Microsoft.Office.Core">
+      <Guid>{2DF8D04C-5BFA-101B-BDE5-00AA0044DE52}</Guid>
+      <VersionMajor>2</VersionMajor>
+      <VersionMinor>8</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>8298</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:8298/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

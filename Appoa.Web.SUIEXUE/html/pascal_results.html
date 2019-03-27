@@ -1,0 +1,123 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, width=device-width">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>作业结果</title>
+    <meta http-equiv="Cache-Control" content="must-revalidate,no-cache">
+    <link rel="stylesheet" href="css/style.css">
+    <script type="text/javascript" src="js/jquery-1.12.3.min.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+    <script src="script/layer_mobile/layer.js"></script>
+    <script src="script/core.js"></script>
+    <script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script src="script/wechat_config.js"></script>
+    <style>
+        .to_answer a {
+            padding: 1rem 0;
+        }
+    </style>
+</head>
+<body class="whitebg">
+    <div class="tests">
+        <div class="testing">
+            <p class="tit2">&nbsp;</p>
+            <div class="score">
+                <h2><span>0</span>分</h2>
+                <p>成绩</p>
+            </div>
+            <div class="test_result clearfix">
+                <dl class="dl1"><dt>用时</dt><dd>0分0秒</dd></dl>
+                <dl class="dl2"><dt>答对</dt><dd>0题</dd></dl>
+                <dl class="dl3"><dt>正确率</dt><dd>0%</dd></dl>
+            </div>
+        </div>
+        <div class="contents">
+            <div class="test_list">
+                <h2>试题详情：</h2>
+                <ul></ul>
+            </div>
+        </div>
+    </div>
+    <div class="to_answer">
+        <a href="javascript:;">查看试题解析</a>
+    </div>
+    <script>
+        var id = getUrlParam('id');
+        $('.to_answer a').attr('href', 'pascal_parsing.html?exaid=' + id);
+
+        GetTestResult();
+        GetAnswerResult();
+
+        function GetTestResult() {
+            if (islogin()) {
+                var data = {
+                    exa_id: id,
+                    user_id: islogin().id
+                };
+
+                sendAjaxSetFunc(data, '/tools/business_handler.ashx?action=GetTestResult', function (result) {
+                    if (parseInt(result.code, 10) == 200) {
+                        var obj = result.data[0];
+                        if (obj) {
+                            var title = obj.exa_title;
+                            var score = obj.score;
+                            var min = obj.use_min;
+                            var sec = obj.use_sec;
+                            var truth_num = obj.truth_num;
+                            var truth_ratio = obj.truth_ratio;
+
+                            $('.tit2').html(title + '得分');
+                            $('.score span').html(score);
+                            if (min > 0) {
+                                $('.test_result .dl1 dd').html(min + '分' + sec + '秒');
+                            } else {
+                                $('.test_result .dl1 dd').html(sec + '秒');
+                            }
+                            $('.test_result .dl2 dd').html(truth_num + '题');
+                            $('.test_result .dl3 dd').html(truth_ratio + '%');
+                        }
+                    } else {
+                        dialogMsg(result.message);
+                    }
+                })
+            } else {
+                dialogMsgFun('您还没有登录，请先去登录', gotologin);
+            }
+        }
+
+        function GetAnswerResult() {
+            if (islogin()) {
+                var data = {
+                    group: 2,
+                    exa_id: id,
+                    user_id: islogin().id
+                };
+
+                sendAjaxSetFunc(data, '/tools/business_handler.ashx?action=GetAnswerResult', function (result) {
+                    if (parseInt(result.code, 10) == 200) {
+                        var list = result.data;
+
+                        var htmls = '';
+                        $.each(list, function (k, v) {
+                            var classname = '';
+                            if (v['is_truth'] != 1) {
+                                classname = ' class="error"';
+                            }
+                            htmls += '<li' + classname + '><a href="pascal_parsing.html?exaid=' + id + '&qid=' + v['q_id'] + '">' + (k + 1) + '</a></li>';
+                        })
+
+                        $('.test_list ul').html(htmls);
+                    } else {
+                        dialogMsg(result.message);
+                    }
+                });
+            } else {
+                dialogMsgFun('您还没有登录，请先去登录', gotologin);
+            }
+        }
+    </script>
+</body>
+
+</html>

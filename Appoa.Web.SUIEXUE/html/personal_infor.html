@@ -1,0 +1,309 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, width=device-width">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>个人资料</title>
+    <meta http-equiv="Cache-Control" content="must-revalidate,no-cache">
+    <link rel="stylesheet" href="css/style.css">
+    <script type="text/javascript" src="js/jquery-1.12.3.min.js"></script>
+    <script src="script/lrz.all.bundle.js"></script>
+    <script src="script/layer_mobile/layer.js"></script>
+    <script src="script/core.js"></script>
+    <script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script src="script/wechat_config.js"></script>
+    <style>
+        #userschool {
+            width: 100%;
+            background: none;
+            height: 1.6rem;
+            line-height: 1.6rem;
+            border: 0;
+            font-size: 1rem;
+            color: #666;
+            direction: rtl;
+            -webkit-appearance: none;
+            outline: none;
+        }
+
+        #clipArea {
+            margin: 20px;
+            height: 240px;
+        }
+
+        #view {
+            margin: 0 auto;
+            width: 200px;
+            height: 200px;
+        }
+
+        .toolbar button {
+            background: #00adef;
+            width: 20%;
+            border-radius: 3px;
+            font-size: 0.9rem;
+            line-height: 1;
+            padding: 0.5rem 0;
+            color: #fff;
+            border: 0;
+            margin: 0 0.5rem;
+            text-align: center;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="personal_menu">
+        <ul>
+            <li class="li1">
+                <span>头像</span>
+                <div class="previewbox2">
+                    <div class="premnun">
+                        <img id="imgPre3" src="images/userphoto.jpg" />
+                    </div>
+                    <a href="javascript:;" class="input-file">
+                        <input type="button" onclick="openImgView();" />
+                    </a>
+                </div>
+            </li>
+            <li>
+                <span>昵称</span>
+                <input type="text" class="input" id="nickname" placeholder="请输入昵称" value="">
+            </li>
+        </ul>
+        <ul>
+            <li><span>真实姓名</span><input type="text" placeholder="请输入真实姓名" class="input" value="" id="truthname"></li>
+            <li>
+                <span>学校</span>
+                <select id="userschool"></select>
+            </li>
+            <li><span>院系</span><input type="text" placeholder="请输入院系" class="input" value="" id="college"></li>
+            <li><span>职位</span><input type="text" placeholder="请输入职位" class="input" value="" id="job"></li>
+            <li><span>所授课程</span><input type="text" placeholder="请输入所授课程" class="input" value="" id="course"></li>
+        </ul>
+        <ul>
+            <li><span>联系方式</span><input type="text" placeholder="请输入联系方式" class="input" value="" id="line_way"></li>
+            <li class="selectaddress">
+                <span>通讯地址</span>
+                <input id="demo1" type="text" class="input" readonly placeholder="选择" value="" />
+                <input id="value1" type="hidden" value="20,234,504" />
+                <i></i>
+            </li>
+            <li class="li">
+                <textarea id="address" placeholder="详细地址"></textarea>
+            </li>
+        </ul>
+        <p class="surebtn">
+            <input type="button" id="submitInfo" value="提交">
+        </p>
+    </div>
+    <script type="text/javascript" src="js/LAreaData1.js"></script>
+    <script type="text/javascript" src="js/LAreaData2.js"></script>
+    <script type="text/javascript" src="js/LArea.js"></script>
+    <script src="js/iscroll-zoom.js"></script>
+    <script src="js/hammer.js"></script>
+    <script src="js/jquery.photoClip.js"></script>
+    <script type="text/javascript">
+        var area1 = new LArea();
+        area1.init({
+            'trigger': '#demo1', //触发选择控件的文本框，同时选择完毕后name属性输出到该位置
+            'valueTo': '#value1', //选择完毕后id属性输出到该位置
+            'keys': {
+                id: 'id',
+                name: 'name'
+            }, //绑定数据源相关字段 id对应valueTo的value属性输出 name对应trigger的value属性输出
+            'type': 1, //数据源类型
+            'data': LAreaData //数据源
+        });
+        area1.value = [1, 13, 3];//控制初始位置，注意：该方法并不会影响到input的value
+    </script>
+    <script type="text/javascript">
+        function finish() {
+            var src = $('#view').css('background-image');
+
+            if (src && src != '' && src != 'none') {
+                src = src.replace('url(', '').replace(')', '').replace('"', '').replace('"', '');
+                $('#imgPre3').attr('src', src);
+                layer.closeAll();
+            } else {
+                dialogTips('请裁剪图片');
+            }
+        }
+
+        function openImgView() {
+            var htmls = [
+                    '<div class="toolbar">',
+                    '	<input type="file" id="file" accept="image/*" hidden>',
+					'	<button onclick="file.click()">选择图片</button>',
+					'	<button id="clipBtn">截取</button>',
+                    '	<button onclick="finish()">完成</button>',
+					'	<button onclick="layer.closeAll()">取消</button>',
+					'</div>',
+					'<article class="htmleaf-container">',
+					'	<div id="clipArea"></div>',
+					'	<div id="view"></div>',
+					'</article>'
+            ].join('');
+
+            if (dialogHtml(htmls)) {
+                $("#clipArea").photoClip({
+                    width: 200,
+                    height: 200,
+                    file: "#file",
+                    view: "#view",
+                    ok: "#clipBtn",
+                    outputType: 'jpg',
+                    loadStart: function () {
+                        dialogTipsTime("照片读取中", 1);
+                        console.log("照片读取中");
+                    },
+                    loadComplete: function () {
+                        console.log("照片读取完成");
+                    },
+                    clipFinish: function (dataURL) {
+                        console.log('裁剪完成');
+                    }
+                });
+
+                //$('#file').click();
+            }
+        }
+
+        getSchool();
+        getUserInfo();
+
+        $('#submitInfo').click(function () {
+            if (islogin()) {
+                var avatar = $('#imgPre3').attr('src');
+                var nick_name = $('#nickname').val();
+                var user_name = $('#truthname').val();
+                var college = $('#college').val();
+                var job = $('#job').val();
+                var course = $('#course').val();
+                var line_way = $('#line_way').val();
+                var area = $('#demo1').val();
+                var address = $('#address').val();
+                var school_id = $('#userschool').val();
+
+                var data = {
+                    user_id: islogin().id,
+                    nick_name: nick_name,
+                    avatar: avatar,
+                    true_name: user_name,
+                    school_id: school_id,
+                    college: college,
+                    job: job,
+                    course: course,
+                    line_way: line_way,
+                    area: area,
+                    address: address
+                };
+
+                layer.closeAll();
+                dialogLoadingText('提交中');
+                sendAjaxSetFunc(data, '/tools/business_handler.ashx?action=EditUserInfo', function (result) {
+                    layer.closeAll();
+                    if (parseInt(result.code, 10) == 200) {
+                        var user = result.data;
+                        var userInfo = JSON.stringify(user.UserInfo);
+                        var userTree = JSON.stringify(user.UserTree);
+                        var userOAuths = JSON.stringify(user.UserOAuths);
+                        setStorage('userInfo', encodeURIComponent(userInfo));
+                        setStorage('userTree', encodeURIComponent(userTree));
+                        setStorage('userOAuths', encodeURIComponent(userOAuths));
+
+                        dialogMsgFun('修改成功', function () {
+                            history.back(-1);
+                        })
+                    } else {
+                        dialogMsg(result.message);
+                    }
+                })
+            } else {
+                dialogMsgFun('您还没有登录，请先去登录', gotologin);
+            }
+        })
+
+        function getUserInfo() {
+            if (islogin()) {
+                var data = {
+                    user_id: islogin().id
+                };
+
+                sendAjaxSetFuncAsync(true, data, '/tools/business_handler.ashx?action=GetUserInfo', function (result) {
+                    if (parseInt(result.code, 10) == 200) {
+                        var obj = result.data[0];
+                        if (obj) {
+                            $('#imgPre3').attr('src', obj.avatar);
+                            $('#nickname').val(obj.nick_name);
+                            $('#truthname').val(obj.user_name);
+                            $('#college').val(obj.college);
+                            $('#job').val(obj.job);
+                            $('#course').val(obj.course);
+                            $('#line_way').val(obj.line_way);
+                            $('#demo1').val(obj.area);
+                            $('#address').val(obj.address);
+                            $('#userschool').val(obj.school_id);
+
+                            var data = LAreaData;//全部数据源
+                            var shengid = parseInt(getAreaId(data, obj.sheng), 10);//省级ID
+                            var shiArr = getAreaChild(data, shengid);//市级数据源
+
+                            var shiid = parseInt(getAreaId(shiArr, obj.shi), 10);//市级ID
+                            var quArr = getAreaChild(shiArr, shiid);//县级数据源
+
+                            var quid = parseInt(getAreaId(quArr, obj.xian), 10);//区级ID
+                            area1.value = [shengid, shiid, quid];
+                            $("#value1").val(area1.value[0] + ',' + area1.value[1] + ',' + area1.value[2]);
+                        }
+                    } else {
+                        dialogMsg(result.message);
+                    }
+                });
+            } else {
+                dialogMsgFun('您还没有登录，请先去登录', gotologin);
+            }
+        }
+
+        //获取数据源索引
+        function getAreaId(list, name) {
+            var index = 0;
+            $.each(list, function (k, v) {
+                if (v.name == name) {
+                    index = k;
+                }
+            })
+            return index;
+        }
+
+        //获取下级数据源
+        function getAreaChild(list, index) {
+            var arr = [];
+            $.each(list, function (k, v) {
+                if (k == index) {
+                    arr = v.child;
+                }
+            })
+            return arr;
+        }
+
+        function getSchool() {
+            sendAjaxSetFuncAsync(false, {}, '/tools/business_handler.ashx?action=GetSchoolList', function (result) {
+                if (parseInt(result.code, 10) == 200) {
+
+                    var list = result.data;
+                    var htmls = '<option value="0">所在学校</option>';
+                    $.each(list, function (k, v) {
+                        htmls += '<option value="' + v['id'] + '">' + v['name'] + '</option>';
+                    })
+
+                    $('#userschool').html(htmls);
+                } else {
+                    dialogMsg(result.message);
+                }
+            })
+        }
+    </script>
+</body>
+</html>

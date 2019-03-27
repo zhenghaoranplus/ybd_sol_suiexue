@@ -1,0 +1,82 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, width=device-width">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>消息</title>
+    <meta http-equiv="Cache-Control" content="must-revalidate,no-cache">
+    <link rel="stylesheet" href="css/style.css">
+    <script type="text/javascript" src="js/jquery-1.12.3.min.js"></script>
+    <script src="script/layer_mobile/layer.js"></script>
+    <script src="script/core.js"></script>
+    <script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script src="script/wechat_config.js"></script>
+</head>
+<body>
+    <section class="message_tab">
+        <ul>
+            <li><a href="message.html" class="current">系统消息</a></li>
+            <li><a href="message2.html">课堂验证</a></li>
+        </ul>
+        <span class="line"></span>
+    </section>
+    <section class="message_list">
+        
+    </section>
+    <script>
+        var pageIndex = 1;
+        var pageSize = 10;
+
+        getData();
+        scrollLoad();
+
+        function getData() {
+            if (islogin()) {
+                var data = {
+                    user_id: islogin().id,
+                    page_index: pageIndex,
+                    page_size: pageSize
+                };
+
+                sendAjaxSetFunc(data, '/tools/business_handler.ashx?action=GetMessageList', function (result) {
+                    if (parseInt(result.code, 10) == 200) {
+                        var list = result.data;
+                        var htmls = '';
+
+                        $.each(list, function (k, v) {
+                            htmls += [
+                                '<div class="list">',
+                                '<p class="time">' + v['add_time'] + '</p>',
+                                '<div class="con">',
+                                '<h2><a href="message_details.html?id=' + v['id'] + '">' + v['title'] + '</a></h2>',
+                                '<div class="txt">' + cutContents(v['subtitle']) + '</div>',
+                                '</div>',
+                                '</div>'
+                            ].join('');
+                        });
+
+                        if (pageIndex == 1) {
+                            $('.message_list').html(htmls);
+                        } else {
+                            $('.message_list').append(htmls);
+                        }
+                    } else {
+                        dialogMsg(result.message);
+                    }
+                });
+            } else {
+                dialogMsgFun('您还没有登录，请先去登录', gotologin);
+            }
+        }
+
+        function cutContents(str) {
+            str = str.toString();
+            if (str.length > 30) {
+                str = str.substr(0, 30) + '...';
+            }
+            return str;
+        }
+    </script>
+</body>
+</html>

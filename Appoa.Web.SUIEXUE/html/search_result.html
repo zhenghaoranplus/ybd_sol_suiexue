@@ -1,0 +1,189 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, width=device-width">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>搜索结果</title>
+    <meta http-equiv="Cache-Control" content="must-revalidate,no-cache">
+    <link rel="stylesheet" href="css/style.css">
+    <script type="text/javascript" src="js/jquery-1.12.3.min.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+    <script src="script/layer_mobile/layer.js"></script>
+    <script src="script/core.js"></script>
+    <script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script src="script/wechat_config.js"></script>
+</head>
+<body>
+    <div class="search_head">
+        <form method="get" action="search_result.html" target="_self" onsubmit="return checkkey();">
+            <div class="search_type">
+                <span>课程</span>
+                <input type="hidden" id="hdType" name="serch_type" value="1" />
+                <div class="type">
+                    <i></i>
+                    <ul id="nvul">
+                        <li>课程</li>
+                        <li>资源</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="search search2">
+                <div class="input">
+                    <input id="keywords" name="keywords" type="text" placeholder="输入课程名查找" value="">
+                </div>
+                <input type="submit" id="" class="searchbtn" value="搜索">
+            </div>
+        </form>
+    </div>
+    <section class="course_list">
+        <div class="course_tit">相关结果（0条）</div>
+        <div class="content">
+        </div>
+    </section>
+    <script>
+        setSearchkey();
+        SearchCourse();
+
+        //保存搜索关键字
+        function setSearchkey() {
+            var keywords = $.trim(getUrlParam('keywords'));
+            if (keywords) {
+                var course_searchkey = localStorage.getItem('course_searchkey');
+                if (!course_searchkey) {
+                    course_searchkey = '';
+                    course_searchkey += keywords;
+                    course_searchkey = encodeURIComponent(course_searchkey);
+                    localStorage.setItem('course_searchkey', course_searchkey);
+                } else {
+                    course_searchkey = decodeURIComponent(course_searchkey);
+
+                    var arr = course_searchkey.split('|');
+                    if (!isInArray(arr, keywords)) {
+                        course_searchkey += '|' + keywords;
+                    }
+
+                    course_searchkey = encodeURIComponent(course_searchkey);
+                    localStorage.setItem('course_searchkey', course_searchkey);
+                }
+            }
+        }
+
+        //检查字符是否在数组里
+        function isInArray(arr, obj) {
+            var i = arr.length;
+            while (i--) {
+                if (arr[i] === obj) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        //检查搜索关键字是否为空
+        function checkkey() {
+            var a = document.getElementById("keywords").value;
+            if ("" == a.replace(/(^\s*)|(\s*$)/g, "")) {
+                return document.getElementById("keywords").focus(), false;
+            }
+
+            return true;
+        }
+
+        function SearchCourse() {
+            var keywords = getUrlParam('keywords');
+            if (keywords) {
+                var type = getUrlParam('serch_type');
+                if (type == '1') {
+                    $('div.search_type span').html('课程');
+                    var data = {
+                        keywords: keywords
+                    };
+
+                    sendAjaxSetFunc(data, '/tools/business_handler.ashx?action=SearchCourse', function (result) {
+                        if (parseInt(result.code, 10) == 200) {
+                            var list = result.data;
+                            var htmls = '';
+
+                            $.each(list, function (k, v) {
+                                htmls += [
+                                    '<div class="list">',
+                                    '<a href="course_details.html?id=' + v['id'] + '">',
+                                    '<div class="pic">',
+                                    '<img src="' + v['cover'] + '">',
+                                    '</div>',
+                                    '<h3>' + v['name'] + '</h3>',
+                                    '<div class="description">' + v['info'] + '</div>',
+                                    '</a>',
+                                    '</div>'
+                                ].join('');
+                            })
+
+                            $('.course_tit').html('相关结果（' + list.length + '条）');
+                            $('.content').html(htmls);
+                        } else {
+                            dialogMsg(result.message);
+                        }
+                    })
+                } else if (type == '2') {
+                    $('div.search_type span').html('资源');
+                    var data = {
+                        keywords: keywords
+                    };
+
+                    sendAjaxSetFunc(data, '/tools/business_handler.ashx?action=SearchResource', function (result) {
+                        if (parseInt(result.code, 10) == 200) {
+                            var list = result.data;
+                            var htmls = '';
+
+                            var htmls = '';
+                            $.each(list, function (k, v) {
+                                var classname = '';
+                                var url = '';
+                                if (parseInt(v['type'], 10) == 1) {//图文资源
+                                    classname = 't3';
+                                    url = 'article_details.html?method=click&id=' + v['id'];
+                                }
+                                if (parseInt(v['type'], 10) == 2) {//文档资源
+                                    classname = 't2';
+                                    url = v['path'];
+                                }
+                                if (parseInt(v['type'], 10) == 3) {//音频资源
+                                    classname = 't7';
+                                    url = 'video_details.html?method=click&id=' + v['id'];
+                                }
+                                if (parseInt(v['type'], 10) == 4) {//视频资源
+                                    classname = 't1';
+                                    url = 'video_details.html?method=click&id=' + v['id'];
+                                }
+                                if (parseInt(v['type'], 10) == 5) {//试卷资源
+                                    classname = 't6';
+                                    url = 'test.html?method=click&id=' + v['id'];
+                                }
+                                if (parseInt(v['type'], 10) == 6) {//3D资源
+                                    classname = 't4';
+                                    url = 'javascript:;';
+                                }
+                                if (parseInt(v['type'], 10) == 7) {//问题讨论
+                                    classname = 't5';
+                                    url = 'discuss_details.html?method=click&id=' + v['id'];
+                                }
+                                htmls += '<li class="' + classname + '"><a href="' + url + '">' + v['title'] + '</a></li>';
+                            })
+
+                            if (htmls) {
+                                htmls = '<ul>' + htmls + '</ul>';
+                            }
+
+                            $('.course_tit').html('相关结果（' + list.length + '条）');
+                            $('.content').html(htmls);
+                        } else {
+                            dialogMsg(result.message);
+                        }
+                    })
+                }
+            }
+        }
+    </script>
+</body>
+</html>

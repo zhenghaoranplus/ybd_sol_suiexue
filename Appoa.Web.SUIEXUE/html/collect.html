@@ -1,0 +1,267 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, width=device-width">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>我的收藏</title>
+    <meta http-equiv="Cache-Control" content="must-revalidate,no-cache">
+    <link rel="stylesheet" href="css/style.css">
+    <script type="text/javascript" src="js/jquery-1.12.3.min.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+    <script src="script/layer_mobile/layer.js"></script>
+    <script src="script/core.js"></script>
+    <script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script src="script/wechat_config.js"></script>
+    <style>
+        .cancel_del_coolect {
+            position: absolute;
+            bottom: 0;
+            right: 10rem;
+            width: 10rem;
+        }
+
+            .cancel_del_coolect input {
+                display: block;
+                width: 100%;
+                border: 0;
+                background: #00adef;
+                padding: 1.2rem 0;
+                text-align: center;
+                line-height: 1;
+                font-size: 1.05rem;
+                color: #fff;
+                cursor: pointer;
+            }
+
+        .course_tab li {
+            width: 43%;
+        }
+    </style>
+</head>
+<body>
+    <section class="course_list collectlist">
+        <section class="course_tab">
+            <ul>
+                <li>课程</li>
+                <li>资源</li>
+            </ul>
+        </section>
+        <div class="content" id="course_coll">
+        </div>
+        <div class="collect_bottom">
+            <span class="edit">编辑</span>
+            <div class="manage_favaorites">
+                <div class="collectcheck">
+                    <label for="">
+                        <input type="checkbox" class="co-check" id="checkall"><em></em>
+                    </label>全选
+                </div>
+                <div class="cancel_del_coolect">
+                    <input type="button" id="" name="" value="取  消">
+                </div>
+                <div class="del_collect">
+                    <input type="button" id="" name="" value="删  除">
+                </div>
+            </div>
+        </div>
+    </section>
+    <script>
+        var pageIndex = 1;
+        var pageSize = 10;
+        var tag = 0;
+
+        $(".course_tab li:eq(0)").addClass("active");
+        $(".course_content:eq(0)").show();
+        $(".course_tab li").click(function () {
+            $(this).addClass("active").siblings("li").removeClass("active");
+            tag = $(this).index();
+
+            getData();
+
+            $('.collect_bottom .edit').show();
+            $('.collect_bottom .edit').parent().find(".manage_favaorites").hide();
+        });
+
+        //编辑
+        $(".collect_bottom .edit").click(function () {
+            $(".collectlist .list").addClass("editlist");
+            if (tag == 1) {
+                $('.course_list .editlist a').css('margin-left', '0');
+                $('.content .editlist .t1').css('margin-left', '2rem');
+            }
+            $(this).hide();
+            $(this).parent().find(".manage_favaorites").show();
+        });
+
+        //取消
+        $('.cancel_del_coolect input').click(function () {
+            $(".collectlist .list").removeClass("editlist");
+            $('.manage_favaorites').hide();
+            $(".collect_bottom .edit").show();
+            if (tag == 1) {
+                $('.content li.t1 a').css('margin-left', '');
+                $('.content li.t1').removeAttr('style');
+            }
+
+        })
+
+        getData();
+        scrollLoad();
+
+        function getData() {
+            if (tag == 0) {
+                getCourseColl();
+            } else if (tag == 1) {
+                getResourceColl();
+            }
+        }
+
+        function getCourseColl() {
+            if (islogin()) {
+                var data = {
+                    user_id: islogin().id,
+                    page_index: pageIndex,
+                    page_size: pageSize
+                };
+
+                sendAjaxSetFunc(data, '/tools/business_handler.ashx?action=GetMyCollection', function (result) {
+                    if (parseInt(result.code, 10) == 200) {
+                        var list = result.data;
+                        var htmls = '';
+
+                        $.each(list, function (k, v) {
+                            htmls += [
+                                '<div class="list">',
+                                '<div class="collectcheck">',
+                                '<label for=""><input type="checkbox" class="co-check collCheck" value="' + v['id'] + '"><em></em></label>',
+                                '</div>',
+                                '<a href="course_details.html?id=' + v['data_id'] + '">',
+                                '<div class="pic">',
+                                '<img src="' + v['cover'] + '">',
+                                '</div>',
+                                '<h3>' + v['name'] + '</h3>',
+                                '<div class="description">' + v['info'] + '</div>',
+                                '</a>',
+                                '</div>'
+                            ].join('');
+                        })
+
+                        if (pageIndex == 1) {
+                            if (htmls) {
+                                $('#course_coll').html(htmls);
+                            } else {
+                                $(".collect_bottom .edit").hide();
+                                $('#course_coll').html('');
+                            }
+                        } else if (pageIndex > 1) {
+                            $('#course_coll').append(htmls);
+                        }
+
+                    } else {
+                        dialogMsg(result.message);
+                    }
+                });
+            } else {
+                dialogMsgFun('您还没有登录，请先去登录', gotologin);
+            }
+        }
+
+        function getResourceColl() {
+            if (islogin()) {
+                var data = {
+                    user_id: islogin().id,
+                    page_index: pageIndex,
+                    page_size: pageSize
+                };
+
+                sendAjaxSetFunc(data, '/tools/business_handler.ashx?action=GetMyResourceColl', function (result) {
+                    if (parseInt(result.code, 10) == 200) {
+                        var list = result.data;
+                        var htmls = '';
+
+                        $.each(list, function (k, v) {
+                            var url = '';
+                            if (v['re_from'] == 1) {
+                                url = 'video_details.html?method=click&id=' + v['data_id'];
+                            } else if (v['re_from'] == 2) {
+                                url = 'video_details1.html?id=' + v['data_id'];
+                            }
+                            htmls += [
+                                '<div class="list">',
+                                '<div class="collectcheck">',
+                                '<label for=""><input type="checkbox" class="co-check collCheck" value="' + v['id'] + '"><em></em></label>',
+                                '</div>',
+                                '<ul>',
+                                '<li class="t1"><a href="' + url + '">' + v['title'] + '</a></li>',
+                                '</ul>',
+                                '</div>',
+                            ].join('');
+                        })
+
+                        if (pageIndex == 1) {
+                            if (htmls) {
+                                $('#course_coll').html(htmls);
+                            } else {
+                                $(".collect_bottom .edit").hide();
+                                $('#course_coll').html('');
+                            }
+                        } else if (pageIndex > 1) {
+                            $('#course_coll').append(htmls);
+                        }
+
+                        $('.course_list .list a').css('padding', '0');
+
+                    } else {
+                        dialogMsg(result.message);
+                    }
+                });
+            } else {
+                dialogMsgFun('您还没有登录，请先去登录', gotologin);
+            }
+        }
+
+        $('.del_collect input').click(function () {
+            var arr = $('.collCheck:checked');
+            if (arr.length <= 0) {
+                dialogTips('请选择要删除的收藏');
+                return;
+            }
+
+            var objarr = [];
+            dialogConfirmFun('确定要删除这些收藏吗？', function () {
+                var ids = '';
+                arr.each(function (k, v) {
+                    ids += $(v).val() + ',';
+                    objarr.push(v);
+                })
+
+                ids = ids.substr(0, ids.length - 1);
+
+                var data = {
+                    user_id: islogin().id,
+                    ids: ids
+                };
+
+                dialogLoadingText('正在删除');
+                sendAjaxSetFunc(data, '/tools/business_handler.ashx?action=DelCollection', function (result) {
+                    layer.closeAll();
+                    if (parseInt(result.code, 10) == 200) {
+                        $.each(objarr, function (k, v) {
+                            $(v).parents('.list').remove();
+
+                            if ($('#course_coll .list').length == 0) {
+                                $(".collect_bottom .edit").hide();
+                                $(".collect_bottom .manage_favaorites").hide();
+                            }
+                        })
+
+                    } else {
+                        dialogMsg(result.message);
+                    }
+                });
+            });
+        })
+    </script>
+</body>
+</html>

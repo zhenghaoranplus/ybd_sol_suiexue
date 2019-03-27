@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, width=device-width">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>变更手机号</title>
+    <meta http-equiv="Cache-Control" content="must-revalidate,no-cache">
+    <link rel="stylesheet" href="css/style.css">
+    <script type="text/javascript" src="js/jquery-1.12.3.min.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+    <script src="script/layer_mobile/layer.js"></script>
+    <script src="script/core.js"></script>
+    <script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script src="script/wechat_config.js"></script>
+</head>
+<body>
+    <section class="modifypassword">
+        <ul>
+            <li>
+                <label>新手机号</label><input type="text" id="" name="" class="input" placeholder="输入新手机号" value="">
+            </li>
+            <li>
+                <label>验证码</label><input type="text" id="" name="" class="input" placeholder="输入验证码" value="">
+                <span class="msgs">获取</span>
+            </li>
+        </ul>
+        <p class="userbtn">
+            <input type="button" id="" name="" value="完成">
+        </p>
+    </section>
+    <script>
+        var validCode = true;
+        $(".msgs").click(function () {
+            var time = 60;
+            var code = $(this);
+            if (validCode) {
+                if (sendCode()) {
+                    validCode = false;
+                    code.addClass("msgs1");
+                    var t = setInterval(function () {
+                        time--;
+                        code.html(time + "秒");
+                        if (time == 0) {
+                            clearInterval(t);
+                            code.html("重新获取");
+                            validCode = true;
+                            code.removeClass("msgs1");
+                        }
+                    }, 1000)
+                } else {
+                    clearInterval(t);
+                }
+            }
+        })
+
+        function sendCode() {
+            var phone = $.trim($('.modifypassword li:eq(0) input').val());
+            if (phone) {
+                getCode(phone);
+                return true;
+            } else {
+                dialogTips("请输入手机号");
+                return false;
+            }
+        }
+
+        function getCode(phone) {
+            var data = {
+                phone: phone
+            };
+
+            sendAjaxSetFuncAsync(false, data, '/tools/business_handler.ashx?action=GetVerifyCode', function (result) {
+                if (parseInt(result.code, 10) == 200) {
+                } else {
+                    dialogTips(result.message);
+                }
+            });
+        }
+
+        $('.userbtn input').click(function () {
+            if (islogin()) {
+                var uid = islogin().id;
+                var phone = $.trim($('.modifypassword li:eq(0) input').val());
+                var code = $.trim($('.modifypassword li:eq(1) input').val());
+
+                if (!phone) {
+                    dialogTips('请输入新手机号');
+                    return;
+                }
+                if (!code) {
+                    dialogTips('请输入验证码');
+                    return;
+                }
+
+                var data = {
+                    user_id: uid,
+                    phone: phone,
+                    code: code
+                };
+
+                dialogLoadingText('提交中');
+                sendAjaxSetFunc(data, '/tools/business_handler.ashx?action=UpdatePhone', function (result) {
+                    layer.closeAll();
+                    if (parseInt(result.code, 10) == 200) {
+                        delStorage('userInfo');
+                        dialogMsgFun('修改成功，请使用新手机号登录', function () {
+                            window.location.href = 'login.html';
+                        });
+                    } else {
+                        dialogMsg(result.message);
+                    }
+                });
+            } else {
+                dialogMsgFun('您还没有登录，请先去登录', gotologin);
+            }
+        })
+    </script>
+</body>
+</html>

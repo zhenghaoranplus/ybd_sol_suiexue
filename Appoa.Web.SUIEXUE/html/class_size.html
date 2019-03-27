@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, width=device-width">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>班级人数</title>
+    <meta http-equiv="Cache-Control" content="must-revalidate,no-cache">
+    <link rel="stylesheet" href="css/style.css">
+    <script type="text/javascript" src="js/jquery-1.12.3.min.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+    <script src="script/layer_mobile/layer.js"></script>
+    <script src="script/core.js"></script>
+    <script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script src="script/wechat_config.js"></script>
+</head>
+<body>
+    <section class="class_size">
+        <section class="headcount">班级总人数（<i>0</i>人）</section>
+        <h1 class="count_h1">老师（<i>0</i>人）</h1>
+        <ul class="memberul">
+            <li><a href="javascript:;">
+                <img src=""><i></i></a></li>
+        </ul>
+        <h1 class="count_h1">成员（<i>0</i>人）</h1>
+        <ul class="memberul">
+            <li><a href="member_data.html">
+                <img src="images/head_img2.jpg">Air</a></li>
+        </ul>
+    </section>
+    <script>
+        var pageIndex = 1;
+        var pageSize = 10;
+
+        getData();
+        scrollLoad();
+
+        function getData() {
+            if (islogin()) {
+                var id = getUrlParam('id');
+                var uid = islogin().id;
+                var data = {
+                    id: id,
+                    user_id: uid,
+                    page_index: pageIndex,
+                    page_size: pageSize
+                };
+
+                sendAjaxSetFunc(data, '/tools/business_handler.ashx?action=GetClassroomUsers', function (result) {
+                    if (parseInt(result.code, 10) == 200) {
+                        var obj = result.data[0];
+                        if (obj) {
+                            $('.headcount i').html(obj.count);
+                            if (obj.teacher) {
+                                $('.count_h1:eq(0) i').html('1');
+                                $('.memberul:eq(0) img').attr('src', obj.teacher.avatar);
+                                $('.memberul:eq(0) i').html(obj.teacher.nick_name);
+                                if (uid != obj.teacher.user_id) {
+                                    $('.memberul:eq(0) a').attr('href', 'member_data.html?uid=' + obj.teacher.user_id);
+                                }
+                            }
+                            $('.count_h1:eq(1) i').html(obj.member);
+
+                            var list = obj.memberList;
+                            var htmls = '';
+                            var url = '';
+
+                            $.each(list, function (k, v) {
+                                if (obj.teacher.user_id == uid) {
+                                    url = 'member_data.html?uid=' + v['user_id'];
+                                } else {
+                                    url = 'javascript:;';
+                                }
+                                htmls += [
+                                    '<li>',
+                                    '<a href="' + url + '">',
+                                    '<img src="' + v['avatar'] + '" />' + v['nick_name'] + '',
+                                    '</a>',
+                                    '</li>'
+                                ].join('');
+                            })
+
+                            if (pageIndex == 1) {
+                                $('.memberul:eq(1)').html(htmls);
+                            } else {
+                                $('.memberul:eq(1)').append(htmls);
+                            }
+                        }
+                    } else {
+                        dialogMsg(result.message);
+                    }
+                })
+            } else {
+                dialogMsgFun('您还没有登录，请先去登录', gotologin);
+            }
+        }
+    </script>
+</body>
+</html>

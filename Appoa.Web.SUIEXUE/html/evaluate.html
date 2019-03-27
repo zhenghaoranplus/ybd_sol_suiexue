@@ -1,0 +1,73 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, width=device-width">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>评价</title>
+    <meta http-equiv="Cache-Control" content="must-revalidate,no-cache">
+    <link rel="stylesheet" href="css/style.css">
+    <script type="text/javascript" src="js/jquery-1.12.3.min.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+    <script type="text/javascript" src="js/star.js"></script>
+    <script src="script/layer_mobile/layer.js"></script>
+    <script src="script/core.js"></script>
+    <script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script src="script/wechat_config.js"></script>
+</head>
+<body class="whitebg">
+    <section class="evaluate">
+        <div class="evaluate_product">
+            <div class="productimg">
+                <img src="images/orderimg.png">
+            </div>
+            <span class="t">评分</span>
+            <div class="estar"><em>分</em><input name="my_input" value="4" id="rating_simple1" type="text"></div>
+        </div>
+        <div class="textarea">
+            <textarea id="contents" name="" placeholder="商品满足你的期待么？说说你的心得吧"></textarea>
+        </div>
+        <div class="questions">
+            <input type="button" id="" value="发布">
+        </div>
+    </section>
+    <script>
+        $("#rating_simple1").webwidget_rating_simple({
+            rating_star_length: '5',
+            rating_initial_value: '4',
+            rating_function_name: '',//this is function name for click
+            directory: 'images'
+        });
+
+        $('.questions input').click(function () {
+            if (islogin()) {
+                var ogid = getUrlParam('id');
+                var uid = islogin().id;
+                var star = $('#rating_simple1').val();
+                var contents = $.trim($('#contents').val());
+
+                var data = {
+                    order_goods_id: ogid,
+                    user_id: uid,
+                    star: star,
+                    contents: contents
+                };
+
+                dialogLoadingText('评价提交中');
+                sendAjaxSetFunc(data, '/tools/business_handler.ashx?action=DoEvaluateGoods', function (result) {
+                    layer.closeAll();
+                    if (parseInt(result.code, 10) == 200) {
+                        dialogMsgFun('评价成功', function () {
+                            window.history.back(-1);
+                        });
+                    } else {
+                        dialogMsg(result.message);
+                    }
+                })
+            } else {
+                dialogMsgFun('您还没有登录，请先去登录', gotologin);
+            }
+        })
+    </script>
+</body>
+</html>

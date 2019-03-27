@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, width=device-width">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>作业</title>
+    <meta http-equiv="Cache-Control" content="must-revalidate,no-cache">
+    <link rel="stylesheet" href="css/style.css">
+    <script type="text/javascript" src="js/jquery-1.12.3.min.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+    <script src="script/layer_mobile/layer.js"></script>
+    <script src="script/core.js"></script>
+    <script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script src="script/wechat_config.js"></script>
+    <script>
+        var sec = 0;
+        var min = 0;
+        function timer() {
+            sec++;
+            if (parseInt((sec / 60), 10) > 0) {
+                sec = 0;
+                min++;
+            }
+
+            min = min.toString().length == 1 ? '0' + min : min.toString();
+            sec = sec.toString().length == 1 ? '0' + sec : sec.toString();
+
+            setStorage('testmin', min);
+            setStorage('testsec', sec);
+
+            $('.count-down span:eq(0)').html(min);
+            $('.count-down span:eq(1)').html(sec);
+        }
+        var t = setInterval('timer()', 1000);
+
+        $(function () {
+            GetTestList();
+
+            //上一题
+            $('.to_answer a:eq(0)').click(function () {
+                var questions = $('.testing');
+                var index = 0;
+                for (var i = 0; i < questions.length; i++) {
+                    var obj = questions[i];
+                    if ($(obj).css('display') == 'block') {
+                        index = $(obj).index();
+                        break;
+                    }
+                }
+
+                index = index - 1;
+                if (index <= 0) {//第一题
+                    $('.prev').hide();
+                    $('.to_answer').removeClass('to_answer2');
+                    $('.testing:eq(0)').show().siblings().hide();
+                } else if (index > 0) {
+                    if (index != (questions.length - 1)) {//不是最后一题
+                        $('.to_answer a:eq(1)').removeClass('submit_answer').html('下一题').removeAttr('onclick');
+                    }
+
+                    if (!$('.to_answer').hasClass('to_answer2')) {
+                        $('.prev').show();
+                        $('.to_answer').addClass('to_answer2');
+                    }
+
+                    $('.testing:eq(' + index + ')').show().siblings().hide();
+                }
+            })
+
+            //下一题、提交
+            $('.to_answer a:eq(1)').click(function () {
+                var questions = $('.testing');
+                var index = 0;
+                for (var i = 0; i < questions.length; i++) {
+                    var obj = questions[i];
+                    if ($(obj).css('display') == 'block') {
+                        index = $(obj).index();
+                        break;
+                    }
+                }
+
+                index = index + 1;
+                if (index == (questions.length - 1)) {//最后一题
+                    $('.to_answer a:eq(1)').addClass('submit_answer').html('提交').attr('onclick', 'checkchoice()');
+                }
+
+                if (!$('.to_answer').hasClass('to_answer2')) {
+                    $('.prev').show();
+                    $('.to_answer').addClass('to_answer2');
+                }
+
+                $('.testing:eq(' + index + ')').show().siblings().hide();
+            })
+        })
+
+        //检查是否答题并保存答案
+        function checkchoice() {
+            var questions = $('.testing');
+
+            //检查答完了几道题
+            var answer_count = 0;
+            var answerArray = new Array();
+            for (var i = 0; i < questions.length; i++) {
+                var obj = questions[i];
+                var type = $(obj).attr('q_type');
+                var qid = $(obj).attr('id').replace('question', '');
+                var answer = '';
+
+                if (parseInt(type, 10) < 4 && parseInt(type, 10) != 2) {
+                    var radioArray = $(obj).find('input');
+                    for (var j = 0; j < radioArray.length; j++) {
+                        if (radioArray[j].checked == true) {
+                            answer_count++;//答题总数
+                            //题目、答案
+                            answer = radioArray[j].id.replace('radio', '');
+                        }
+                    }
+                } else if (parseInt(type, 10) == 2) {
+                    var checkboxArray = $(obj).find('input');
+                    for (var j = 0; j < checkboxArray.length; j++) {
+                        if (checkboxArray[j].checked == true) {
+                            //题目、答案
+                            answer += checkboxArray[j].id.replace('checkbox', '') + ',';
+                        }
+                        if (answer != '') {
+                            answer_count++;//答题总数
+                        }
+                    }
+                } else {
+                    var contents = $.trim($(obj).find('textarea').val());
+                    answer_count++;
+                    answer = contents;
+                }
+
+                var json = { id: qid, type: type, answer: answer };
+                answerArray.push(json);
+            }
+
+            if (answer_count < questions.length) {
+                t = clearInterval(t);
+                dialogConfirmFunCustom(
+                    '您还有题目没有完成，确定提交么？',
+                    '马上提交', '继续做题',
+                    function () {
+                        submitAnswer(answerArray);
+                    },
+                    function () {
+                        t = setInterval('timer()', 1000);
+                        layer.closeAll();
+                    }
+                )
+            } else {
+                submitAnswer(answerArray);
+            }
+        }
+
+        //提交答案
+        function submitAnswer(answerArray) {
+            var exaid = getUrlParam('id');
+            var min = getStorage('testmin');
+            var sec = getStorage('testsec');
+            var data = {
+                group: 2,
+                user_id: islogin().id,
+                exa_id: exaid,
+                min: min,
+                sec: sec,
+                result: JSON.stringify(answerArray)
+            };
+
+            layer.closeAll();
+            dialogLoadingText('提交中');
+            sendAjaxSetFuncAsync(false, data, '/tools/business_handler.ashx?action=GetExaminationAnswer', function (result) {
+                layer.closeAll();
+                if (parseInt(result.code, 10) == 200) {
+                    delStorage('testmin');
+                    delStorage('testsec');
+                    dialogMsgUrl('提交成功', 'pascal_results.html?id=' + exaid);
+                } else {
+                    dialogMsg(result.message);
+                }
+            })
+        }
+
+        //问题列表
+        function GetTestList() {
+            var id = getUrlParam('id');
+            if (islogin()) {
+                var data = {
+                    id: id
+                };
+
+                sendAjaxSetFunc(data, '/tools/business_handler.ashx?action=GetTestList', function (result) {
+                    if (parseInt(result.code, 10) == 200) {
+                        var list = result.data;
+                        var htmls = '';
+
+                        $.each(list, function (k, v) {
+                            if (v['type'] < 4) {
+                                htmls += [
+                                    '<div id="question' + v['q_id'] + '" class="testing" style="display:none" q_type="' + v['type'] + '">',
+                                    '<p class="tit2">' + (k + 1) + '.' + v['title'] + '<span>（' + v['type_name'] + v['score'] + '分）</span></p>',
+                                    '<ul>',
+                                    '' + SetOptionsHtml(v['optionsList'], v['q_id'], v['type']) + '',
+                                    '</ul>',
+                                    '</div>'
+                                ].join('');
+                            }
+                            else {
+                                htmls += [
+                                    '<div id="question' + v['q_id'] + '" class="testing" style="display:none" q_type="' + v['type'] + '">',
+                                    '<p class="tit2">' + (k + 1) + '.' + v['title'] + '<span>（' + v['type_name'] + v['score'] + '分）</span></p>',
+                                    '<div class="textarea">',
+                                    '<textarea id="answer' + v['q_id'] + '" placeholder="请输入答案..."></textarea>',
+                                    '</div>',
+                                    '</div>'
+                                ].join('');
+                            }
+                        })
+
+                        $('#questions').html(htmls);
+                        $('.testing:eq(0)').show();
+                        $('.prev').hide();
+                        $('.to_answer').removeClass('to_answer2');
+                    } else {
+                        dialogMsg(result.message);
+                    }
+                });
+            } else {
+                dialogMsgFun('您还没有登录，请先去登录', gotologin);
+            }
+        }
+
+        //选项列表
+        function SetOptionsHtml(list, qid, type) {
+            var htmls = '';
+            var typename = '';
+            $.each(list, function (k, v) {
+                if (type == 2) {
+                    typename = 'checkbox';
+                } else {
+                    typename = 'radio';
+                }
+                htmls += [
+                    '<li>',
+                    '<input type="' + typename + '" id="' + typename + v['id'] + '" name="' + typename + qid + '" class="radio" />',
+                    '<label for="' + typename + '' + v['id'] + '">' + v['no'] + '、' + v['title'] + '</label>',
+                    '</li>'
+                ].join('');
+            })
+
+            return htmls;
+        }
+    </script>
+</head>
+<body class="whitebg">
+    <section id="questions">
+    </section>
+    <div class="count-down">
+        <span>00</span>：<span>00</span>
+    </div>
+    <div class="to_answer to_answer2">
+        <a href="javascript:;" class="prev" hidden>上一题</a>
+        <a href="javascript:;">下一题</a>
+    </div>
+    <div class="submit_tips">
+        <div class="con">
+            <h1>提示</h1>
+            <p>您还有题目没有完成，确定提交么？</p>
+            <div class="btn">
+                <input type="button" id="" class="btn1" value="继续做题">
+                <input type="submit" id="" class="btn2" value="马上提交">
+            </div>
+        </div>
+    </div>
+</body>
+</html>

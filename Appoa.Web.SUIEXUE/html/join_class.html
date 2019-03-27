@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, width=device-width">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>加入课堂</title>
+    <meta http-equiv="Cache-Control" content="must-revalidate,no-cache">
+    <link rel="stylesheet" href="css/style.css">
+    <script type="text/javascript" src="js/jquery-1.12.3.min.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+    <script src="script/layer_mobile/layer.js"></script>
+    <script src="script/core.js"></script>
+    <script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script src="script/wechat_config.js"></script>
+</head>
+<body class="whitebg">
+    <section class="class_ban">
+        <div class="img">
+            <img src="images/class_banner.jpg"><div class="shade"></div>
+        </div>
+        <div class="content">
+            <div class="class_head">
+                <img src="images/class_head.png">
+            </div>
+            <h1></h1>
+            <h2><span></span></h2>
+            <h3><span>创建于<i></i></span></h3>
+        </div>
+    </section>
+    <section class="class_introduce">
+        <h1 class="h1">课程介绍</h1>
+        <div class="con">
+        </div>
+    </section>
+    <div class="questions">
+        <input type="button" value="加入课堂" />
+    </div>
+    <script>
+        getClassroomInfo();
+
+        function getClassroomInfo() {
+            if (islogin()) {
+                var id = getUrlParam('id');
+                var data = {
+                    id: id,
+                    user_id: islogin().id
+                };
+
+                sendAjaxSetFunc(data, '/tools/business_handler.ashx?action=GetClassroomInfo', function (result) {
+                    if (parseInt(result.code, 10) == 200) {
+                        var obj = result.data[0];
+                        if (obj) {
+                            $('.class_head img').attr('src', obj.avatar);
+                            $('.img img').attr('src', obj.avatar);
+                            $('.content h1').html(obj.name);
+                            $('.content h2 span').html(obj.user_name);
+                            $('.content h3 i').html(obj.add_time);
+                            $('.con').html(obj.info);
+
+                            if (obj.is_join != 4) {
+                                var title = '';
+                                var url = '';
+                                if (obj.is_join == 1 || obj.is_join == 2) {//创建者或已加入
+                                    title = '进入课堂';
+                                    url = 'class_details.html?id=' + id;
+
+                                    $('.questions input').val(title);
+                                    $('.questions input').click(function () {
+                                        window.location.href = url;
+                                    })
+                                }
+                                if (obj.is_join == 3) {//未加入
+                                    title = '加入课堂';
+                                    $('.questions input').val(title);
+
+                                    if (obj.is_show == 2) {//不是公开课堂,去验证
+                                        url = 'verify.html?id=' + id;
+                                        $('.questions input').click(function () {
+                                            window.location.href = url;
+                                        })
+                                    } else {//是公开课堂，直接加入
+                                        $('.questions input').click(function () {
+                                            sendAjaxSetFunc(data, '/tools/business_handler.ashx?action=DirectJoinClass', function (result) {
+                                                if (parseInt(result.code, 10) == 200) {
+                                                    dialogMsgUrl('加入成功', 'class_details.html?id=' + id);
+                                                } else {
+                                                    dialogMsg(result.message);
+                                                }
+                                            })
+                                        })
+                                    }
+                                }
+                            } else if (obj.is_join == 4) {//申请审核中
+                                $('.questions input').val('审核中');
+                            }
+                        }
+                    } else {
+                        dialogMsg(result.message);
+                    }
+                });
+            } else {
+                dialogMsgFun('您还没有登录，请先去登录', gotologin);
+            }
+        }
+    </script>
+</body>
+</html>

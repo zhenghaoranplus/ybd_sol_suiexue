@@ -1,0 +1,81 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <script src="js/jquery-1.12.3.min.js"></script>
+    <script src="script/layer_mobile/layer.js"></script>
+    <script src="script/core.js"></script>
+</head>
+<body>
+    <div></div>
+    <script>
+        var source_url = getUrlParam('source_url');//来源页面
+        var code = getUrlParam('code');//获取
+        var state = getUrlParam('state');//获取
+
+        if (code) {
+            $.ajax({
+                type: "post",
+                url: '/tools/business_handler.ashx?action=wxLogin',
+                data: { code: code, state: state },
+                dataType: "json",
+                async: false,
+                success: function (result) {
+                    if (parseInt(result.code, 10) == 200) {
+                        var userInfo = JSON.stringify(result.data.UserInfo);
+                        var userTree = JSON.stringify(result.data.UserTree);
+                        var userOAuths = JSON.stringify(result.data.UserOAuths);
+                        setStorage('userInfo', encodeURIComponent(userInfo));
+                        setStorage('userTree', encodeURIComponent(userTree));
+                        setStorage('userOAuths', encodeURIComponent(userOAuths));
+
+                        var temp = decodeURIComponent(state);
+                        var url = temp.replace(/\*/g, '&');
+
+                        window.location.href = url;
+                    } else if (parseInt(result.code, 10) == 300) {
+                        window.location.href = result.message;
+                    } else {
+                        alert(result.message);
+                    }
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert('通信错误');
+                }
+            });
+        }
+
+        if (source_url) {
+            //var locat = window.location.href.toString();
+            //var index = locat.indexOf('=');
+            //source_url = locat.substr(index + 1, locat.length - index - 1);
+
+            source_url = source_url.replace(/&/g, '*');
+
+            if (islogin() && islogin().id > 0) {
+                source_url = source_url.replace(/\*/g, '&');
+                window.location.href = source_url;
+            } else {
+                $.ajax({
+                    type: "post",
+                    url: '/tools/business_handler.ashx?action=WeChat_GetCode',
+                    data: { source_url: source_url },
+                    dataType: "json",
+                    async: false,
+                    success: function (result) {
+                        if (parseInt(result.code, 10) == 200) {
+                            window.location = result.data;
+                        } else {
+                            alert(result.message);
+                        }
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        alert('通信错误');
+                    }
+                });
+            }
+        }
+    </script>
+</body>
+</html>

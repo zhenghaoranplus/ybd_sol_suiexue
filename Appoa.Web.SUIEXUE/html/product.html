@@ -1,0 +1,170 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, width=device-width">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>分类</title>
+    <meta http-equiv="Cache-Control" content="must-revalidate,no-cache">
+    <link rel="stylesheet" href="css/style.css">
+    <script type="text/javascript" src="js/jquery-1.12.3.min.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+    <link rel="stylesheet" href="dist/css/swiper.min.css">
+    <script src="script/layer_mobile/layer.js"></script>
+    <script src="script/core.js"></script>
+    <script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script src="script/wechat_config.js"></script>
+</head>
+<body class="whitebg">
+    <section class="productop">
+        <div class="swiper-container producttype">
+            <div class="swiper-wrapper">
+            </div>
+        </div>
+    </section>
+    <section class="classify">
+        <div class="product-tab">
+            <ul>
+            </ul>
+        </div>
+        <div class="product_list">
+            <section class="j-content">
+                <ul>
+                </ul>
+            </section>
+        </div>
+    </section>
+    <script src="dist/js/swiper.min.js"></script>
+    <!-- Initialize Swiper -->
+    <script type="text/javascript">
+        var cid = 0;
+        var pageIndex = 1;
+        var pageSize = 10;
+
+        GetCategoryList();
+        scrollLoad();
+
+        function GetCategoryList() {
+
+            sendAjaxSetFunc({}, '/tools/business_handler.ashx?action=GetFirstCategory', function (result) {
+                if (parseInt(result.code, 10) == 200) {
+                    var list = result.data;
+                    var htmls = '';
+                    $.each(list, function (k, v) {
+                        htmls += [
+                            '<div class="swiper-slide"><a href="javascript:;" pid="' + v['id'] + '">' + v['name'] + '</a></div>'
+                        ].join('');
+                    })
+
+                    htmls = '<div class="swiper-slide"><a href="javascript:;" pid="0">全部</a></div>' + htmls;
+
+                    $('.swiper-wrapper').html(htmls);
+
+                    var swiper = new Swiper('.swiper-container', {
+                        pagination: '.swiper-pagination',
+                        slidesPerView: 5,
+                        paginationClickable: true,
+                        spaceBetween: 0
+                    });
+
+                    $('.swiper-slide').click(function () {
+                        $(this).addClass("swiper-slide-active").siblings().removeClass("swiper-slide-active");
+                    })
+
+                    getChildrenCategory(0);
+
+                    $('.swiper-slide a').click(function () {
+                        var pid = $(this).attr('pid');
+                        getChildrenCategory(pid);
+                    })
+                } else {
+                    dialogMsg(result.message);
+                }
+            })
+        }
+
+        function getChildrenCategory(pid) {
+            var data = { parent_id: pid };
+
+            sendAjaxSetFunc(data, '/tools/business_handler.ashx?action=GetSecondCategory', function (result) {
+                if (parseInt(result.code, 10) == 200) {
+                    var list = result.data;
+                    var htmls = '';
+                    $.each(list, function (k, v) {
+                        htmls += [
+                            '<li cid="' + v['id'] + '">' + v['name'] + '<i></i></li>'
+                        ].join('');
+                    })
+
+                    htmls = '<li cid="' + pid + '">全部<i></i></li>' + htmls;
+
+                    $('.product-tab ul').html(htmls);
+
+                    $(".product-tab li:eq(0)").addClass("hover");
+
+                    cid = pid;
+                    pageIndex = 1;
+                    getData();
+
+                    $(".product-tab li").click(function () {
+                        $(this).addClass("hover").siblings("li").removeClass("hover");
+
+                        cid = $(this).attr('cid');
+                        pageIndex = 1;
+                        getData();
+                    });
+                } else {
+                    dialogMsg(result.message);
+                }
+            })
+        }
+
+
+        function getData() {
+            var data = {
+                category: cid,
+                group_id: 1,
+                page_index: pageIndex,
+                page_size: pageSize
+            };
+
+            
+            sendAjaxSetFunc(data, '/tools/business_handler.ashx?action=GetGoodsByCategory', function (result) {
+                if (parseInt(result.code, 10) == 200) {
+                    var list = result.data;
+                    var htmls = '';
+                    $.each(list, function (k, v) {
+                        var url = '';
+                        if (v['subtitle'] && v['subtitle'] != '') {
+                            url = v['subtitle'];
+                        } else {
+                            url = 'product_details.html?id=' + v['id'];
+                        }
+
+                        htmls += [
+                            '<li>',
+                            '<a href="' + url + '">',
+                            '<div class="img"><img src="' + v['img_src'] + '"></div>',
+                            '<h2>' + v['title'] + '</h2>',
+                            '<h3>&yen;' + parseFloat(v['price']).formatMoney(2, '', ',', '.') + '</h3>',
+                            '</a>',
+                            '</li>'
+                        ].join('');
+                    })
+
+                    if (pageIndex == 1) {
+                        $('.j-content ul').html(htmls);
+                    } else if (pageIndex > 1) {
+                        $('.j-content ul').append(htmls);
+                    }
+
+                    var height = $(".j-content ul li .img img").width();
+                    $(".j-content ul li .img img").css("height", height);
+                } else {
+                    dialogMsg(result.message);
+                }
+            })
+        }
+    </script>
+</body>
+</html>

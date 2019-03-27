@@ -1,0 +1,177 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, width=device-width">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>商城</title>
+    <meta http-equiv="Cache-Control" content="must-revalidate,no-cache">
+    <link rel="stylesheet" href="css/style.css">
+    <script type="text/javascript" src="js/jquery-1.12.3.min.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+    <script src="script/layer_mobile/layer.js"></script>
+    <script src="script/core.js"></script>
+    <script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script src="script/wechat_config.js"></script>
+</head>
+<body class="mallbody">
+    <section id="wrapper">
+        <section class="top-slider-wrapper">
+            <ul class="slide_box bxslider"></ul>
+        </section>
+        <script type="text/javascript" src="js/jquery.bxslider_e88acd1b.js"></script>
+    </section>
+    <section class="mall_tab">
+        <ul>
+            <li><span>教育商城</span></li>
+            <li><span>积分专区</span></li>
+        </ul>
+        <i></i>
+    </section>
+    <section class="mall_product">
+        <p class="more"><a href="product.html">更多</a></p>
+        <ul class="productul" id="eduGoods"></ul>
+    </section>
+    <section class="mall_product">
+        <p class="more"><a href="integral.html">更多</a></p>
+        <ul class="productul" id="pointGoods"></ul>
+    </section>
+    <footer class="footer">
+        <ul>
+            <li class="li1">
+                <a href="index.html">
+                    <span></span>
+                    <p>精品微课</p>
+                </a>
+            </li>
+            <li class="li2">
+                <a href="classroom.html">
+                    <span></span>
+                    <p>课堂</p>
+                </a>
+            </li>
+            <li class="li3">
+                <a href="mall.html">
+                    <span></span>
+                    <p>商城</p>
+                </a>
+            </li>
+            <li class="li4">
+                <a href="my_center.html">
+                    <span></span>
+                    <p>我的</p>
+                </a>
+            </li>
+        </ul>
+        <div class="scanli">
+            <a href="javascript:;" onclick="scanQrcode()">
+                <img src="images/scan.png">
+            </a>
+        </div>
+    </footer>
+    <script>
+        GetShopIndexData();
+
+        function GetShopIndexData() {
+            dialogLoadingText('加载中');
+            sendAjaxSetFunc({}, '/tools/business_handler.ashx?action=GetShopIndexData', function (result) {
+                setTimeout(function () {
+                    layer.closeAll();
+                    if (parseInt(result.code, 10) == 200) {
+                        var obj = result.data[0];
+                        var bannerList = obj.bannerList;
+                        var eduGoodsList = obj.eduGoodsList;
+                        var pointGoodsList = obj.pointGoodsList;
+
+                        var htmls = '';
+                        $.each(bannerList, function (k, v) {
+                            var url = '';
+                            if (v['data_url']) {
+                                url = v['data_url'];
+                            } else if (v['data_id']) {
+                                url = 'product_details.html?' + v['data_id'];
+                            } else {
+                                url = 'javascript:;';
+                            }
+
+                            htmls += [
+                                '<li><a href="' + url + '"><img src="' + v['img_url'] + '" alt=""></a></li>'
+                            ].join('');
+                        })
+
+                        $('.slide_box').html(htmls);
+
+                        var slide_height = $("#wrapper").width() / 1.77;
+                        $(".top-slider-wrapper .bx-viewport,.slide_box img").css("height", slide_height);
+                        if (bannerList.length == 1) {
+                            $(".bxslider li").attr('style', 'float: left; list-style: none; position: relative; width: 100%;');
+                        } else {
+                            $(".bxslider").bxSlider({
+                                auto: true
+                            });
+                        }
+
+                        htmls = '';
+                        $.each(eduGoodsList, function (k, v) {
+                            var url = '';
+                            if (v['subtitle'] && v['subtitle'] != '') {
+                                url = v['subtitle'];
+                            } else {
+                                url = 'product_details.html?id=' + v['id'];
+                            }
+
+                            htmls += [
+                                '<li>',
+                                '<a href="' + url + '">',
+                                '<div class="img">',
+                                '<img src="' + v['img_src'] + '">',
+                                '</div>',
+                                '<h2>' + v['title'] + '</h2>',
+                                '<h3>&yen;' + parseFloat(v['price']).formatMoney(2, '', ',', '.') + '</h3>',
+                                '</a>',
+                                '</li>'
+                            ].join('');
+                        })
+
+                        if (htmls == '') {
+                            $('.more:eq(0)').hide();
+                        }
+                        $('#eduGoods').html(htmls);
+
+                        htmls = '';
+                        $.each(pointGoodsList, function (k, v) {
+                            var url = '';
+                            if (v['subtitle'] && v['subtitle'] != '') {
+                                url = v['subtitle'];
+                            } else {
+                                url = 'product_details.html?id=' + v['id'];
+                            }
+                            htmls += [
+                                '<li>',
+                                '<a href="' + url + '">',
+                                '<div class="img">',
+                                '<img src="' + v['img_src'] + '">',
+                                '</div>',
+                                '<h2>' + v['title'] + '</h2>',
+                                '<h3>' + parseFloat(v['price']).formatMoney(0, '', ',', '.') + '积分</h3>',
+                                '</a>',
+                                '</li>'
+                            ].join('');
+                        })
+
+                        if (htmls == '') {
+                            $('.more:eq(1)').hide();
+                        }
+                        $('#pointGoods').html(htmls);
+
+                        var height = $(".productul li .img img").width();
+                        $(".productul li .img img").css("height", height);
+                    } else {
+                        dialogMsg(result.message);
+                    }
+                }, 500);
+            })
+        }
+    </script>
+</body>
+</html>

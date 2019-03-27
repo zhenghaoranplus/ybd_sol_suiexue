@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, width=device-width">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>更多设置</title>
+    <meta http-equiv="Cache-Control" content="must-revalidate,no-cache">
+    <link rel="stylesheet" href="css/style.css">
+    <script type="text/javascript" src="js/jquery-1.12.3.min.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+    <script src="script/layer_mobile/layer.js"></script>
+    <script src="script/core.js"></script>
+    <script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script src="script/wechat_config.js"></script>
+    <script>
+        $(function () {
+            if (islogin()) {
+                $('.setmenu ul:eq(0) li:eq(0) a').click(function () {
+                    window.location.href = 'modify_password.html';
+                })
+
+                $('.setmenu ul:eq(0) li:eq(1) a').click(function () {
+                    window.location.href = 'modify_phone.html';
+                })
+
+                $('.setmenu ul:eq(1) li:eq(0) a').click(function () {
+                    window.location.href = 'address.html';
+                })
+
+                $('.setmenu ul:eq(2) li:eq(1) a').click(function () {
+                    window.location.href = 'feedback.html';
+                })
+
+                sendAjaxSetFunc({}, '/tools/business_handler.ashx?action=GetServiceTelephone', function (result) {
+                    if (parseInt(result.code, 10) == 200) {
+                        var phone = result.data[0].contents;
+                        $('.service_hottel h2').html(phone);
+                        $('.service_hottel .btn a').attr('href', 'tel:' + phone);
+                    } else {
+                        dialogMsg(result.message);
+                    }
+                })
+
+                $('.surebtn').show();
+            } else {
+                $('.setmenu ul:eq(0) li:eq(0) a').click(function () {
+                    dialogMsgFun('您还没有登录，请先去登录', gotologin);
+                })
+
+                $('.setmenu ul:eq(0) li:eq(1) a').click(function () {
+                    dialogMsgFun('您还没有登录，请先去登录', gotologin);
+                })
+
+                $('.setmenu ul:eq(1) li:eq(0) a').click(function () {
+                    dialogMsgFun('您还没有登录，请先去登录', gotologin);
+                })
+
+                $('.setmenu ul:eq(2) li:eq(1) a').click(function () {
+                    dialogMsgFun('您还没有登录，请先去登录', gotologin);
+                })
+
+                $('.surebtn').hide();
+            }
+
+            $('.sureclear').click(function () {
+                var userinfo = getStorage('userInfo');
+                var userTree = getStorage('userTree');
+                var userOAuth = getStorage('userOAuth');
+                localStorage.clear();
+                setStorage('userInfo', userinfo);
+                setStorage('userTree', userTree);
+                setStorage('userOAuth', userOAuth);
+                $('.clearcache').hide();
+            })
+
+            $('#exitlogin').click(function () {
+                dialogConfirmFun('确定要退出登录吗？', function () {
+                    //delStorage('userInfo');
+                    //delStorage('userTree');
+                    //delStorage('userOAuth');
+                    localStorage.clear();
+                    history.back(-1);
+                })
+            })
+        })
+    </script>
+</head>
+<body>
+    <section class="setmenu">
+        <ul>
+            <li><a href="javascript:;">修改密码</a></li>
+            <li><a href="javascript:;">变更手机号</a></li>
+        </ul>
+        <ul>
+            <li><a href="javascript:;">收货地址</a></li>
+        </ul>
+        <ul>
+            <li><span class="service_tel">客服热线</span></li>
+            <li><a href="javascript:;">意见反馈</a></li>
+            <li><a href="aboutus.html">关于我们</a></li>
+        </ul>
+        <ul>
+            <li><span class="clear_cache">清除缓存</span></li>
+        </ul>
+        <p class="surebtn">
+            <input type="button" id="exitlogin" value="退出">
+        </p>
+    </section>
+
+    <section class="service_hottel">
+        <div class="con">
+            <h2>400-8888-888</h2>
+            <p>确认拨打电话？</p>
+            <div class="btn">
+                <span class="cancel_tel">取消</span>
+                <a href="tel:400-8888-888">拨打</a>
+            </div>
+        </div>
+    </section>
+    <section class="clearcache">
+        <div class="con">
+            <h3>确认清除本地缓存？</h3>
+            <div class="btn">
+                <span class="cancel_clear">取消</span>
+                <a href="javascript:;" class="sureclear">确定</a>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

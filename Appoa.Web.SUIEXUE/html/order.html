@@ -1,0 +1,213 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, width=device-width">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>确认订单</title>
+    <meta http-equiv="Cache-Control" content="must-revalidate,no-cache">
+    <link rel="stylesheet" href="css/style.css">
+    <script type="text/javascript" src="js/jquery-1.12.3.min.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+    <script src="script/layer_mobile/layer.js"></script>
+    <script src="script/core.js"></script>
+    <script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script src="script/wechat_config.js"></script>
+    <style>
+        .list .price i {
+            color: #444;
+        }
+    </style>
+</head>
+<body>
+    <section class="order_details">
+        <div class="order_address">
+            <!--<div class="add_address">
+                <a href="add_address.html"><span>请添加收货地址</span></a>
+            </div>-->
+        </div>
+        <div class="orderlist">
+        </div>
+        <ul class="orderul">
+            <li><span>支付配送</span><label>货到付款</label></li>
+            <li><span>买家留言</span><input type="text" id="userremark" class="input" placeholder="填写留言" value=""></li>
+        </ul>
+        <ul class="orderul">
+            <li>
+                <span>商品金额</span><div class="tprice" id="goodsmny"><em>共0件商品</em><i>￥0.00</i></div>
+            </li>
+            <li>
+                <span>运费</span><div class="tprice" id="expmny">￥10.00</div>
+            </li>
+        </ul>
+        <p class="integral_notice">*&nbsp;您现有积分总数为<i>0</i>积分</p>
+    </section>
+
+    <div class="submit_order">
+        <p class="total">合计：<label>&yen;0.00</label></p>
+        <input class="btn" type="button" id="" name="" value="提交订单" onclick="AddOrder()">
+    </div>
+    <script>
+        var totalmoney = 0;
+        var totalintegral = 0;
+        getData();
+        function getData() {
+            if (islogin()) {
+                var uid = islogin().id;
+                var ids = getStorage('cids');
+                var from = getStorage('orderfrom');
+                ids = decodeURIComponent(ids);
+
+                var data = {
+                    user_id: uid,
+                    ids: ids,
+                    from: from
+                };
+
+                dialogLoadingText('加载中');
+
+                sendAjaxSetFunc(data, '/tools/business_handler.ashx?action=ConfirmOrder', function (result) {
+                    setTimeout(function () {
+                        layer.closeAll();
+                        if (parseInt(result.code, 10) == 200) {
+                            var obj = result.data[0];
+                            var defaultAddress = obj.defaultAddress;
+                            var goodsList = obj.goodsList;
+                            var total_price = parseFloat(obj.total_price).formatMoney(2, '', ',', '.');
+                            var total_integral = parseFloat(obj.total_integral).formatMoney(0, '', ',', '.');
+                            var count = obj.count;
+                            var express_money = parseFloat(obj.express_money).formatMoney(2, '', ',', '.');
+                            var sum_price = parseFloat(obj.total_price + obj.express_money).formatMoney(2, '', ',', '.');
+                            totalmoney = obj.total_price;
+                            totalintegral = obj.total_integral;
+
+                            var htmls = '';
+
+                            var selectedAddress = decodeURIComponent(getStorage('selectedAddress'));
+                            selectedAddress = JSON.parse(selectedAddress);
+                            if (selectedAddress) {
+                                htmls = [
+                                  '<div class="infor" aid="' + selectedAddress.id + '">',
+                                  '<a href="address.html">',
+                                  '<h2>收货人：' + selectedAddress.name + '<span>' + formatPhone(selectedAddress.phone) + '</span></h2>',
+                                  '<p>收货地址：' + selectedAddress.address + '</p>',
+                                  '</a>',
+                                  '</div>'
+                                ].join('');
+                            } else {
+                                //默认地址
+                                if (defaultAddress) {
+                                    htmls = [
+                                        '<div class="infor" aid="' + defaultAddress.id + '">',
+                                        '<a href="address.html">',
+                                        '<h2>收货人：' + defaultAddress.name + '<span>' + formatPhone(defaultAddress.phone) + '</span></h2>',
+                                        '<p>收货地址：' + defaultAddress.address + '</p>',
+                                        '</a>',
+                                        '</div>'
+                                    ].join('');
+                                } else {
+                                    htmls = [
+                                        '<div class="add_address" aid="0">',
+                                        '<a href="add_address.html"><span>请添加收货地址</span></a>',
+                                        '</div>'
+                                    ].join('');
+                                }
+                            }
+                            $('.order_address').html(htmls);
+
+                            htmls = ''
+                            //商品列表
+                            if (goodsList && goodsList.length > 0) {
+                                var group = 0;
+                                $.each(goodsList, function (k, v) {
+                                    group = v['group'];
+                                    if (group == 1) {//教育
+                                        price = '&yen;' + parseFloat(v['price']).formatMoney(2, '', ',', '.');
+                                    } else {//积分
+                                        price = parseFloat(v['price']).formatMoney(0, '', ',', '.') + '积分';
+                                    }
+                                    htmls += [
+                                        '<div class="list">',
+                                        '<div class="propic">',
+                                        '<img src="' + v['img_src'] + '" alt="" />',
+                                        '</div>',
+                                        '<h1>' + v['title'] + '</h1>',
+                                        '<p class="price"><span>' + price + '</span>&nbsp;&nbsp;<i>' + v['spec'] + '</i></p>',
+                                        '<div class="counts"><span>X</span>' + v['num'] + '</div>',
+                                        '</div>'
+                                    ].join('');
+                                })
+                            }
+                            $('.orderlist').html(htmls);
+
+                            var moneyStr = '';
+                            if (total_price == '0.00' && total_integral != '0') {
+                                moneyStr = total_integral + '积分';
+                            }
+                            if (total_price != '0.00' && total_integral == '0') {
+                                moneyStr = '&yen;' + total_price;
+                            }
+                            if (total_price != '0.00' && total_integral != '0') {
+                                moneyStr = '&yen;' + total_price + '+' + total_integral + '积分';
+                            }
+
+                            $('#goodsmny i').html(moneyStr);
+                            $('#goodsmny em').html('共' + count + '件商品');
+                            $('#expmny').html('&yen;' + express_money);
+                            $('.integral_notice i').html(obj.has_integral);
+                            $('.total label').html('&yen;' + sum_price + '+' + total_integral + '积分');
+                        } else {
+                            dialogMsg(result.message);
+                        }
+                    }, 500);
+                })
+            } else {
+                dialogMsgFun('您还没有登录，请先去登录', gotologin);
+            }
+        }
+
+        function AddOrder() {
+            if (islogin()) {
+                var aid = $('.order_address').children('div').attr('aid');
+                var user_id = islogin().id;
+                var cids = decodeURIComponent(getStorage('cids'));
+                var price = totalmoney;
+                var integral = totalintegral;
+                var remark = $.trim($('#userremark').val());
+                var from = getStorage('orderfrom');
+
+                var data = {
+                    user_id: user_id,
+                    aid: aid,
+                    cids: cids,
+                    price: price,
+                    integral: integral,
+                    remark: remark,
+                    from: from
+                };
+
+                console.log(JSON.stringify(data));
+                dialogLoadingText('订单提交中');
+                sendAjaxSetFunc(data, '/tools/business_handler.ashx?action=AddOrder', function (result) {
+                    layer.closeAll();
+                    if (parseInt(result.code, 10) == 200) {
+                        delStorage('selectedAddress');
+                        delStorage('cids');
+                        delStorage('specid');
+                        delStorage('orderfrom');
+
+                        dialogMsgFun('订单提交成功，请等待商家发货。。。', function () {
+                            setStorage('ordertag', 'all');
+                            window.location.href = 'my_order.html';
+                        });
+                    } else {
+                        dialogMsg(result.message);
+                    }
+                })
+            } else {
+                dialogMsgFun('您还没有登录，请先去登录', gotologin);
+            }
+        }
+    </script>
+</body>
+</html>

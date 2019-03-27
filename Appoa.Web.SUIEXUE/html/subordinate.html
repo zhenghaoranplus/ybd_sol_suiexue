@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, width=device-width">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>他的下级</title>
+    <meta http-equiv="Cache-Control" content="must-revalidate,no-cache">
+    <link rel="stylesheet" href="css/style.css">
+    <script type="text/javascript" src="js/jquery-1.12.3.min.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+    <script src="script/layer_mobile/layer.js"></script>
+    <script src="script/core.js"></script>
+    <script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script src="script/wechat_config.js"></script>
+</head>
+<body>
+    <section class="distribution_content subordinate">
+        <div class="list">
+            <span class="userhead">
+                <img src="images/head_img1.jpg"></span>
+            <h1>微骁</h1>
+            <p>贡献：50分</p>
+            <div class="txt"><a href="subordinate.html">他的下级</a></div>
+        </div>
+        <div class="list">
+            <span class="userhead">
+                <img src="images/head_img3.jpg"></span>
+            <h1>栀子花</h1>
+            <p>贡献：50分</p>
+            <div class="txt"><a href="subordinate.html">他的下级</a></div>
+        </div>
+        <div class="list">
+            <span class="userhead">
+                <img src="images/head_img4.jpg"></span>
+            <h1>小白</h1>
+            <p>贡献：50分</p>
+            <div class="txt"><a href="subordinate.html">他的下级</a></div>
+        </div>
+        <div class="list">
+            <span class="userhead">
+                <img src="images/head_img5.jpg"></span>
+            <h1>微骁</h1>
+            <p>贡献：50分</p>
+            <div class="txt"><a href="subordinate.html">他的下级</a></div>
+        </div>
+        <div class="list">
+            <span class="userhead">
+                <img src="images/head_img6.jpg"></span>
+            <h1>花期</h1>
+            <p>贡献：50分</p>
+            <div class="txt"><a href="subordinate.html">他的下级</a></div>
+        </div>
+    </section>
+    <script>
+        var pageIndex = 1;
+        var pageSize = 20;
+
+        getData();
+        scrollLoad();
+
+        function getData() {
+            if (islogin()) {
+                var data = {
+                    user_id: getUrlParam('id'),
+                    page_index: pageIndex,
+                    page_size: pageSize
+                };
+
+                sendAjaxSetFunc(data, '/tools/business_handler.ashx?action=GetSubordinate', function (result) {
+                    if (parseInt(result.code, 10) == 200) {
+                        var list = result.data;
+                        var htmls = '';
+
+                        $.each(list, function (k, v) {
+                            htmls += [
+                                '<div class="list">',
+                                '<span class="userhead">',
+                                '<img src="' + v['avatar'] + '"></span>',
+                                '<h1>' + v['nick_name'] + '</h1>',
+                                '<p>贡献：' + v['integral'] + '分</p>',
+                                '<div class="txt"></div>',
+                                '</div>'
+                            ].join('');
+                        })
+
+                        if (pageIndex == 1) {
+                            $('.subordinate').html(htmls);
+                        } else {
+                            $('.subordinate').append(htmls);
+                        }
+                    } else {
+                        dialogMsg(result.message);
+                    }
+                });
+            } else {
+                dialogMsgFun('您还没有登录，请先去登录', gotologin);
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,127 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, width=device-width">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>问卷调查</title>
+    <meta http-equiv="Cache-Control" content="must-revalidate,no-cache">
+    <link rel="stylesheet" href="css/style.css">
+    <script type="text/javascript" src="js/jquery-1.12.3.min.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+    <script src="script/layer_mobile/layer.js"></script>
+    <script src="script/core.js"></script>
+    <script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script src="script/wechat_config.js"></script>
+</head>
+<body class="whitebg">
+    <div class="testing questionnaire">
+    </div>
+    <div class="to_answer">
+        <input type="button" id="" value="提交" onclick="submitAnswer();">
+    </div>
+    <script>
+        var id = getUrlParam('id');
+        getData();
+
+        function getData() {
+            var data = {
+                id: id
+            };
+
+            dialogLoadingText('加载中');
+            sendAjaxSetFunc(data, '/tools/business_handler.ashx?action=GetQuestionnaireList', function (result) {
+                setTimeout(function () {
+                    layer.closeAll();
+                    if (parseInt(result.code, 10) == 200) {
+                        var list = result.data;
+                        var htmls = '';
+
+                        $.each(list, function (k, v) {
+                            htmls += [
+                                '<div class="list">',
+                                '<p class="tit2">' + (k + 1) + '. ' + v['title'] + '</p>',
+                                '<ul>',
+                                '' + setOptionHtmls(v['id'], v['optionsList']) + '',
+                                '</ul>',
+                                '</div>'
+                            ].join('');
+                        })
+
+                        $('.questionnaire').html(htmls);
+                    } else {
+                        dialogMsg(result.message);
+                    }
+                }, 500);
+            });
+        }
+
+        function setOptionHtmls(id, list) {
+            var htmls = '';
+            $.each(list, function (k, v) {
+                htmls += '';
+                htmls += [
+                    '<li>',
+                    '<input type="radio" id="radio-' + id + '-' + v['id'] + '" name="radio' + id + '" class="radio" />',
+                    '<label for="radio-' + id + '-' + v['id'] + '">' + v['title'] + '</label>',
+                    '</li>'
+                ].join('');
+            })
+
+            return htmls;
+        }
+
+        function submitAnswer() {
+            if (islogin()) {
+                var quest_count = $('.questionnaire .list').length;
+                var check_count = 0;
+                var ids = '';
+
+                var answerArray = new Array();
+                $('input[type=radio]').each(function (k, v) {
+                    if ($(v).prop('checked') == true) {
+                        check_count++;
+                        var radioid = $(v).attr('id');
+                        var findex = radioid.indexOf('-');
+                        var lindex = radioid.lastIndexOf('-');
+                        var qid = radioid.substr(findex + 1, lindex - findex - 1);
+                        var optionid = radioid.substr(lindex + 1, radioid.length - lindex - 1);
+
+                        ids += optionid + ',';
+
+                        var json = { id: qid, type: 1, answer: optionid };
+                        answerArray.push(json);
+                    }
+                })
+
+                if (check_count != quest_count) {
+                    dialogTips('您还有未选择的题目');
+                    return;
+                }
+
+                var data = {
+                    group: 3,
+                    user_id: islogin().id,
+                    exa_id: id,
+                    min: 0,
+                    sec: 0,
+                    result: JSON.stringify(answerArray)
+                };
+
+                layer.closeAll();
+                dialogLoadingText('提交中');
+                sendAjaxSetFuncAsync(false, data, '/tools/business_handler.ashx?action=GetExaminationAnswer', function (result) {
+                    layer.closeAll();
+                    if (parseInt(result.code, 10) == 200) {
+                        dialogMsgUrl('提交成功', 'questionnaire2.html?id=' + id);
+                    } else {
+                        dialogMsg(result.message);
+                    }
+                })
+            } else {
+                dialogMsgFun('您还没有登录，请先去登录', gotologin);
+            }
+        }
+    </script>
+</body>
+</html>

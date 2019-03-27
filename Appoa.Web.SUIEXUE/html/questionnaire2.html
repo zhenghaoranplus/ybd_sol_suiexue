@@ -1,0 +1,73 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, width=device-width">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>问卷调查</title>
+    <meta http-equiv="Cache-Control" content="must-revalidate,no-cache">
+    <link rel="stylesheet" href="css/style.css">
+    <script type="text/javascript" src="js/jquery-1.12.3.min.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+    <script src="script/layer_mobile/layer.js"></script>
+    <script src="script/core.js"></script>
+    <script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script src="script/wechat_config.js"></script>
+</head>
+<body class="whitebg">
+    <div class="questionnaire">
+        <p class="tit"></p>
+        <p class="questionnaire_result">测试结果：<i>0</i>分</p>
+        <div class="result_analysis">
+        </div>
+    </div>
+    <div class="to_answer">
+        <a href="javascript:;">返回</a>
+    </div>
+    <script>
+        var id = getUrlParam('id');
+
+        getData();
+
+        $('.to_answer a').click(function () {
+            if (history.length > 3) {
+                history.go(-3);
+            } else {
+                window.location.href = 'index.html';
+            }
+        })
+
+        function getData() {
+            if (islogin()) {
+                var data = {
+                    id: id,
+                    user_id: islogin().id
+                };
+
+                dialogLoadingText('加载中');
+                sendAjaxSetFunc(data, '/tools/business_handler.ashx?action=GetQuestionnaireResult', function (result) {
+                    setTimeout(function () {
+                        layer.closeAll();
+                        if (parseInt(result.code, 10) == 200) {
+                            var obj = result.data[0];
+                            if (obj) {
+                                var title = obj.title;
+                                var descript = obj.descript;
+                                var score = obj.score;
+
+                                $('.tit').html(title);
+                                $('.questionnaire_result i').html(score);
+                                $('.result_analysis').html('<p>结果分析：</p>' + descript);
+                            }
+                        } else {
+                            dialogMsg(result.message);
+                        }
+                    }, 500);
+                });
+            } else {
+                dialogMsgFun('您还没有登录，请先去登录', gotologin);
+            }
+        }
+    </script>
+</body>
+</html>

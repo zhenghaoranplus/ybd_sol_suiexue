@@ -1,0 +1,145 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{DBF5D18F-F68E-4F2A-9D36-5DCF9F905165}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Appoa.DAL</RootNamespace>
+    <AssemblyName>Appoa.DAL</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="answer_record.cs" />
+    <Compile Include="answer_result.cs" />
+    <Compile Include="base\base_connect.cs" />
+    <Compile Include="base\manager_log.cs" />
+    <Compile Include="base\manager_role.cs" />
+    <Compile Include="base\sys_config.cs" />
+    <Compile Include="base\sys_manager.cs" />
+    <Compile Include="base\sys_navigation.cs" />
+    <Compile Include="classroom_info.cs" />
+    <Compile Include="classroom_user.cs" />
+    <Compile Include="common_adR.cs" />
+    <Compile Include="common_albums.cs" />
+    <Compile Include="common_answers.cs" />
+    <Compile Include="common_article.cs" />
+    <Compile Include="common_category.cs" />
+    <Compile Include="common_dict.cs" />
+    <Compile Include="common_evaluate.cs" />
+    <Compile Include="common_examination.cs" />
+    <Compile Include="common_feedback.cs" />
+    <Compile Include="common_message.cs" />
+    <Compile Include="common_questions.cs" />
+    <Compile Include="common_resource.cs" />
+    <Compile Include="common_school.cs" />
+    <Compile Include="company_info.cs" />
+    <Compile Include="company_partner.cs" />
+    <Compile Include="course_chapter.cs" />
+    <Compile Include="course_info.cs" />
+    <Compile Include="examination_question.cs" />
+    <Compile Include="goods_goods.cs" />
+    <Compile Include="goods_spec_item.cs" />
+    <Compile Include="goods_spec_type.cs" />
+    <Compile Include="Partial\answer_record.cs" />
+    <Compile Include="Partial\answer_result.cs" />
+    <Compile Include="Partial\classroom_info.cs" />
+    <Compile Include="Partial\classroom_user.cs" />
+    <Compile Include="Partial\common_adR.cs" />
+    <Compile Include="Partial\common_albums.cs" />
+    <Compile Include="Partial\common_answers.cs" />
+    <Compile Include="Partial\common_article.cs" />
+    <Compile Include="Partial\common_category.cs" />
+    <Compile Include="Partial\common_dict.cs" />
+    <Compile Include="Partial\common_evaluate.cs" />
+    <Compile Include="Partial\common_examination.cs" />
+    <Compile Include="Partial\common_feedback.cs" />
+    <Compile Include="Partial\common_message.cs" />
+    <Compile Include="Partial\common_questions.cs" />
+    <Compile Include="Partial\common_resource.cs" />
+    <Compile Include="Partial\common_school.cs" />
+    <Compile Include="Partial\company_info.cs" />
+    <Compile Include="Partial\company_partner.cs" />
+    <Compile Include="Partial\course_chapter.cs" />
+    <Compile Include="Partial\course_info.cs" />
+    <Compile Include="Partial\examination_question.cs" />
+    <Compile Include="Partial\goods_goods.cs" />
+    <Compile Include="Partial\goods_spec_item.cs" />
+    <Compile Include="Partial\goods_spec_type.cs" />
+    <Compile Include="Partial\user_address.cs" />
+    <Compile Include="Partial\user_cart.cs" />
+    <Compile Include="Partial\user_collection.cs" />
+    <Compile Include="Partial\user_info.cs" />
+    <Compile Include="Partial\user_integral.cs" />
+    <Compile Include="Partial\user_oauths.cs" />
+    <Compile Include="Partial\user_order.cs" />
+    <Compile Include="Partial\user_ordergoods.cs" />
+    <Compile Include="Partial\user_readrecord.cs" />
+    <Compile Include="Partial\user_signin.cs" />
+    <Compile Include="Partial\user_tree.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="user_address.cs" />
+    <Compile Include="user_cart.cs" />
+    <Compile Include="user_collection.cs" />
+    <Compile Include="user_info.cs" />
+    <Compile Include="user_integral.cs" />
+    <Compile Include="user_oauths.cs" />
+    <Compile Include="user_order.cs" />
+    <Compile Include="user_ordergoods.cs" />
+    <Compile Include="user_readrecord.cs" />
+    <Compile Include="user_signin.cs" />
+    <Compile Include="user_tree.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Appoa.Common\Appoa.Common.csproj">
+      <Project>{800ea747-e444-4f57-8495-7e4090e08b25}</Project>
+      <Name>Appoa.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Appoa.DBUtility\Appoa.DBUtility.csproj">
+      <Project>{c8eebfe6-444a-42a5-ba36-0855af98571e}</Project>
+      <Name>Appoa.DBUtility</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Appoa.Model\Appoa.Model.csproj">
+      <Project>{1a05d408-6e9a-4bb4-9900-2fd6681cf447}</Project>
+      <Name>Appoa.Model</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

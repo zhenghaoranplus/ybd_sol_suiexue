@@ -1,0 +1,93 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, width=device-width">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>搜索</title>
+    <meta http-equiv="Cache-Control" content="must-revalidate,no-cache">
+    <link rel="stylesheet" href="css/style.css">
+    <script type="text/javascript" src="js/jquery-1.12.3.min.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+    <script src="script/layer_mobile/layer.js"></script>
+    <script src="script/core.js"></script>
+    <script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script src="script/wechat_config.js"></script>
+</head>
+<body>
+    <div class="search_head">
+        <form method="get" action="search_result.html" target="_self" onsubmit="return checkkey()">
+            <div class="search_type">
+                <span>课程</span>
+                <input type="hidden" id="hdType" name="serch_type" value="1" />
+                <div class="type">
+                    <i></i>
+                    <ul id="nvul">
+                        <li>课程</li>
+                        <li>资源</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="search search2">
+                <div class="input">
+                    <input name="keywords" id="keywords" type="text" placeholder="输入课程名查找" value="">
+                </div>
+                <input type="submit" id="" class="searchbtn" value="搜索">
+            </div>
+        </form>
+    </div>
+    <section class="search_history">
+        <h2>历史搜索</h2>
+        <div class="content">
+            <ul></ul>
+            <div class="clear_recently_search"><a href="javascript:;" onclick="clearRecently()">清除历史记录</a></div>
+            <div class="recently_search_null" style="display: none;">没有搜索记录</div>
+        </div>
+    </section>
+    <script>
+        //检查搜索关键字是否为空
+        function checkkey() {
+            var a = document.getElementById("keywords").value;
+            if ("" == a.replace(/(^\s*)|(\s*$)/g, "")) {
+                return document.getElementById("keywords").focus(), false;
+            }
+
+            return true;
+        }
+
+        getRecentlySearch();
+
+        //列出搜索历史
+        function getRecentlySearch() {
+            var htmls = '';
+            var course_searchkey = localStorage.getItem('course_searchkey');
+            if (course_searchkey) {
+                course_searchkey = decodeURIComponent(course_searchkey);
+                var arr = course_searchkey.split('|');
+                for (var i = 0; i < arr.length; i++) {
+                    if (arr[i]) {
+                        htmls += [
+                            '<li><a href="search_result.html?serch_type=' + $('#hdType').val() + '&keywords=' + arr[i] + '"><i></i>' + arr[i] + '<em></em></a></li>'
+                        ].join('');
+                    }
+                }
+            }
+
+            if (htmls == '') {
+                $('.clear_recently_search').hide();
+                $('.recently_search_null').show();
+            }
+
+            $('.content ul').html(htmls);
+        }
+
+        //清空搜索历史
+        function clearRecently() {
+            localStorage.removeItem('course_searchkey');
+            $('.clear_recently_search').hide();
+            $('.recently_search_null').show();
+            $('.content ul').html('');
+        }
+    </script>
+</body>
+</html>

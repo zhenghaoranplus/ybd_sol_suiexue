@@ -1,0 +1,184 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, width=device-width">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>音视频资源</title>
+    <meta http-equiv="Cache-Control" content="must-revalidate,no-cache">
+    <link rel="stylesheet" href="css/style.css">
+    <script type="text/javascript" src="js/jquery-1.12.3.min.js"></script>
+    <script src="script/layer_mobile/layer.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+    <script src="script/core.js"></script>
+    <script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script src="script/wechat_config.js"></script>
+    <style>
+        #word_list {
+            padding-left: 0.5rem;
+            line-height: 3rem;
+        }
+
+            #word_list p span {
+                padding-left: 3.5rem;
+            }
+
+            #word_list p img {
+                width: 1rem;
+                margin-right: 1rem;
+            }
+    </style>
+</head>
+<body class="whitebg">
+    <div id="word_list">
+    </div>
+    <script>
+        var id = getUrlParam('id');
+        var method = getUrlParam('method');
+
+        getPath();
+
+        //获取资源地址
+        function getPath() {
+            if (method) {//从网页点击或扫码后认证后
+                if (method == 'click') {
+                    getDocument();
+                } else if (method == 'scan') {
+                    getFinalPath();
+                }
+            } else {//扫码后认证前
+                if (isWechatBrowser()) {//是微信浏览器
+                    var source_url = window.location.href + "*method=scan";
+                    var redirecturl = '/html/wxlogin.html?t=' + Math.random() + '&source_url=' + source_url
+
+                    window.location.href = redirecturl;
+                } else {//不是微信浏览器，查询公共资源
+                    getCommonPath();
+                }
+            }
+        }
+
+        //获取资源地址
+        function getDocument() {
+            if (islogin()) {
+                var data = {
+                    id: id,
+                    user_id: islogin().id
+                };
+                sendAjaxSetFuncAsync(false, data, '/tools/business_handler.ashx?action=GetResourcePath', function (result) {
+                    if (parseInt(result.code, 10) == 200) {
+                        var entity = result.data[0];
+                        var obj = entity.resource;
+                        $('title').html(obj.title);
+
+                        sharedesc = obj.title;
+                        getInfo();
+
+                        getData(obj.id);
+                    } else {
+                        dialogMsg(result.message);
+                    }
+                })
+            } else {
+                dialogMsgFun('您还没有登录，请先去登录', gotologin);
+            }
+        }
+
+        //获取最终资源地址
+        function getFinalPath() {
+            if (getUserOAuths()) {
+                var openid = getUserOAuths().appid;
+                var source_url = window.location.href;
+                sendAjaxSetFuncAsync(
+                    false,
+                    { openid: openid, source_url: source_url },
+                    '/tools/business_handler.ashx?action=GetFinalPath',
+                    function (result) {
+                        var code = parseInt(result.code, 10);
+                        if (code == 200) {
+                            var entity = result.data[0];
+                            var obj = entity.resource;
+                            $('title').html(obj.title);
+
+                            sharedesc = obj.title;
+                            getInfo();
+
+                            getData(obj.id);
+                        } else if (code == -1) {
+                            getCommonPath();
+                        } else {
+                            dialogMsg(result.message);
+                        }
+                    });
+            } else {
+                getCommonPath();
+            }
+        }
+
+        //获取学校资源对应的公共资源
+        function getCommonPath() {
+            var data = {
+                id: id
+            };
+            sendAjaxSetFuncAsync(false, data, '/tools/business_handler.ashx?action=GetCommonResourcePath', function (result) {
+                if (parseInt(result.code, 10) == 200) {
+                    var entity = result.data[0];
+                    var obj = entity.resource;
+                    $('title').html(obj.title);
+
+                    sharedesc = obj.title;
+                    getInfo();
+
+                    getData(obj.id);
+                } else {
+                    dialogMsg(result.message);
+                }
+            })
+        }
+
+        function getData(rid) {
+            if (!rid) {
+                rid = 0;
+            }
+            sendAjaxSetFunc({ id: rid }, '/tools/business_handler.ashx?action=GetEnglishVoice', function (result) {
+                if (parseInt(result.code, 10) == 200) {
+                    var list = result.data;
+
+                    var htmls = '';
+
+                    $.each(list, function (k, v) {
+                        htmls += [
+                            '<p>',
+                            '<img src="images/audio_player_120.png" alt="播放" />',
+                            '<i>' + v['word_name'] + '</i>',
+                            '<span>' + v['word_nature'] + '</span>',
+                            '<span>' + v['word_translate'] + '</span>',
+                            '<audio id="wordplay' + k + '" src="' + v['video_path'] + '" controls="controls" hidden></audio>',
+                            '</p>'
+                        ].join('');
+                    })
+
+                    $('#word_list').html(htmls);
+
+                    $('#word_list p').click(function () {
+
+                        var audioid = 'wordplay' + $(this).index();
+                        var audio = document.getElementById(audioid);
+                        if (audio != null) {
+                            if (!audio.paused) {
+                                // 这个就是暂停
+                                audio.pause();
+                            } else {
+                                // 这个就是播放
+                                audio.play();
+                            }
+                        }
+                    })
+                } else {
+                    dialogMsg(result.message);
+                }
+            });
+        }
+    </script>
+</body>
+</html>

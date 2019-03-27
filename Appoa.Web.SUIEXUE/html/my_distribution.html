@@ -1,0 +1,112 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, width=device-width">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>我的分销</title>
+    <meta http-equiv="Cache-Control" content="must-revalidate,no-cache">
+    <link rel="stylesheet" href="css/style.css">
+    <script type="text/javascript" src="js/jquery-1.12.3.min.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+    <script src="script/layer_mobile/layer.js"></script>
+    <script src="script/core.js"></script>
+    <script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script src="script/wechat_config.js"></script>
+</head>
+<body class="whitebg">
+    <section class="distribution_ban">
+        <ul>
+            <li><span class="icon">
+                <img src="images/distribution_icon1.png"></span><h1>下级总人数</h1>
+                <h2>0</h2>
+            </li>
+            <li><span class="icon">
+                <img src="images/distribution_icon2.png"></span><h1>贡献总积分</h1>
+                <h2>0</h2>
+            </li>
+        </ul>
+        <span class="line"></span>
+        <div class="distribution_rule"><a href="integral_rule.html"></a></div>
+    </section>
+
+    <section class="my_distribution">
+        <ul class="tab">
+            <li><span>我的下级</span></li>
+            <li><span>贡献明细</span></li>
+        </ul>
+        <section class="distribution_content">
+        </section>
+        <section class="distribution_content">
+        </section>
+    </section>
+    <script>
+        var pageIndex = 1;
+        var pageSize = 20;
+
+        getData();
+        scrollLoad();
+
+        function getData() {
+            if (islogin()) {
+                var data = {
+                    user_id: islogin().id,
+                    page_index: pageIndex,
+                    page_size: pageSize
+                };
+
+                sendAjaxSetFunc(data, '/tools/business_handler.ashx?action=GetMyDistribution', function (result) {
+                    if (parseInt(result.code, 10) == 200) {
+                        var obj = result.data;
+                        if (obj) {
+                            $('.distribution_ban li:eq(0) h2').html(obj.count);
+                            $('.distribution_ban li:eq(1) h2').html(obj.sum);
+
+                            var nextList = obj.nextList;
+                            var recordList = obj.recordList;
+                            var nexthtmls = '';
+                            var recordhtmls = '';
+
+                            $.each(nextList, function (k, v) {
+                                nexthtmls += [
+                                    '<div class="list">',
+                                    '<span class="userhead">',
+                                    '<img src="' + v['avatar'] + '"></span>',
+                                    '<h1>' + v['nick_name'] + '</h1>',
+                                    '<p>贡献：' + v['integral'] + '分</p>',
+                                    '<div class="txt"><a href="subordinate.html?id=' + v['user_id'] + '">他的下级</a></div>',
+                                    '</div>'
+                                ].join('');
+                            })
+
+                            $.each(recordList, function (k, v) {
+                                recordhtmls += [
+                                    '<div class="list">',
+                                    '<span class="userhead">',
+                                    '<img src="' + v['avatar'] + '"></span>',
+                                    '<h1>' + v['nick_name'] + '</h1>',
+                                    '<p>' + v['add_time'] + '</p>',
+                                    '<div class="txt">+' + v['integral'] + '</div>',
+                                    '</div>'
+                                ].join('');
+                            })
+
+                            if (pageIndex == 1) {
+                                $('.distribution_content:eq(0)').html(nexthtmls);
+                                $('.distribution_content:eq(1)').html(recordhtmls);
+                            } else {
+                                $('.distribution_content:eq(0)').append(nexthtmls);
+                                $('.distribution_content:eq(1)').append(recordhtmls);
+                            }
+                        }
+                    } else {
+                        dialogMsg(result.message);
+                    }
+                });
+            } else {
+                dialogMsgFun('您还没有登录，请先去登录', gotologin);
+            }
+        }
+    </script>
+</body>
+</html>

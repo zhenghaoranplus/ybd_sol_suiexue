@@ -1,0 +1,163 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, width=device-width">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>播放历史</title>
+    <meta http-equiv="Cache-Control" content="must-revalidate,no-cache">
+    <link rel="stylesheet" href="css/style.css">
+    <script type="text/javascript" src="js/jquery-1.12.3.min.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+    <script src="script/layer_mobile/layer.js"></script>
+    <script src="script/core.js"></script>
+    <script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script src="script/wechat_config.js"></script>
+    <style>
+        .cancel_del_coolect {
+            position: absolute;
+            bottom: 0;
+            right: 10rem;
+            width: 10rem;
+        }
+
+            .cancel_del_coolect input {
+                display: block;
+                width: 100%;
+                border: 0;
+                background: #00adef;
+                padding: 1.2rem 0;
+                text-align: center;
+                line-height: 1;
+                font-size: 1.05rem;
+                color: #fff;
+                cursor: pointer;
+            }
+    </style>
+</head>
+<body>
+    <section class="course_list collectlist">
+        <div class="content">
+        </div>
+        <div class="collect_bottom">
+            <span class="edit">编辑</span>
+            <div class="manage_favaorites">
+                <div class="collectcheck">
+                    <label for="">
+                        <input type="checkbox" class="co-check" id="checkall"><em></em></label>全选
+                </div>
+                <div class="cancel_del_coolect">
+                    <input type="button" id="" name="" value="取  消">
+                </div>
+                <div class="del_collect">
+                    <input type="button" id="" name="" value="删  除">
+                </div>
+            </div>
+        </div>
+    </section>
+    <script>
+        var pageIndex = 1;
+        var pageSize = 10;
+
+        getData();
+        scrollLoad();
+
+        function getData() {
+            if (islogin()) {
+                var data = {
+                    user_id: islogin().id,
+                    page_index: pageIndex,
+                    page_size: pageSize
+                };
+
+                sendAjaxSetFunc(data, '/tools/business_handler.ashx?action=GetMyReadRecord', function (result) {
+                    if (parseInt(result.code, 10) == 200) {
+                        var list = result.data;
+                        var htmls = '';
+
+                        $.each(list, function (k, v) {
+                            htmls += [
+                                '<div class="list">',
+                                '<div class="collectcheck">',
+                                '<label for=""><input type="checkbox" class="co-check collCheck" value="' + v['id'] + '"><em></em></label>',
+                                '</div>',
+                                '<a href="course_details.html?id=' + v['data_id'] + '">',
+                                '<div class="pic">',
+                                '<img src="' + v['cover'] + '">',
+                                '</div>',
+                                '<h3>' + v['name'] + '</h3>',
+                                '<div class="description">' + v['info'] + '</div>',
+                                '</a>',
+                                '</div>'
+                            ].join('');
+                        })
+
+                        if (pageIndex == 1) {
+                            if (htmls) {
+                                $('.content').html(htmls);
+                            } else {
+                                $(".collect_bottom .edit").hide();
+                                dialogTips('没有数据');
+                            }
+                        } else {
+                            $('.content').append(htmls);
+                        }
+                    } else {
+                        dialogMsg(result.message);
+                    }
+                });
+            } else {
+                dialogMsgFun('您还没有登录，请先去登录', gotologin);
+            }
+        }
+
+        $('.del_collect input').click(function () {
+            var arr = $('.collCheck:checked');
+            if (arr.length <= 0) {
+                dialogTips('请选择要删除的历史记录');
+                return;
+            }
+
+            var objarr = [];
+            dialogConfirmFun('确定要删除这些历史记录吗？', function () {
+                var ids = '';
+                arr.each(function (k, v) {
+                    ids += $(v).val() + ',';
+                    objarr.push(v);
+                })
+
+                ids = ids.substr(0, ids.length - 1);
+
+                var data = {
+                    user_id: islogin().id,
+                    ids: ids
+                };
+
+                dialogLoadingText('正在删除');
+                sendAjaxSetFunc(data, '/tools/business_handler.ashx?action=DelReadRecord', function (result) {
+                    layer.closeAll();
+                    if (parseInt(result.code, 10) == 200) {
+                        $.each(objarr, function (k, v) {
+                            $(v).parents('.list').remove();
+
+                            if ($('.content .list').length == 0) {
+                                $(".collect_bottom .edit").hide();
+                                $(".collect_bottom .manage_favaorites").hide();
+                            }
+                        })
+
+                    } else {
+                        dialogMsg(result.message);
+                    }
+                });
+            });
+        })
+
+        $('.cancel_del_coolect input').click(function () {
+            $(".collectlist .list").removeClass("editlist");
+            $('.manage_favaorites').hide();
+            $(".collect_bottom .edit").show();
+        })
+    </script>
+</body>
+</html>

@@ -1,0 +1,178 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, width=device-width">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>注册</title>
+    <meta http-equiv="Cache-Control" content="must-revalidate,no-cache">
+    <link rel="stylesheet" href="css/style.css">
+    <script type="text/javascript" src="js/jquery-1.12.3.min.js"></script>
+    <script src="script/layer_mobile/layer.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+    <script src="script/core.js"></script>
+    <script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script src="script/wechat_config.js"></script>
+    <script>
+        $(function () {
+            //获取短信验证码
+            var validCode = true;
+            $(".msgs").click(function () {
+                var time = 60;
+                var code = $(this);
+                if (validCode) {
+                    if (sendCode()) {
+                        validCode = false;
+                        code.addClass("msgs1");
+                        var t = setInterval(function () {
+                            time--;
+                            code.html(time + "秒");
+                            if (time == 0) {
+                                clearInterval(t);
+                                code.html("重新获取");
+                                validCode = true;
+                                code.removeClass("msgs1");
+                            }
+                        }, 1000)
+                    } else {
+                        clearInterval(t);
+                    }
+                }
+            })
+
+            getSchool();
+
+            $('#register').click(function () {
+                //var recommend = getStorage('recommend') || '0';
+                var recommend = sessionStorage.getItem('recommend') || '0';
+                var mobile = $.trim($('#mobile').val());
+                var code = $.trim($('#code').val());
+                var pwd = $.trim($('#pwd').val());
+                var confirmpwd = $.trim($('#confirmpwd').val());
+                var school_id = $('#userschool').val();
+
+                if (!mobile) {
+                    dialogTips('请输入手机号');
+                    return;
+                }
+                if (!code) {
+                    dialogTips('请输入短信验证码');
+                    return;
+                }
+                if (!pwd) {
+                    dialogTips('请输入密码');
+                    return;
+                }
+                if (!confirmpwd) {
+                    dialogTips('请输入确认密码');
+                    return;
+                }
+                if (pwd != confirmpwd) {
+                    dialogTips('两次输入密码不一致');
+                    return;
+                }
+
+                var data = {
+                    phone: mobile,
+                    pwd: pwd,
+                    verifycode: code,
+                    school_id: school_id,
+                    recommend: recommend
+                };
+
+                sendAjaxSetFunc(data, '/tools/business_handler.ashx?action=Register', function (result) {
+                    if (parseInt(result.code, 10) == 200) {
+                        dialogMsgUrl('注册成功', 'login.html');
+                    } else {
+                        dialogMsg(result.message);
+                    }
+                })
+            })
+        })
+
+        function sendCode() {
+            var phone = $.trim($("#mobile").val());
+            if (phone) {
+                getCode(phone);
+                return true;
+            } else {
+                dialogTips("请输入手机号");
+                return false;
+            }
+        }
+
+        function getCode(phone) {
+            var data = {
+                phone: phone
+            };
+
+            sendAjaxSetFuncAsync(false, data, '/tools/business_handler.ashx?action=GetVerifyCode', function (result) {
+                if (parseInt(result.code, 10) == 200) {
+                    console.log(result.data[0].code);
+                } else {
+                    dialogTips(result.message);
+                }
+            });
+        }
+
+        function getSchool() {
+            sendAjaxSetFuncAsync(false, {}, '/tools/business_handler.ashx?action=GetSchoolList', function (result) {
+                if (parseInt(result.code, 10) == 200) {
+
+                    var list = result.data;
+                    var htmls = '<option value="0">所在学校</option>';
+                    $.each(list, function (k, v) {
+                        htmls += '<option value="' + v['id'] + '">' + v['name'] + '</option>';
+                    })
+
+                    $('#userschool').html(htmls);
+                } else {
+                    dialogMsg(result.message);
+                }
+            })
+        }
+    </script>
+</head>
+<body class="whitebg">
+    <section class="loginform">
+        <div class="login_logo">
+            <img src="images/login_logo.png">
+        </div>
+        <ul>
+            <li class="li1">
+                <div class="inputdiv">
+                    <input type="text" id="mobile" name="mobile" class="input" placeholder="手机号" value="">
+                </div>
+            </li>
+            <li class="li3">
+                <div class="inputdiv">
+                    <input type="text" id="code" name="code" class="input" placeholder="验证码" value="">
+                </div>
+                <span class="msgs">获取</span>
+            </li>
+            <li class="li2">
+                <div class="inputdiv">
+                    <input type="password" id="pwd" name="pwd" class="input" placeholder="输入密码" value="">
+                </div>
+            </li>
+            <li class="li2">
+                <div class="inputdiv">
+                    <input type="password" id="confirmpwd" name="pwd" class="input" placeholder="确认密码" value="">
+                </div>
+            </li>
+            <li class="li4">
+                <div class="inputdiv inputdiv2">
+                    <select id="userschool"></select>
+                    <span class="span">（选填）</span>
+                </div>
+            </li>
+        </ul>
+        <p class="register_notice">
+            <input type="checkbox" id="agreementcheck" name="agreementcheck" class="agreementcheck" checked><label for="agreementcheck"></label>同意<a href="agreement.html">《用户注册协议》</a>
+        </p>
+        <p class="userbtn">
+            <input type="button" id="register" name="" value="注册">
+        </p>
+    </section>
+</body>
+</html>

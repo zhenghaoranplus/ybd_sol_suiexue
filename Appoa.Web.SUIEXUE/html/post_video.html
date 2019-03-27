@@ -1,0 +1,167 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, width=device-width">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>发布视频</title>
+    <meta http-equiv="Cache-Control" content="must-revalidate,no-cache">
+    <link rel="stylesheet" href="css/style.css">
+    <script type="text/javascript" src="js/jquery-1.12.3.min.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+    <script src="script/layer_mobile/layer.js"></script>
+    <script src="script/core.js"></script>
+    <script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script src="script/wechat_config.js"></script>
+</head>
+<body>
+    <section class="question_content">
+        <h1><span>*</span>标题</h1>
+        <div class="inputs">
+            <input type="text" id="txt" placeholder="输入标题" value="">
+            <input type="hidden" id="hdtitle" value="">
+        </div>
+        <h1><span>*</span>视频</h1>
+        <div class="add_img add_video">
+            <input type="button" onmousemove="f.style.pixelLeft = event.x - 60; f.style.pixelTop = this.offsetTop;" value="添加短视频（限10s以内）" size="30" onclick="upd()" class="liulan">
+            <input type="file" id="f" name="f" style="height:26px;" class="files" size="1" accept="video/mp4, video/flv" hidefocus>
+            <div class="upload_video">
+            </div>
+        </div>
+        <div class="questions"><input type="button" id="" value="提交" onclick="ReleaseVideo();"></div>
+    </section>
+    <script>
+        //发布
+        function ReleaseVideo() {
+            if (islogin()) {
+                var id = getUrlParam('id');
+                var title = $.trim($('#txt').val());
+                var filename = $('#hdtitle').val();
+                var src = '';
+
+                if (!id || id == 0) {
+                    dialogTips('没有此课堂');
+                    return;
+                }
+                if (!title) {
+                    dialogTips('请输入标题');
+                    return;
+                }
+
+                var videosrc = $('#videoview').attr('src');
+                var videoimg = $('#imgSmallView').attr('src');
+                if (videosrc && videoimg) {
+                    if (videosrc.split(',').length != 2) {
+                        dialogTips('视频格式不正确');
+                        return false;
+                    }
+                    //if (videoimg.split(',').length != 2) {
+                    //    dialogTips('视频缩略图格式不正确');
+                    //    return false;
+                    //}
+
+                    //src = videosrc + '|' + videoimg;//前者是视频后者是缩略图
+                    src = videosrc;//视频
+                }
+
+                var data = {
+                    user_id: islogin().id,
+                    id: id,
+                    title: title,
+                    filename:filename,
+                    path: src
+                };
+
+                dialogLoadingText('提交中');
+                sendAjaxSetFunc(data, '/tools/business_handler.ashx?action=ReleaseVideo', function (result) {
+                    layer.closeAll();
+                    if (parseInt(result.code) == 200) {
+                        dialogMsgFun('提交成功', function () {
+                            history.back(-1);
+                        });
+                    } else {
+                        dialogMsg(result.message);
+                    }
+                })
+            } else {
+                dialogMsgFun('您还没有登录，请先去登录', gotologin);
+            }
+        }
+
+        //选择文件回调事件
+        function upd() {
+            var file_input = $('#f');
+            var videolen = file_input.parent().children('.upload_video').children().length;
+
+            file_input.unbind();
+            file_input.click();
+            file_input.change(function () {
+                var file = this.files[0];
+                if (file) {
+                    $('#txt').val(file.name);
+                    $('#hdtitle').val(file.name);
+                    //var size = file.size;
+                    //if ((size / 1024 / 1024) > 10) {//超过10M
+                    //    dialogTips('文件大小不能超出10M');
+                    //    return false;
+                    //}
+
+                    var type = file.type;
+                    type = type.split('/')[0];
+
+                    if (type == 'video') {
+
+                        var windowURL = window.URL || window.webkitURL;
+                        var url = windowURL.createObjectURL(file);
+                        file_input.parent().children('.upload_video').html('');
+
+                        var htmls = '<video id="videoview_hide" src="' + url + '" width="100%" hidden>您的浏览器不支持 video 标签。</video>';
+                        file_input.parent().children('.upload_video').append(htmls); //设置预览图片
+
+                        setTimeout(function () {
+
+                            //获取视频缩略图
+                            var scale = 0.2;
+                            var video = document.getElementById('videoview_hide');
+                            var canvas = document.createElement("canvas");
+                            var canvasFill = canvas.getContext('2d');
+                            if (video) {
+                                var duration = video.duration;
+                                if (duration > 10) {
+                                    layer.closeAll();
+                                    $('#videoview_hide,#videoview').remove();
+                                    dialogTips('视频时长不可超过10s');
+                                    return false;
+                                }
+
+                                canvas.width = video.videoWidth * scale;
+                                canvas.height = video.videoHeight * scale;
+                                canvasFill.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+                                var src = canvas.toDataURL("image/jpeg");
+                                $('.upload_video').append('<img id="imgSmallView" src="' + src + '" alt="预览图" hidden />');
+
+                                //把视频文件转成base64字符串
+                                var reader = new FileReader();
+                                reader.readAsDataURL(file);
+                                reader.onload = function (e) {
+                                    dialogLoadingText('加载中');
+                                    var src = e.target.result;
+
+                                    var htmls = '<video id="videoview" src="' + src + '" width="100%">您的浏览器不支持 video 标签。</video>';
+                                    file_input.parent().children('.upload_video').append(htmls); //设置预览图片
+
+                                    setTimeout(function () { layer.closeAll(); }, 500);
+                                }
+                            }
+                        }, 500);
+                    } else {
+                        dialogTips('文件类型不正确');
+                        return false;
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>

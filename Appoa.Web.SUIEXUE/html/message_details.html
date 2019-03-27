@@ -1,0 +1,52 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, width=device-width">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>消息详情</title>
+    <meta http-equiv="Cache-Control" content="must-revalidate,no-cache">
+    <link rel="stylesheet" href="css/style.css">
+    <script type="text/javascript" src="js/jquery-1.12.3.min.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+    <script src="script/layer_mobile/layer.js"></script>
+    <script src="script/core.js"></script>
+    <script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script src="script/wechat_config.js"></script>
+</head>
+<body>
+    <section class="notice_details">
+        <p class="notice_title"></p>
+        <p class="notice_time"></p>
+        <div class="notice_content">
+
+        </div>
+    </section>
+    <script>
+        GetMessageInfo();
+
+        function GetMessageInfo() {
+            var data = {
+                id: getUrlParam('id')
+            };
+
+            dialogLoadingText('加载中');
+            sendAjaxSetFunc(data, '/tools/business_handler.ashx?action=GetMessageInfo', function (result) {
+                setTimeout(function () {
+                    layer.closeAll();
+                    if (parseInt(result.code, 10) == 200) {
+                        var obj = result.data;
+                        if (obj) {
+                            $('.notice_title').html(obj.title);
+                            $('.notice_time').html(obj.add_time);
+                            $('.notice_content').html(obj.contents);
+                        }
+                    } else {
+                        dialogMsg(result.message);
+                    }
+                }, 500);
+            });
+        }
+    </script>
+</body>
+</html>

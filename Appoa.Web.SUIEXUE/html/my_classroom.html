@@ -1,0 +1,176 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, width=device-width">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>我的课堂</title>
+    <meta http-equiv="Cache-Control" content="must-revalidate,no-cache">
+    <link rel="stylesheet" href="css/style.css">
+    <script type="text/javascript" src="js/jquery-1.12.3.min.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+    <link rel="stylesheet" href="js/swiper/swiper.min.css" />
+    <script src="script/layer_mobile/layer.js"></script>
+    <script src="script/core.js"></script>
+    <script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script src="script/wechat_config.js"></script>
+</head>
+<body>
+    <section class="mall_tab tabs">
+        <ul>
+            <li class="active"><a href="javascript:;" hidefocus="true"><span>我加入的</span></a></li>
+            <li><a href="javascript:;" hidefocus="true"><span>我创建的</span></a></li>
+        </ul>
+        <i></i>
+    </section>
+    <div class="swiper-container">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide swiper-slide-visible swiper-slide-active">
+                <section class="classrooms">
+                    <section class="classroom">
+                        
+                    </section>
+                </section>
+            </div>
+            <div class="swiper-slide">
+                <section class="classrooms">
+                    <section class="classroom">
+                       
+                    </section>
+                </section>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="js/zepto.min.js"></script>
+    <script type="text/javascript" src="js/swiper/idangerous.swiper.min.js"></script>
+    <script type="text/javascript">
+        var index = 0;
+        var join_pageIndex = 1;
+        var crt_pageIndex = 1;
+        var pageSize = 10;
+
+        SwiperInit();
+        getData(index);
+        scrollLoadSwiper();
+
+        function SwiperInit() {
+            var tabsSwiper;
+            tabsSwiper = new Swiper('.swiper-container', {
+                speed: 500,
+                onSlideChangeStart: function () {
+                    $(".tabs .active").removeClass('active');
+                    $(".tabs li").eq(tabsSwiper.activeIndex).addClass('active');
+                }
+            });
+
+            $(".tabs li").on('touchstart mousedown', function (e) {
+                e.preventDefault()
+                $(".tabs .active").removeClass('active');
+                $(this).addClass('active');
+                index = $(this).index();
+                if (index == 0) {
+                    if (join_pageIndex == 1) {
+                        getData(index);
+                    }
+                }
+                if (index == 1) {
+                    if (crt_pageIndex == 1) {
+                        getData(index);
+                    }
+                }
+
+                tabsSwiper.swipeTo($(this).index());
+            });
+
+            $(".tabs li").click(function (e) {
+                e.preventDefault();
+            });
+        }
+
+        function getData(indextag) {
+            if (islogin()) {
+                var pageIndex = 1;
+                if (indextag == 0) {
+                    pageIndex = join_pageIndex;
+                }
+                if (indextag == 1) {
+                    pageIndex = crt_pageIndex;
+                }
+
+                var data = {
+                    user_id: islogin().id,
+                    page_index: pageIndex,
+                    page_size: pageSize,
+                    tag: indextag + 1
+                };
+
+                sendAjaxSetFunc(data, '/tools/business_handler.ashx?action=GetMyClass', function (result) {
+                    if (parseInt(result.code, 10) == 200) {
+                        var list = result.data;
+                        var htmls = '';
+
+                        $.each(list, function (k, v) {
+                            htmls += [
+                                '<div class="list">',
+                                '<a href="join_class.html?id=' + v['id'] + '">',
+                                '<div class="pic">',
+                                '<img src="' + v['avatar'] + '">',
+                                '</div>',
+                                '<h1>' + v['name'] + '</h1>',
+                                '<p>创建人：<span>' + v['user_name'] + '</span></p>',
+                                '<p>创建时间：' + v['id'] + '</p>',
+                                '</a>',
+                                '</div>'
+                            ].join('');
+                        })
+
+                        if (join_pageIndex == 1) {
+                            $('.classroom:eq(' + indextag + ')').html(htmls);
+                        } else {
+                            $('.classroom:eq(' + indextag + ')').append(htmls);
+                        }
+                    } else {
+                        dialogMsg(result.message);
+                    }
+                })
+            } else {
+                dialogMsgFun('您还没有登录，请先去登录', gotologin);
+            }
+        }
+
+        function scrollLoadSwiper() {
+            $(window).scroll(function () {
+                var scrollTop = $(this).scrollTop(); //滚动条距离顶部的高度
+                var scrollHeight = $(document).height(); //当前页面的总高度
+                var windowHeight = $(this).height(); //当前可视的页面高度
+
+                if (scrollHeight != windowHeight) {
+                    //滚动条在顶部
+                    if (scrollTop <= 0) {
+                        if (index == 0) {
+                            join_pageIndex = 1;
+                            getData(index);
+                        }
+                        if (index == 1) {
+                            crt_pageIndex = 1;
+                            getData(index);
+                        }
+                    }
+
+                    //距离顶部+当前高度 >=文档总高度 即代表滑动到底部
+                    if (scrollTop + windowHeight >= scrollHeight) {
+                        if (index == 0) {
+                            join_pageIndex++;
+                            getData(index);
+                        }
+                        if (index == 1) {
+                            crt_pageIndex++;
+                            getData(index);
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>

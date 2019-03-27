@@ -1,0 +1,130 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{1A05D408-6E9A-4BB4-9900-2FD6681CF447}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Appoa.Model</RootNamespace>
+    <AssemblyName>Appoa.Model</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="answer_record.cs" />
+    <Compile Include="answer_result.cs" />
+    <Compile Include="base\manager_log.cs" />
+    <Compile Include="base\manager_role.cs" />
+    <Compile Include="base\manager_role_value.cs" />
+    <Compile Include="base\sys_config.cs" />
+    <Compile Include="base\sys_manager.cs" />
+    <Compile Include="base\sys_navigation.cs" />
+    <Compile Include="classroom_info.cs" />
+    <Compile Include="classroom_user.cs" />
+    <Compile Include="common_adR.cs" />
+    <Compile Include="common_albums.cs" />
+    <Compile Include="common_answers.cs" />
+    <Compile Include="common_article.cs" />
+    <Compile Include="common_category.cs" />
+    <Compile Include="common_dict.cs" />
+    <Compile Include="common_evaluate.cs" />
+    <Compile Include="common_examination.cs" />
+    <Compile Include="common_feedback.cs" />
+    <Compile Include="common_message.cs" />
+    <Compile Include="common_questions.cs" />
+    <Compile Include="common_resource.cs" />
+    <Compile Include="common_school.cs" />
+    <Compile Include="company_info.cs" />
+    <Compile Include="company_partner.cs" />
+    <Compile Include="course_chapter.cs" />
+    <Compile Include="course_info.cs" />
+    <Compile Include="Entity\answer_result_request.cs" />
+    <Compile Include="Entity\category_entity.cs" />
+    <Compile Include="Entity\classroom_article_detail.cs" />
+    <Compile Include="Entity\classroom_info_entity.cs" />
+    <Compile Include="Entity\classroom_user_entity.cs" />
+    <Compile Include="Entity\confirm_order_entity.cs" />
+    <Compile Include="Entity\course_article_entity.cs" />
+    <Compile Include="Entity\course_category_back.cs" />
+    <Compile Include="Entity\course_chapter_entity.cs" />
+    <Compile Include="Entity\course_info_entity.cs" />
+    <Compile Include="Entity\course_resource_entity.cs" />
+    <Compile Include="Entity\file_info_entity.cs" />
+    <Compile Include="Entity\goods_detail_entity.cs" />
+    <Compile Include="Entity\goods_evaluate_entity.cs" />
+    <Compile Include="Entity\img_entity.cs" />
+    <Compile Include="Entity\materials_entity.cs" />
+    <Compile Include="Entity\member_info_entity.cs" />
+    <Compile Include="Entity\my_center_entity.cs" />
+    <Compile Include="Entity\my_classroom_entity.cs" />
+    <Compile Include="Entity\my_distribution_entity.cs" />
+    <Compile Include="Entity\my_order_entity.cs" />
+    <Compile Include="Entity\news_info_entity.cs" />
+    <Compile Include="Entity\news_list_entity.cs" />
+    <Compile Include="Entity\order_details_entity.cs" />
+    <Compile Include="Entity\order_goods_entity.cs" />
+    <Compile Include="Entity\pc_index_adr.cs" />
+    <Compile Include="Entity\question_analysis_entity.cs" />
+    <Compile Include="Entity\resource_evaluate_entity.cs" />
+    <Compile Include="Entity\resource_model_entity.cs" />
+    <Compile Include="Entity\shop_index_goods.cs" />
+    <Compile Include="Entity\test_entity.cs" />
+    <Compile Include="Entity\test_info_entity.cs" />
+    <Compile Include="Entity\user_address_entity.cs" />
+    <Compile Include="Entity\user_info_entity.cs" />
+    <Compile Include="Entity\word_voice_entity.cs" />
+    <Compile Include="examination_question.cs" />
+    <Compile Include="goods_goods.cs" />
+    <Compile Include="goods_spec_item.cs" />
+    <Compile Include="goods_spec_type.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="user_address.cs" />
+    <Compile Include="user_cart.cs" />
+    <Compile Include="user_collection.cs" />
+    <Compile Include="user_info.cs" />
+    <Compile Include="user_integral.cs" />
+    <Compile Include="user_oauths.cs" />
+    <Compile Include="user_order.cs" />
+    <Compile Include="user_ordergoods.cs" />
+    <Compile Include="user_readrecord.cs" />
+    <Compile Include="user_signin.cs" />
+    <Compile Include="user_tree.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

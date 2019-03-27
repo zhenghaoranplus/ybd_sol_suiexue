@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, width=device-width">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>搜索结果</title>
+    <meta http-equiv="Cache-Control" content="must-revalidate,no-cache">
+    <link rel="stylesheet" href="css/style.css">
+    <script type="text/javascript" src="js/jquery-1.12.3.min.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+    <script src="script/layer_mobile/layer.js"></script>
+    <script src="script/core.js"></script>
+    <script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script src="script/wechat_config.js"></script>
+</head>
+<body>
+    <form method="get" action="search_result2.html" target="_self" onsubmit="return checkkey();">
+        <div class="search search2">
+            <div class="input">
+                <input id="keywords" name="keywords" type="text" placeholder="输入课堂名查找" value="">
+            </div>
+            <input type="submit" id="" class="searchbtn" value="搜索">
+        </div>
+    </form>
+    <div class="course_tit">相关课堂（0条）</div>
+    <section class="classroom br0">
+        <!--<div class="list">
+            <a href="join_class.html">
+                <div class="pic">
+                    <img src="images/classroom_img.jpg">
+                </div>
+                <h1>网络营销1班</h1>
+                <p>创建人：<span>张老师</span></p>
+                <p>创建时间：2017-05-10</p>
+            </a>
+        </div>-->
+    </section>
+    <script>
+        setSearchkey();
+        SearchClassroom();
+
+        //保存搜索关键字
+        function setSearchkey() {
+            var keywords = $.trim(getUrlParam('keywords'));
+            if (keywords) {
+                var classroom_searchkey = localStorage.getItem('classroom_searchkey');
+                if (!classroom_searchkey) {
+                    classroom_searchkey = '';
+                    classroom_searchkey += keywords;
+                    classroom_searchkey = encodeURIComponent(classroom_searchkey);
+                    localStorage.setItem('classroom_searchkey', classroom_searchkey);
+                } else {
+                    classroom_searchkey = decodeURIComponent(classroom_searchkey);
+
+                    var arr = classroom_searchkey.split('|');
+                    if (!isInArray(arr, keywords)) {
+                        classroom_searchkey += '|' + keywords;
+                    }
+
+                    classroom_searchkey = encodeURIComponent(classroom_searchkey);
+                    localStorage.setItem('classroom_searchkey', classroom_searchkey);
+                }
+            }
+        }
+
+        //检查字符是否在数组里
+        function isInArray(arr, obj) {
+            var i = arr.length;
+            while (i--) {
+                if (arr[i] === obj) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        //检查搜索关键字是否为空
+        function checkkey() {
+            var a = document.getElementById("keywords").value;
+            if ("" == a.replace(/(^\s*)|(\s*$)/g, "")) {
+                return document.getElementById("keywords").focus(), false;
+            }
+
+            return true;
+        }
+
+        function SearchClassroom() {
+            var keywords = getUrlParam('keywords');
+            if (keywords) {
+
+                var data = {
+                    keywords: keywords
+                };
+
+                sendAjaxSetFunc(data, '/tools/business_handler.ashx?action=SearchClassroom', function (result) {
+                    if (parseInt(result.code, 10) == 200) {
+                        var list = result.data;
+                        var htmls = '';
+
+                        $.each(list, function (k, v) {
+                            htmls += [
+                                '<div class="list">',
+                                '<a href="join_class.html?id=' + v['id'] + '">',
+                                '<div class="pic">',
+                                '<img src="' + v['avatar'] + '">',
+                                '</div>',
+                                '<h1>' + v['name'] + '</h1>',
+                                '<p>创建人：<span>' + v['user_name'] + '</span></p>',
+                                '<p>创建时间：' + formatData(v['add_time'], '-') + '</p>',
+                                '</a>',
+                                '</div>'
+                            ].join('');
+                        })
+
+                        $('.course_tit').html('相关课堂（' + list.length + '条）');
+                        $('.classroom').html(htmls);
+                    } else {
+                        dialogMsg(result.message);
+                    }
+                })
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,76 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, width=device-width">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>全部课程</title>
+    <meta http-equiv="Cache-Control" content="must-revalidate,no-cache">
+    <link rel="stylesheet" href="css/style.css">
+    <script type="text/javascript" src="js/jquery-1.12.3.min.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+    <script src="script/layer_mobile/layer.js"></script>
+    <script src="script/core.js"></script>
+    <script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script src="script/wechat_config.js"></script>
+</head>
+<body class="whitebg">
+    <form method="get" action="search_result.html" onsubmit="return checkkey();">
+        <div class="search search2">
+            <div class="input">
+                <input name="keywords" id="keywords" type="text" placeholder="输入课程名查找" value="">
+            </div>
+            <input type="submit" id="" class="searchbtn" value="搜索">
+        </div>
+    </form>
+    <section class="course_classify">
+        
+    </section>
+    <script>
+        getData();
+
+        function getData() {
+            var data = {
+                group: 1
+            };
+
+            sendAjaxSetFunc(data, '/tools/business_handler.ashx?action=GetCategoryList', function (result) {
+                if (parseInt(result.code, 10) == 200) {
+                    var list = result.data;
+                    var htmls = '';
+
+                    $.each(list, function (k, v) {
+                        htmls += [
+                            '<dl>',
+                            '<dt><a href="course.html?id=' + v['id'] + '"><i><img src="' + v['img_src'] + '"></i>' + v['title'] + '<em></em></a></dt>',
+                            '<dd>',
+                            //'<ul>',
+                            //'<li><a href="course.html">经济学</a></li>',
+                            //'<li><a href="course.html">金融学</a></li>',
+                            //'<li><a href="course.html">工商管理</a></li>',
+                            //'<li><a href="course.html">电子商务</a></li>',
+                            //'</ul>',
+                            '</dd>',
+                            '</dl>'
+                        ].join('');
+                    })
+
+                    $('.course_classify').html(htmls);
+                } else {
+                    dialogMsg(result.message);
+                }
+            });
+        }
+
+        //检查搜索关键字是否为空
+        function checkkey() {
+            var a = document.getElementById("keywords").value;
+            if ("" == a.replace(/(^\s*)|(\s*$)/g, "")) {
+                return document.getElementById("keywords").focus(), false;
+            }
+
+            return true;
+        }
+    </script>
+</body>
+</html>

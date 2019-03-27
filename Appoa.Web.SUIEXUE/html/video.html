@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, width=device-width">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>视频</title>
+    <meta http-equiv="Cache-Control" content="must-revalidate,no-cache">
+    <link rel="stylesheet" href="css/style.css">
+    <script type="text/javascript" src="js/jquery-1.12.3.min.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+    <script src="script/layer_mobile/layer.js"></script>
+    <script src="script/core.js"></script>
+    <script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script src="script/wechat_config.js"></script>
+</head>
+<body class="whitebg">
+    <div class="materials_video">
+        <ul class="videoul">
+        </ul>
+    </div>
+    <script>
+        var pageIndex = 1;
+        var pageSize = 10;
+        getData();
+        scrollLoad();
+
+        function getData() {
+            var id = getUrlParam('id');
+
+            sendAjaxSetFunc({ id: id }, '/tools/business_handler.ashx?action=GetVideoList', function (result) {
+                if (parseInt(result.code, 10) == 200) {
+                    var list = result.data;
+                    var htmls = '';
+                    $.each(list, function (k, v) {
+                        htmls += [
+                            '<li>',
+                            '<div class="con">',
+                            '<a href="video_details1.html?id=' + v['id'] + '">',
+                            '<div class="video_img">',
+                            '<img src="' + v['cover'] + '">',
+                            '</div>',
+                            '<div class="text">',
+                            '<div class="t">',
+                            '<h1>' + v['title'] + '</h1>',
+                            '<p>上传于' + v['add_time'] + '</p>',
+                            '</div>',
+                            '</div>',
+                            '</a>',
+                            '</div>',
+                            '</li>'
+                        ].join('');
+                    })
+
+                    if (htmls) {
+                        if (pageIndex == 1) {
+                            $('.videoul').html(htmls);
+                        } else if (pageIndex > 1) {
+                            $('.videoul').append(htmls);
+                        }
+                    } else {
+                        dialogTips('没有数据');
+                    }
+                } else {
+                    dialogMsg(result.message);
+                }
+            })
+        }
+    </script>
+</body>
+</html>

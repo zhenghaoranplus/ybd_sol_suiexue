@@ -1,0 +1,230 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, width=device-width">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>订单详情</title>
+    <meta http-equiv="Cache-Control" content="must-revalidate,no-cache">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/jquery-1.12.3.min.js"></script>
+    <script src="script/layer_mobile/layer.js"></script>
+    <script src="script/core.js"></script>
+    <script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script src="script/wechat_config.js"></script>
+</head>
+<body>
+    <section class="order_details myorderdetails">
+        <div class="order_address">
+            <div class="infor">
+                <h2>
+                    <i></i>
+                    <label></label>
+                </h2>
+                <p class="p">收货地址：<i></i></p>
+            </div>
+        </div>
+        <div class="myorder_list">
+            <div class="list">
+                <div class="product_info">
+                    <div class="propic">
+                        <img src="images/orderimg.png" alt="" />
+                    </div>
+                    <h1>孤独是世界的礼物</h1>
+                    <p class="price"><span>&yen;</span>16.00</p>
+                    <div class="counts">X<span>1</span></div>
+                </div>
+            </div>
+            <div class="list">
+                <div class="product_info">
+                    <div class="propic">
+                        <img src="images/orderimg.png" alt="" />
+                    </div>
+                    <h1>孤独是世界的礼物</h1>
+                    <p class="price"><span>&yen;</span>16.00</p>
+                    <div class="counts">X<span>1</span></div>
+                </div>
+            </div>
+        </div>
+        <ul class="orderul">
+            <li><span>支付配送</span><label>货到付款</label></li>
+            <li><span>买家留言</span><label>无</label></li>
+            <li><span>订单编号</span><label></label></li>
+        </ul>
+        <ul class="orderul">
+            <li><span>商品金额</span><label><em>共0件商品</em><i></i></label></li>
+            <li><span>运费</span><label>￥10.00</label></li>
+        </ul>
+        <ul class="orderul">
+            <li><span>快递单号</span><label>21535211251</label></li>
+        </ul>
+
+        <section class="order_status">
+            <input type="button" id="" class="cancelorder" value="取消订单">
+            <p>已完成</p>
+        </section>
+    </section>
+    <script>
+        getDetails();
+
+        function getDetails() {
+            var id = getUrlParam('id');
+
+            dialogLoadingText('加载中');
+            sendAjaxSetFunc({ order_id: id }, '/tools/business_handler.ashx?action=GetOrderDetails', function (result) {
+                setTimeout(function () {
+                    layer.closeAll();
+                    if (parseInt(result.code, 10) == 200) {
+                        var obj = result.data[0];
+
+                        $('.infor h2 i').html(obj.accept_name);//收件人
+                        $('.infor h2 label').html(formatPhone(obj.mobile));//联系电话
+                        $('.infor p i').html(obj.address);//详细地址
+
+                        /***商品列表开始***/
+                        var list = obj.goodsList;
+                        var htmls = '';
+                        var price = '';
+                        $.each(list, function (k, v) {
+                            if (v['group'] == 1) {//教育
+                                price = '&yen;' + parseFloat(v['price']).formatMoney(2, '', ',', '.');
+                            } else {//积分
+                                price = parseFloat(v['price']).formatMoney(0, '', ',', '.') + '积分';
+                            }
+
+                            var eval = '';
+                            if (obj.status == 3 && v['is_eval'] == 0) {//待评价
+                                eval = '<div class="to_evaluate"><a href="evaluate.html?id=' + v['id'] + '">评价</a></div>';
+                            } else {
+                                eval = '';
+                            }
+
+                            htmls += [
+                                '<div class="list">',
+                                '<div class="product_info">',
+                                '<div class="propic">',
+                                '<img src="' + v['img_src'] + '" alt="" />',
+                                '</div>',
+                                '<h1>' + v['title'] + '</h1>',
+                                '<p class="price"><span>' + price + '</span>&nbsp;&nbsp;<i>' + v['spec'] + '</i></p>',
+                                '<div class="counts">X<span>' + v['num'] + '</span></div>',
+                                '' + eval + '',
+                                '</div>',
+                                '</div>'
+                            ].join('');
+                        })
+                        $('.myorder_list').html(htmls);
+                        /***商品列表结束***/
+
+                        //1
+                        if (obj.remark) {
+                            $('.orderul:eq(0) li:eq(1) label').html(obj.remark);
+                        } else {
+                            $('.orderul:eq(0) li:eq(1) label').html('无');
+                        }
+
+                        $('.orderul:eq(0) li:eq(2) label').html(obj.order_no);
+
+                        //2
+                        var moneyStr = '';
+                        if (obj.total_price.toString() == '0.00' && obj.total_integral.toString() != '0') {
+                            moneyStr = obj.total_integral + '积分';
+                        }
+                        if (obj.total_price.toString() != '0.00' && obj.total_integral.toString() == '0') {
+                            moneyStr = '&yen;' + obj.total_price;
+                        }
+                        if (obj.total_price.toString() != '0.00' && obj.total_integral.toString() != '0') {
+                            moneyStr = '&yen;' + obj.total_price + '+' + obj.total_integral + '积分';
+                        }
+
+                        $('.orderul:eq(1) li:eq(0) label em').html('共' + obj.count + '件商品');
+                        $('.orderul:eq(1) li:eq(0) label i').html(moneyStr);
+                        $('.orderul:eq(1) li:eq(1) label').html('&yen;' + parseFloat(obj.express_money).formatMoney(2, '', ',', '.'));
+
+                        //3
+                        if (obj.express_no) {
+                            $('.orderul:eq(2) li:eq(0) label').html(obj.express_no);
+                        } else {
+                            $('.orderul:eq(2) li:eq(0) label').html('等待商家发货');
+                        }
+
+                        //4
+                        if (obj.status == 1) {
+                            $('.cancelorder').val('取消订单');
+                            $('.cancelorder').click(function () {
+                                cancelOrder();
+                            })
+                        } else if (obj.status == 2) {
+                            $('.cancelorder').val('确认收货');
+                            $('.cancelorder').click(function () {
+                                confirmReceive();
+                            })
+                        } else {
+                            $('.cancelorder').hide();
+                        }
+
+                        $('.order_status p').html(obj.status_name);
+
+                    } else {
+                        dialogMsg(result.message);
+                    }
+                }, 500);
+            })
+        }
+
+        //取消订单
+        function cancelOrder() {
+            if (islogin()) {
+                dialogConfirmFun('您确定要取消订单吗？', function () {
+                    var oid = getUrlParam('id');
+                    var uid = islogin().id;
+
+                    var data = {
+                        order_id: oid,
+                        user_id: uid
+                    };
+
+                    dialogLoadingText('正在取消');
+                    sendAjaxSetFunc(data, '/tools/business_handler.ashx?action=CancelOrder', function (result) {
+                        layer.closeAll();
+                        if (parseInt(result.code, 10) == 200) {
+                            getDetails();
+                        } else {
+                            dialogMsg(result.message);
+                        }
+                    })
+                })
+            } else {
+                dialogMsgFun('您还没有登录，请先去登录', gotologin);
+            }
+        }
+
+        //确认收货
+        function confirmReceive() {
+            if (islogin()) {
+                dialogConfirmFun('请在确定收到货后再进行此操作，您确定收到货了吗？', function () {
+                    var oid = getUrlParam('id');
+                    var uid = islogin().id;
+
+                    var data = {
+                        order_id: oid,
+                        user_id: uid
+                    };
+
+                    dialogLoadingText('正在取消');
+                    sendAjaxSetFunc(data, '/tools/business_handler.ashx?action=ConfirmReceive', function (result) {
+                        layer.closeAll();
+                        if (parseInt(result.code, 10) == 200) {
+                            getDetails();
+                        } else {
+                            dialogMsg(result.message);
+                        }
+                    })
+                })
+            } else {
+                dialogMsgFun('您还没有登录，请先去登录', gotologin);
+            }
+        }
+    </script>
+</body>
+</html>

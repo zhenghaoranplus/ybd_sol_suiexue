@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, width=device-width">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>购物车</title>
+    <meta http-equiv="Cache-Control" content="must-revalidate,no-cache">
+    <link rel="stylesheet" href="css/style.css">
+    <script type="text/javascript" src="js/jquery-1.12.3.min.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+    <script src="script/layer_mobile/layer.js"></script>
+    <script src="script/core.js"></script>
+    <script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script src="script/wechat_config.js"></script>
+    <style>
+        .goods-msg .prices i {
+            color: #444;
+        }
+    </style>
+</head>
+<body>
+    <div class="one-shop">
+        <div class="operate_cart">
+            <span class="edit_cart">编辑</span>
+            <span class="finish">完成</span>
+        </div>
+        <section id="cartlist">
+        </section>
+        <div class="h5rem"></div>
+        <div class="shop-total">
+            <div class="cartcheck">
+                <label for="">
+                    <input type="checkbox" class="goods-check ShopCheck" id="AllCheck"><em></em></label>全选
+            </div>
+            <p class="total">合计：<span></span><span class="shop-total-amount ShopTotalprice">￥0.00</span></p>
+            <div class="topay">
+                <input type="button" id="" name="" value="去结算">
+            </div>
+            <div class="del">
+                <input type="button" id="" name="" value="删除">
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        getData();
+        function getData() {
+            if (islogin()) {
+                var data = {
+                    user_id: islogin().id
+                };
+
+                sendAjaxSetFunc(data, '/tools/business_handler.ashx?action=GetCartList', function (result) {
+                    if (parseInt(result.code, 10) == 200) {
+                        var list = result.data;
+                        var htmls = '';
+
+                        $.each(list, function (k, v) {
+                            var group = v['group_id'];
+                            var price = '';
+                            var total = '';
+                            if (group == 1) {//教育
+                                total = (parseFloat(v['goods_price']) * parseInt(v['num'], 10)).formatMoney(2, '&yen;', ',', '.');
+                                price = '&yen;<span class="shop-total-amount GoodsPrice">' + parseFloat(v['goods_price']).formatMoney(2, '', ',', '.') + '</span>';
+                            } else {//积分
+                                total = (parseFloat(v['goods_price']) * parseInt(v['num'], 10)) + '积分';
+                                price = '<span class="shop-total-amount GoodsPrice">' + parseFloat(v['goods_price']).formatMoney(0, '', ',', '.') + '</span>积分';
+                            }
+
+                            htmls += [
+                                '<div class="one-goods">',
+                                '<div class="goods-msg">',
+                                '<div class="cartcheck">',
+                                '<label for="" cartid="' + v['id'] + '" group="' + v['group_id'] + '"><input type="checkbox" class="goods-check GoodsCheck"><em></em></label>',
+                                '</div>',
+                                '<div class="propic"><img src="' + v['goods_img'] + '" alt="" /></div>',
+                                '<h1>' + v['goods_name'] + '</h1>',
+                                '<p class="prices">' + price + '&nbsp;&nbsp;<i>' + v['goods_spec'] + '</i></p>',
+                                '<div class="count" cartid="' + v['id'] + '">',
+                                '<button type="button" class="minus">-</button>',
+                                '<input type="text" class="am-num-text" value="' + v['num'] + '" onkeyup="this.value=this.value.replace(/[^\\.\\d]/g,\'\');this.value=this.value.replace(\'.\',\'\');" onblur="updateBlur(this)" />',
+                                '<button type="button" class="plus">+</button>',
+                                '</div>',
+                                '<div class="prices2"><span class="totalPrice">' + total + '</span></div>',
+                                '</div>',
+                                '</div>'
+                            ].join('');
+                        })
+
+                        if (htmls) {
+                            $('#cartlist').html(htmls);
+                            eventBind();
+                        } else {
+                            setCartEmpty();
+                        }
+                    } else {
+                        dialogMsg(result.message);
+                    }
+                });
+            } else {
+                dialogMsgFun('您还没有登录，请先去登录', gotologin);
+            }
+        }
+
+        function setCartEmpty() {
+            var htmls = [
+                '<div class="noproduct">',
+                '<img src="images/cart2.png" class="icon">',
+                '<h3>购物车还空空如也哦~</h3>',
+                '<p class="togg"><a href="product.html">去逛逛</a></p>',
+                '</div>'
+            ].join('');
+
+            $('body').html(htmls);
+        }
+
+        //直接修改数量（失去焦点）
+        function updateBlur(obj) {
+            var cartid = $(obj).parent().attr('cartid');
+            var n = $(obj).val();
+            if (n < 1) {
+                n = 1;
+                $(obj).val(n);
+            }
+            updateNum(cartid, n, 'upd', obj);
+        }
+
+        //更改数量
+        function updateNum(cartid, num, method, obj) {
+            var data = {
+                cartid: cartid,
+                method: method,
+                num: num
+            };
+
+            sendAjaxSetFuncObj(data, '/tools/business_handler.ashx?action=UpdateGoodsNum', function (result) {
+                if (parseInt(result.code, 10) == 200) {
+                    var nums = result.data[0];
+                    if (nums) {
+                        nums = nums.nums;
+                        $(obj).val(nums);
+                    }
+                    TotalPrice();
+                } else {
+                    dialogTips(result.message);
+                }
+            }, obj)
+        }
+
+        //删除购物车商品
+        $('.del input').click(function () {
+            if (islogin()) {
+                var arr = $('.GoodsCheck:checked');
+                if (arr.length == 0) {
+                    dialogTips('请选择要删除的商品');
+                    return;
+                }
+                var objarr = [];
+                dialogConfirmFun('确定要删除这些商品吗？', function () {
+                    layer.closeAll();
+                    var ids = '';
+                    arr.each(function (k, v) {
+                        ids += $(v).parent().attr('cartid') + ',';
+                        objarr.push(v);
+                    })
+                    ids = ids.substr(0, ids.length - 1);
+
+                    var uid = islogin().id;
+
+                    var data = {
+                        ids: ids,
+                        user_id: uid
+                    };
+
+                    sendAjaxSetFunc(data, '/tools/business_handler.ashx?action=DelCartGoods', function (result) {
+                        if (parseInt(result.code, 10) == 200) {
+                            $.each(objarr, function (k, v) {
+                                $(v).parents('.one-goods').remove();
+                            })
+
+                            TotalPrice();
+
+                            if ($('#cartlist .one-goods').length == 0) {
+                                setCartEmpty();
+                            }
+
+                        } else {
+                            dialogTips(result.message);
+                        }
+                    })
+                })
+            } else {
+                dialogMsgFun('您还没有登录，请先去登录', gotologin);
+            }
+        })
+
+        //结算
+        $('.topay input').click(function () {
+            if (islogin()) {
+                var arr = $('.GoodsCheck:checked');
+                if (arr.length == 0) {
+                    dialogTips('请选择要结算的商品');
+                    return;
+                }
+
+                var ids = '';
+                arr.each(function (k, v) {
+                    ids += $(v).parent().attr('cartid') + ',';
+                })
+
+                ids = ids.substr(0, ids.length - 1);
+                ids = encodeURIComponent(ids);
+
+                setStorage('cids', ids);
+                setStorage('orderfrom', 'cart');
+                window.location.href = 'order.html';
+            } else {
+                dialogMsgFun('您还没有登录，请先去登录', gotologin);
+            }
+        })
+
+        function eventBind() {
+            // 数量减
+            $(".minus").click(function () {
+                var t = $(this).parent().find('.am-num-text');
+                t.val(parseInt(t.val()) - 1);
+                if (t.val() <= 1) {
+                    t.val(1);
+                }
+
+                var cartid = $(this).parent().attr('cartid');
+                updateNum(cartid, 1, 'sub', this);
+
+                //TotalPrice();
+            });
+            // 数量加
+            $(".plus").click(function () {
+                var t = $(this).parent().find('.am-num-text');
+                t.val(parseInt(t.val()) + 1);
+                if (t.val() <= 1) {
+                    t.val(1);
+                }
+
+                var cartid = $(this).parent().attr('cartid');
+                updateNum(cartid, 1, 'add', this);
+
+                //TotalPrice();
+            });
+            // 点击商品按钮
+            $(".GoodsCheck").click(function () {
+                var goods = $(this).closest(".one-shop").find(".GoodsCheck"); //获取本店铺的所有商品
+                var goodsC = $(this).closest(".one-shop").find(".GoodsCheck:checked"); //获取本店铺所有被选中的商品
+                var Shops = $(this).closest(".one-shop").find(".ShopCheck"); //获取本店铺的全选按钮
+                if (goods.length == goodsC.length) { //如果选中的商品等于所有商品
+                    Shops.prop('checked', true); //店铺全选按钮被选中
+                    if ($(".ShopCheck").length == $(".ShopCheck:checked").length) { //如果店铺被选中的数量等于所有店铺的数量
+                        $("#AllCheck").prop('checked', true); //全选按钮被选中
+                        TotalPrice();
+                    } else {
+                        $("#AllCheck").prop('checked', false); //else全选按钮不被选中 
+                        TotalPrice();
+                    }
+                } else { //如果选中的商品不等于所有商品
+                    Shops.prop('checked', false); //店铺全选按钮不被选中
+                    $("#AllCheck").prop('checked', false); //全选按钮也不被选中
+                    // 计算
+                    TotalPrice();
+                    // 计算
+                }
+            });
+            // 点击店铺按钮
+            $(".ShopCheck").change(function () {
+                if ($(this).prop("checked") == true) { //如果店铺按钮被选中
+                    $(this).parents(".one-shop").find(".goods-check").prop('checked', true); //店铺内的所有商品按钮也被选中
+                    if ($(".ShopCheck").length == $(".ShopCheck:checked").length) { //如果店铺被选中的数量等于所有店铺的数量
+                        $("#AllCheck").prop('checked', true); //全选按钮被选中
+                        TotalPrice();
+                    } else {
+                        $("#AllCheck").prop('checked', false); //else全选按钮不被选中
+                        TotalPrice();
+                    }
+                } else { //如果店铺按钮不被选中
+                    $(this).parents(".one-shop").find(".goods-check").prop('checked', false); //店铺内的所有商品也不被全选
+                    $("#AllCheck").prop('checked', false); //全选按钮也不被选中
+                    TotalPrice();
+                }
+            });
+            // 点击全选按钮
+            $("#AllCheck").click(function () {
+                if ($(this).prop("checked") == true) { //如果全选按钮被选中
+                    $(".goods-check").prop('checked', true); //所有按钮都被选中
+                    TotalPrice();
+                } else {
+                    $(".goods-check").prop('checked', false); //else所有按钮不全选
+                    TotalPrice();
+                }
+                $(".ShopCheck").change(); //执行店铺全选的操作
+            });
+        }
+
+        //计算总价
+        function TotalPrice() {
+            var allprice = 0; //总价
+            $(".one-shop").each(function () { //循环每个店铺
+                var oprice = 0; //总价
+                var integral = 0;//总积分
+                var sumStr = '';
+                $(this).find(".GoodsCheck").each(function () { //循环店铺里面的商品
+                    var group = $(this).parent().attr('group');
+                    var num = parseInt($(this).parents(".one-goods").find(".am-num-text").val()); //得到商品的数量
+                    var price = parseFloat($(this).parents(".one-goods").children('.goods-msg').children('.prices').find(".GoodsPrice").html()).toFixed(2); //得到商品的单价
+                    var total = price * num; //计算单个商品的总价
+                    var totalStr = '';
+                    if ($(this).is(":checked")) { //如果该商品被选中 
+                        if (group == 1) {
+                            oprice += total; //计算该店铺的总价
+                        } else if (group == 2) {
+                            integral += total;
+                        }
+                    }
+                    if (group == 1) {
+                        totalStr = total.formatMoney(2, '&yen;', ',', '.');
+                    } else if (group == 2) {
+                        totalStr = total + '积分';
+                    }
+
+                    $(this).parents(".one-goods").find(".totalPrice").html(totalStr);
+                });
+
+                if (oprice.toFixed(2).toString() != '0.00' && integral.toFixed(0).toString() != '0') {
+                    sumStr = '&yen;' + oprice.toFixed(2) + '+' + integral.toFixed(0) + '积分';
+                } else if (oprice.toFixed(2).toString() == '0.00' && integral.toFixed(0).toString() != '0') {
+                    sumStr = integral.toFixed(0) + '积分';
+                } else if (oprice.toFixed(2).toString() != '0.00' && integral.toFixed(0).toString() == '0') {
+                    sumStr = '&yen;' + oprice.toFixed(2);
+                }
+
+                if (!sumStr) {
+                    sumStr = '&yen;0.00';
+                }
+
+                $(this).closest(".one-shop").find(".ShopTotalprice").html(sumStr); //显示被选中商品的店铺总价
+
+                var oneprice = parseFloat($(this).find(".ShopTotalprice").text()).toFixed(2); //得到每个店铺的总价
+                allprice += oneprice; //计算所有店铺的总价
+            });
+        }
+    </script>
+</body>
+</html>

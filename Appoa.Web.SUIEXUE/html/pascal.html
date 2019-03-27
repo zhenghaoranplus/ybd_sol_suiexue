@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, width=device-width">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>作业</title>
+    <meta http-equiv="Cache-Control" content="must-revalidate,no-cache">
+    <link rel="stylesheet" href="css/style.css">
+    <script type="text/javascript" src="js/jquery-1.12.3.min.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+    <script src="script/layer_mobile/layer.js"></script>
+    <script src="script/core.js"></script>
+    <script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script src="script/wechat_config.js"></script>
+    <script>
+        $(document).ready(function () { getTestInfo(); })
+
+        function getTestInfo() {
+            var id = getUrlParam('id');
+            sendAjaxSetFuncAsync(false, { id: id }, '/tools/business_handler.ashx?action=GetTestInfo', function (result) {
+                if (parseInt(result.code, 10) == 200) {
+                    var obj = result.data[0];
+
+                    var title = obj.name;
+                    var desc = obj.desc;
+                    var nums = obj.nums;
+                    var score = obj.score;
+
+                    $('title').html(title);
+                    $('.tit').html(title);
+                    if (desc) {
+                        $('.desc').html('本阶段作业的题目题型包含' + desc + '。答题时间不限！');
+                    } else {
+                        $('.desc').html('');
+                    }
+                    $('.totest p:eq(0) span').html(nums + '道');
+                    $('.totest p:eq(1) span').html(score + '分');
+                    $('.to_answer a').attr('href', 'pascal1.html?id=' + id);
+                } else {
+                    dialogMsg(result.message);
+                }
+            })
+        }
+    </script>
+</head>
+<body class="whitebg">
+    <div class="testing">
+        <p class="tit">第一节　网络营销常识知识</p>
+        <div class="desc">随着国家对于互联网金融的监管调整，网货行业正向着更规范化、专业化发展，理财市场收益也更趋于理性。</div>
+        <div class="totest">
+            <h1>作业</h1>
+            <p>题目数量<span>50道</span></p>
+            <p>题目总分<span>100分</span></p>
+        </div>
+    </div>
+    <div class="to_answer">
+        <a href="javascript:;">开始答题</a>
+    </div>
+</body>
+</html>

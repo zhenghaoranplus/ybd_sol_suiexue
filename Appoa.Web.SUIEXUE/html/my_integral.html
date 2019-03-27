@@ -1,0 +1,103 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, width=device-width">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>我的积分</title>
+    <meta http-equiv="Cache-Control" content="must-revalidate,no-cache">
+    <link rel="stylesheet" href="css/style.css">
+    <script type="text/javascript" src="js/jquery-1.12.3.min.js"></script>
+    <script src="script/layer_mobile/layer.js"></script>
+    <script src="script/core.js"></script>
+    <script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script src="script/wechat_config.js"></script>
+</head>
+<body class="whitebg">
+    <section class="my_integral">
+        <div class="credits">
+            <h1>15</h1>
+            <p>积分</p>
+        </div>
+        <div class="integral_rule"><a href="integral_rule.html">积分规则</a></div>
+        <section class="details">
+            <div class="titles"><span>积分明细</span></div>
+            <div class="integral_list">
+            </div>
+        </section>
+    </section>
+    <script>
+        var pageIndex = 1;
+        var pageSize = 10;
+
+        getData();
+        scrollLoad();
+
+        function getData() {
+            if (islogin()) {
+                var uid = islogin().id;
+
+                sendAjaxSetFuncAsync(false, { user_id: islogin().id }, '/tools/business_handler.ashx?action=GetMyCenter', function (result) {
+                    if (parseInt(result.code, 10) == 200) {
+                        var obj = result.data;
+                        var user = obj.user;
+                        var userInfo = user.UserInfo;
+                        var userTree = user.UserTree;
+                        var userOAuths = user.UserOAuths;
+                        setStorage('userInfo', encodeURIComponent(JSON.stringify(userInfo)));
+                        setStorage('userTree', encodeURIComponent(JSON.stringify(userTree)));
+                        setStorage('userOAuths', encodeURIComponent(JSON.stringify(userOAuths)));
+
+                        $('.credits h1').html(islogin().integral);
+                    } else {
+                        dialogMsg(result.message);
+                    }
+                })
+
+                var data = {
+                    user_id: uid,
+                    page_index: pageIndex,
+                    page_size: pageSize
+                };
+
+                sendAjaxSetFunc(data, '/tools/business_handler.ashx?action=GetMyIntegral', function (result) {
+                    if (parseInt(result.code, 10) == 200) {
+                        var list = result.data;
+                        var htmls = '';
+                        var classname = '';
+                        var symble = '';
+
+                        $.each(list, function (k, v) {
+                            if (v['get_or_use'] == 1) {
+                                classname = ' class="get"';
+                                symble = '+';
+                            } else {
+                                classname = '';
+                                symble = '-';
+                            }
+
+                            htmls += [
+                                '<div class="list">',
+                                '<h1>' + v['type_name'] + '</h1>',
+                                '<p>' + v['add_time'] + '</p>',
+                                '<span' + classname + '>' + symble + v['integral'] + '</span>',
+                                '</div>'
+                            ].join('');
+                        })
+
+                        if (pageIndex == 1) {
+                            $('.integral_list').html(htmls);
+                        } else {
+                            $('.integral_list').append(htmls);
+                        }
+                    } else {
+                        dialogMsg(result.message);
+                    }
+                });
+            } else {
+                dialogMsgFun('您还没有登录，请先去登录', gotologin);
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,213 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, width=device-width">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>学习资料</title>
+    <meta http-equiv="Cache-Control" content="must-revalidate,no-cache">
+    <link rel="stylesheet" href="css/style.css">
+    <script type="text/javascript" src="js/jquery-1.12.3.min.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+    <script src="script/layer_mobile/layer.js"></script>
+    <script src="script/core.js"></script>
+    <script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script src="script/wechat_config.js"></script>
+</head>
+<body>
+    <section class="materials_ban">
+        <ul>
+            <li>
+                <a href="courseware.html">
+                    <span class="icon">
+                        <img src="images/materials_icon1.png">
+                    </span><p>课件</p>
+                </a>
+            </li>
+            <li>
+                <a href="video.html">
+                    <span class="icon">
+                        <img src="images/materials_icon2.png">
+                    </span><p>视频</p>
+                </a>
+            </li>
+            <li>
+                <a href="knowledge.html">
+                    <span class="icon">
+                        <img src="images/materials_icon3.png">
+                    </span><p>知识点</p>
+                </a>
+            </li>
+            <li>
+                <a href="task.html">
+                    <span class="icon">
+                        <img src="images/materials_icon4.png">
+                    </span><p>作业</p>
+                </a>
+            </li>
+        </ul>
+    </section>
+    <div class="materials_list list1">
+        <div class="title"><i></i>课件<a href="javascript:;" class="more">更多</a></div>
+        <ul class="fileul"></ul>
+    </div>
+    <div class="materials_list list2">
+        <div class="title"><i></i>视频<a href="javascript:;" class="more">更多</a></div>
+        <ul class="videoul"></ul>
+    </div>
+    <div class="materials_list list3">
+        <div class="title"><i></i>知识点<a href="javascript:;" class="more">更多</a></div>
+        <ul class="fileul"></ul>
+    </div>
+    <div class="materials_list list4">
+        <div class="title"><i></i>作业<a href="javascript:;" class="more">更多</a></div>
+        <div class="task">
+        </div>
+    </div>
+    <div class="release"></div>
+    <div class="publish">
+        <div class="close_publish"></div>
+        <ul>
+            <li class="li1"><a href="javascript:;">知识点</a></li>
+            <li class="li2"><a href="javascript:;">视频</a></li>
+        </ul>
+    </div>
+    <script>
+        var id = getUrlParam('id');
+        if (id && id > 0) {
+            $('.materials_ban li:eq(0) a').attr('href', 'courseware.html?id=' + id);
+            $('.materials_ban li:eq(1) a').attr('href', 'video.html?id=' + id);
+            $('.materials_ban li:eq(2) a').attr('href', 'knowledge.html?id=' + id);
+            $('.materials_ban li:eq(3) a').attr('href', 'task.html?id=' + id);
+
+            $('.publish .li1 a').attr('href', 'post_photo.html?id=' + id);
+            $('.publish .li2 a').attr('href', 'post_video.html?id=' + id);
+
+            getMaterials();
+        } else {
+            dialogTips('没有此课堂');
+        }
+
+        function getMaterials() {
+
+            dialogLoadingText('加载中');
+            sendAjaxSetFunc({ id: id }, '/tools/business_handler.ashx?action=GetMaterials', function (result) {
+                setTimeout(function () { layer.closeAll(); }, 500);
+                if (parseInt(result.code, 10) == 200) {
+                    var obj = result.data[0];
+                    if (obj) {
+
+                        var user_id = obj.user_id;
+                        if (user_id != islogin().id) {
+                            $('.release,.publish').remove();
+                        }
+
+                        var fileList = obj.fileList;
+                        var videoList = obj.videoList;
+                        var articleList = obj.articleList;
+                        var workList = obj.workList;
+
+                        setFileHtml(fileList);//课件
+                        setVideoHtml(videoList);//视频
+                        setArticleHtml(articleList);//知识点
+                        setWorkHtml(workList);//作业
+
+                        var more1 = $('.list1 .title a').attr('href');
+                        var more2 = $('.list2 .title a').attr('href');
+                        var more3 = $('.list3 .title a').attr('href');
+                        var more4 = $('.list4 .title a').attr('href');
+
+                        $('.list1 .title a').attr('href', 'courseware.html?id=' + id);
+                        $('.list2 .title a').attr('href', 'video.html?id=' + id);
+                        $('.list3 .title a').attr('href', 'knowledge.html?id=' + id);
+                        $('.list4 .title a').attr('href', 'task.html?id=' + id);
+                    }
+                } else {
+                    dialogMsg(result.message);
+                }
+            })
+        }
+
+        function setFileHtml(list) {
+            var htmls = '';
+            $.each(list, function (k, v) {
+                htmls += [
+                    '<li>',
+                    '<a href="doc_detail.html?method=click&id=' + v['id'] + '">' + v['title'] + '',
+                    '<span>上传于' + v['add_time'] + '</span>',
+                    '</a>',
+                    '</li>'
+                ].join('');
+            })
+
+            $('.list1 .fileul').html(htmls);
+        }
+
+        function setVideoHtml(list) {
+            var htmls = '';
+            $.each(list, function (k, v) {
+                htmls += [
+                    '<li>',
+                    '<div class="con">',
+                    '<a href="video_details1.html?id=' + v['id'] + '">',
+                    '<div class="video_img">',
+                    '<img src="' + v['cover'] + '">',
+                    '</div>',
+                    '<div class="text">',
+                    '<div class="t">',
+                    '<h1>' + v['title'] + '</h1>',
+                    '<p>上传于' + v['add_time'] + '</p>',
+                    '</div>',
+                    '</div>',
+                    '</a>',
+                    '</div>',
+                    '</li>'
+                ].join('');
+            })
+
+            $('.list2 .videoul').html(htmls);
+        }
+
+        function setArticleHtml(list) {
+            var htmls = '';
+            $.each(list, function (k, v) {
+                htmls += [
+                    '<li>',
+                    '<a href="knowledge_details.html?id=' + v['id'] + '">' + v['title'] + '',
+                    '<span>上传于' + v['add_time'] + '</span>',
+                    '</a>',
+                    '</li>'
+                ].join('');
+            })
+
+            $('.list3 .fileul').html(htmls);
+        }
+
+        function setWorkHtml(list) {
+            var htmls = '';
+            $.each(list, function (k, v) {
+                htmls += [
+                    '<div class="list">',
+                    '<h2>' + v['title'] + '</h2>',
+                    '<ul>',
+                    '' + setChapterWork(v['resourceList']) + '',
+                    '</ul>',
+                    '</div>'
+                ].join('');
+            })
+
+            $('.list4 .task').html(htmls);
+        }
+
+        function setChapterWork(list) {
+            var htmls = '';
+            var url = '';
+            $.each(list, function (k, v) {
+                htmls += '<li><a href="pascal.html?id=' + v['id'] + '">' + v['title'] + '</a></li>';
+            })
+
+            return htmls;
+        }
+    </script>
+</body>
+</html>

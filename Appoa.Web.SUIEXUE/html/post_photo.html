@@ -1,0 +1,119 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, width=device-width">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>发布图文</title>
+    <meta http-equiv="Cache-Control" content="must-revalidate,no-cache">
+    <link rel="stylesheet" href="css/style.css">
+    <script type="text/javascript" src="js/jquery-1.12.3.min.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+    <script src="script/layer_mobile/layer.js"></script>
+    <script src="script/core.js"></script>
+    <script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script src="script/wechat_config.js"></script>
+</head>
+<body>
+    <section class="question_content">
+        <h1><span>*</span>标题</h1>
+        <div class="inputs"><input type="text" id="txt" placeholder="输入标题" value=""></div>
+        <h1>内容</h1>
+        <div class="textarea textarea2">
+            <textarea id="b" placeholder="输入内容..."></textarea>
+        </div>
+        <div class="add_img">
+            <input type="button" onmousemove="f.style.pixelLeft = event.x - 60; f.style.pixelTop = this.offsetTop;" value="可添加多张图片" size="30" onclick="upd()" class="liulan">
+            <input type="file" id="f" name="f" style="height:26px;" class="files" size="1" accept="image/jpeg, image/png, image/bmp" hidefocus>
+            <div class="uploadimg">
+            </div>
+        </div>
+        <div class="questions"><input type="button" id="" value="提交" onclick="ReleaseArticle()"></div>
+    </section>
+    <script>
+
+        function ReleaseArticle() {
+            if (islogin()) {
+                var id = getUrlParam('id');
+                var title = $.trim($('#txt').val());
+                var contents = $.trim($('#b').val());
+                var src = '';
+
+                if (!title) {
+                    dialogTips('请输入标题');
+                    return;
+                }
+
+                var imgsrc = '';
+                var imgarr = $('.uploadimg img');
+                if (imgarr.length > 0) {
+                    imgarr.each(function (k, v) {
+                        var imgbase64 = $(v).attr('src');
+                        if (imgbase64.split(',').length != 2) {
+                            dialogTips('图片格式不正确');
+                            return false;
+                        }
+
+                        imgsrc += imgbase64 + '|';
+                    })
+
+                    src = imgsrc.substr(0, imgsrc.length - 1);
+                }
+
+                if (!contents && !src) {
+                    dialogTips('请输入内容或选择图片');
+                    return;
+                }
+
+                var data = {
+                    user_id: islogin().id,
+                    id: id,
+                    title: title,
+                    contents: contents,
+                    path: src
+                };
+
+                dialogLoadingText('提交中');
+                sendAjaxSetFunc(data, '/tools/business_handler.ashx?action=ReleaseArticle', function (result) {
+                    layer.closeAll();
+                    if (parseInt(result.code) == 200) {
+                        dialogMsgFun('提交成功', function () {
+                            history.back(-1);
+                        });
+                    } else {
+                        dialogMsg(result.message);
+                    }
+                })
+            } else {
+                dialogMsgFun('您还没有登录，请先去登录', gotologin);
+            }
+        }
+
+        function upd() {
+            var file_input = $(f);
+            var imglen = file_input.parent().children('.uploadimg').children().length;
+
+            if (imglen < 3) {
+                file_input.unbind();
+                file_input.click();
+                file_input.change(function () {
+                    var file = this.files[0];
+                    if (file) {
+                        var reader = new FileReader();
+                        reader.readAsDataURL(file);
+                        reader.onload = function (e) {
+                            dialogLoadingText('加载中');
+                            var src = e.target.result;
+
+                            var htmls = '<img src="' + src + '" width="33%" height="128">';
+                            file_input.parent().children('.uploadimg').append(htmls); //设置预览图片
+
+                            setTimeout(function () { layer.closeAll(); }, 500);
+                        }
+                    }
+                });
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,58 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, width=device-width">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>我的题库</title>
+    <meta http-equiv="Cache-Control" content="must-revalidate,no-cache">
+    <link rel="stylesheet" href="css/style.css">
+    <script type="text/javascript" src="js/jquery-1.12.3.min.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+    <script src="script/layer_mobile/layer.js"></script>
+    <script src="script/core.js"></script>
+    <script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script src="script/wechat_config.js"></script>
+</head>
+<body>
+    <section class="my_question question_list">
+        <ol>
+        </ol>
+    </section>
+    <script>
+        getData();
+
+        function getData() {
+            if (islogin()) {
+                var id = getUrlParam('id');
+                var data = {
+                    id: id,
+                    user_id: islogin().id
+                };
+
+                dialogLoadingText('加载中');
+                sendAjaxSetFunc(data, '/tools/business_handler.ashx?action=GetMyQuestion', function (result) {
+                    setTimeout(function () {
+                        layer.closeAll();
+                        if (parseInt(result.code, 10) == 200) {
+                            var list = result.data;
+                            var htmls = '';
+                            $.each(list, function (k, v) {
+                                htmls += [
+                                    '<li><a href="question_details.html?exa_id=' + id + '&index=' + k + '">' + v['title'] + '</a></li>',
+                                ].join('');
+                            })
+
+                            $('.question_list ol').html(htmls);
+                        } else {
+                            dialogMsg(result.message);
+                        }
+                    }, 500);
+                });
+            } else {
+                dialogMsgFun('您还没有登录，请先去登录', gotologin);
+            }
+        }
+    </script>
+</body>
+</html>

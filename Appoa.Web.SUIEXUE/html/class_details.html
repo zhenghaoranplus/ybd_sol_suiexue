@@ -1,0 +1,188 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, width=device-width">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>课堂详情</title>
+    <meta http-equiv="Cache-Control" content="must-revalidate,no-cache">
+    <link rel="stylesheet" href="css/style.css">
+    <script type="text/javascript" src="js/jquery-1.12.3.min.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+    <script src="script/layer_mobile/layer.js"></script>
+    <script src="script/core.js"></script>
+    <script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script src="script/wechat_config.js"></script>
+</head>
+<body>
+    <section class="class_ban">
+        <div class="img">
+            <img src=""><div class="shade"></div>
+        </div>
+        <div class="content">
+            <div class="class_head">
+                <img src="">
+            </div>
+            <h1></h1>
+            <h2><span></span></h2>
+            <h3><span>创建于<i></i></span></h3>
+        </div>
+    </section>
+    <section class="class_details">
+        <ul>
+            <li>
+                <a href="javascript:;">
+                    <span class="icon">
+                        <img src="images/class_ico1.png">
+                    </span><p>课堂公告</p>
+                </a>
+            </li>
+            <li>
+                <div class="class_ewm">
+                    <span class="icon">
+                        <img src="images/class_ico2.png">
+                    </span><p>课堂二维码</p>
+                </div>
+            </li>
+            <li>
+                <a href="javascript:;">
+                    <span class="icon">
+                        <img src="images/class_ico3.png">
+                    </span><p>班级人数</p>
+                </a>
+            </li>
+            <li>
+                <a href="javascript:;">
+                    <span class="icon">
+                        <img src="images/class_ico4.png">
+                    </span><p>学习资料/作业</p>
+                </a>
+            </li>
+            <li>
+                <a href="javascript:;">
+                    <span class="icon">
+                        <img src="images/class_ico5.png">
+                    </span><p>考试排名</p>
+                </a>
+            </li>
+            <li>
+                <a href="javascript:;">
+                    <span class="icon">
+                        <img src="images/class_ico6.png">
+                    </span><p>退出课堂</p>
+                </a>
+            </li>
+        </ul>
+    </section>
+
+    <div class="class_code">
+        <h1>网络营销1班</h1>
+        <p class="ewmcode">
+            <img src="images/code.jpg">
+        </p>
+        <p>扫一扫加入课堂</p>
+    </div>
+    <div class="overloay"></div>
+    <script>
+        getClassroomInfo();
+
+        function getClassroomInfo() {
+            if (islogin()) {
+                var id = getUrlParam('id');
+                var data = {
+                    id: id,
+                    user_id: islogin().id
+                };
+
+                sendAjaxSetFunc(data, '/tools/business_handler.ashx?action=GetClassroomInfo', function (result) {
+                    if (parseInt(result.code, 10) == 200) {
+                        var obj = result.data[0];
+                        if (obj) {
+                            $('.class_head img').attr('src', obj.avatar);
+                            $('.img img').attr('src', obj.avatar);
+                            $('.content h2 span').html(obj.user_name);
+                            $('.content h3 i').html(obj.add_time);
+                            $('.class_code h1').html(obj.name);
+                            $('.ewmcode img').attr('src', obj.qrcode);
+
+                            if (obj.is_join == 1) {//创建者
+                                $('.content h1').html('<a href = "edit_class.html?id=' + obj.id + '">' + obj.name + '</a>');
+                                $('.class_details li:last p').html('解散课堂');
+                                $('.class_details li:last a').click(disbandClassroom);
+                            }
+                            if (obj.is_join == 2) {//已加入
+                                $('.content h1').html(obj.name);
+                                $('.class_details li:last p').html('退出课堂');
+                                $('.class_details li:last a').click(exitClassroom);
+                            }
+
+                            $('.class_details li:eq(0) a').click(function () {
+                                window.location.href = 'class_notice.html?id=' + id;
+                            })
+                            $('.class_details li:eq(2) a').click(function () {
+                                window.location.href = 'class_size.html?id=' + id;
+                            })
+                            $('.class_details li:eq(3) a').click(function () {
+                                window.location.href = 'materials.html?id=' + id;
+                            })
+                            $('.class_details li:eq(4) a').click(function () {
+                                window.location.href = 'test_rank.html?id=' + id;
+                            })
+                        }
+                    } else {
+                        dialogMsg(result.message);
+                    }
+                });
+            } else {
+                dialogMsgFun('您还没有登录，请先去登录', gotologin);
+            }
+        }
+
+        //解散课堂
+        function disbandClassroom() {
+            dialogConfirmFun('您确定要解散课堂吗？', function () {
+                if (islogin()) {
+                    var id = getUrlParam('id');
+                    var data = {
+                        user_id: islogin().id,
+                        classroom_id: id
+                    };
+
+                    sendAjaxSetFunc(data, '/tools/business_handler.ashx?action=DelClassroom', function (result) {
+                        if (parseInt(result.code, 10) == 200) {
+                            dialogMsgUrl('解散成功', 'classroom.html');
+                        } else {
+                            dialogMsg(result.message);
+                        }
+                    });
+                } else {
+                    dialogMsgFun('您还没有登录，请先去登录', gotologin);
+                }
+            })
+        }
+
+        //退出课堂
+        function exitClassroom() {
+            dialogConfirmFun('您确定要退出课堂吗？', function () {
+                if (islogin()) {
+                    var id = getUrlParam('id');
+                    var data = {
+                        user_id: islogin().id,
+                        classroom_id: id
+                    };
+
+                    sendAjaxSetFunc(data, '/tools/business_handler.ashx?action=ExitClassroom', function (result) {
+                        if (parseInt(result.code, 10) == 200) {
+                            dialogMsgUrl('退出成功', 'classroom.html');
+                        } else {
+                            dialogMsg(result.message);
+                        }
+                    });
+                } else {
+                    dialogMsgFun('您还没有登录，请先去登录', gotologin);
+                }
+            })
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,206 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, width=device-width">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>我的题库</title>
+    <meta http-equiv="Cache-Control" content="must-revalidate,no-cache">
+    <link rel="stylesheet" href="css/style.css">
+    <script type="text/javascript" src="js/jquery-1.12.3.min.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+    <script src="script/layer_mobile/layer.js"></script>
+    <script src="script/core.js"></script>
+    <script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script src="script/wechat_config.js"></script>
+</head>
+<body class="whitebg">
+    <section id="questions"></section>
+
+    <div class="to_answer">
+        <a href="javascript:;" class="prev">上一题</a>
+        <a href="javascript:;">下一题</a>
+    </div>
+    <script>
+        GetMyQuestion();
+
+        function GetMyQuestion() {
+            if (islogin()) {
+                var data = {
+                    id: getUrlParam('exa_id'),
+                    user_id: islogin().id
+                };
+
+                dialogLoadingText('加载中');
+                sendAjaxSetFuncAsync(false, data, '/tools/business_handler.ashx?action=GetMyQuestion', function (result) {
+                    setTimeout(function () {
+                        layer.closeAll();
+                        if (parseInt(result.code, 10) == 200) {
+                            var list = result.data;
+                            var htmls = '';
+
+                            $.each(list, function (k, v) {
+
+                                if (v['type'] < 4) {
+                                    htmls += [
+                                        '<div class="testing" style="display:none">',
+                                        '<p class="tit2">' + (k + 1) + '.' + v['title'] + '<span>（' + v['type_name'] + v['score'] + '分）</span></p>',
+                                        '' + SetOptionsHtml(v['optionsList'], v['user_answer'], v['type']) + '',
+                                        '<div class="answers error">',
+                                        '<p><span>回答错误!</span> &nbsp;正确答案是&nbsp;' + v['truth_answer'] + ' &nbsp;你的答案是&nbsp;<label>' + v['user_answer'] + '</label></p>',
+                                        '<p>本题共有' + v['join_count'] + '人参与答题，正确率' + v['truth_ratio'] + '%</p>',
+                                        '</div>',
+                                        '' + SetQuestionAnalysis(v['analysis']) + '',
+                                        '</div>'
+                                    ].join('');
+                                } else {
+                                    htmls += [
+                                        '<div class="testing" style="display:none">',
+                                        '<p class="tit2">' + (k + 1) + '.' + v['title'] + '<span>（' + v['type_name'] + v['score'] + '分）</span></p>',
+                                        '<div class="textarea">' + v['user_answer'] + '</div>',
+                                        '<div class="answers error">',
+                                        '<p><span>回答错误!</span> &nbsp;正确答案是&nbsp;' + v['truth_answer'] + ' &nbsp;你的答案是&nbsp;<label>' + v['user_answer'] + '</label></p>',
+                                        '<p>本题共有' + v['join_count'] + '人参与答题，正确率' + v['truth_ratio'] + '%</p>',
+                                        '</div>',
+                                        '' + SetQuestionAnalysis(v['analysis']) + '',
+                                        '</div>'
+                                    ].join('');
+                                }
+                            })
+
+
+                            $('title').html('1/' + list.length);
+                            $('#questions').html(htmls);
+
+                            var index = getUrlParam('index');
+                            $('.testing:eq(' + index + ')').show();
+                            if (index == 0) {
+                                $('.prev').hide();
+                                $('.to_answer').removeClass('to_answer2');
+                            } else {
+                                $('.prev').show();
+                                $('.to_answer').addClass('to_answer2');
+                            }
+                        } else {
+                            dialogMsg(result.message);
+                        }
+                    }, 500);
+                });
+            } else {
+                dialogMsgFun('您还没有登录，请先去登录', gotologin);
+            }
+        }
+
+        function SetOptionsHtml(list, answer, type) {
+            var htmls = '';
+            var classname = '';
+            if (type == 2) {//是多选题
+                var arr = answer.toString().split(',');
+
+                for (var j = 0; j < list.length; j++) {
+                    var no = list[j].no;
+                    var index = $.inArray(no, arr);
+                    if (index >= 0) {
+                        classname = ' class="selected"';
+                    } else {
+                        classname = '';
+                    }
+
+                    htmls += [
+                        '<li' + classname + '>' + list[j].no + '、' + list[j].title + '</li>',
+                    ].join('');
+                }
+            } else {
+                $.each(list, function (k, v) {
+                    if (answer == v['no']) {
+                        classname = ' class="selected"';
+                    } else {
+                        classname = '';
+                    }
+
+                    htmls += [
+                        '<li' + classname + '>' + v['no'] + '、' + v['title'] + '</li>',
+                    ].join('');
+                })
+            }
+
+            htmls = '<ul class="my_answer">' + htmls + '</ul>';
+            return htmls;
+        }
+
+        function SetQuestionAnalysis(analysis) {
+            var htmls = '';
+            if (analysis) {
+                htmls = [
+                    '<div class="parsing">',
+                    '<h1>【解析】</h1>',
+                    '<div class="content">' + analysis + '</div>',
+                    '</div>',
+                ].join('');
+            }
+            return htmls;
+        }
+
+        //上一题
+        $('.to_answer a:eq(0)').click(function () {
+            var questions = $('.testing');
+            var index = 0;
+            for (var i = 0; i < questions.length; i++) {
+                var obj = questions[i];
+                if ($(obj).css('display') == 'block') {
+                    index = $(obj).index();
+                    break;
+                }
+            }
+
+            index = index - 1;
+            if (index <= 0) {//第一题
+                $('.prev').hide();
+                $('.to_answer').removeClass('to_answer2');
+                $('.testing:eq(0)').show().siblings().hide();
+            } else if (index > 0) {
+                if (index != (questions.length - 1)) {//不是最后一题
+                    $('.to_answer a:eq(1)').removeClass('submit_answer').html('下一题').removeAttr('onclick');
+                }
+
+                if (!$('.to_answer').hasClass('to_answer2')) {
+                    $('.prev').show();
+                    $('.to_answer').addClass('to_answer2');
+                }
+
+                $('.testing:eq(' + index + ')').show().siblings().hide();
+            }
+
+            $('title').html((index + 1) + '/' + questions.length);
+        })
+
+        //下一题、提交
+        $('.to_answer a:eq(1)').click(function () {
+            var questions = $('.testing');
+            var index = 0;
+            for (var i = 0; i < questions.length; i++) {
+                var obj = questions[i];
+                var display = $(obj).css('display');
+                if (display == 'block') {
+                    index = $(obj).index();
+                    break;
+                }
+            }
+
+            index = index + 1;
+            if (index == (questions.length - 1)) {//最后一题
+                $('.to_answer a:eq(1)').html('返回').attr('onclick', 'javascript:history.back(-1);');
+            }
+
+            if (!$('.to_answer').hasClass('to_answer2')) {
+                $('.prev').show();
+                $('.to_answer').addClass('to_answer2');
+            }
+
+            $('.testing:eq(' + index + ')').show().siblings().hide();
+
+            $('title').html((index + 1) + '/' + questions.length);
+        })
+    </script>
+</body>
+</html>
